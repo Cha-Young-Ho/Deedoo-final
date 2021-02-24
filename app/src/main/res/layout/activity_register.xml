@@ -53,21 +53,6 @@
         app:layout_constraintTop_toBottomOf="@+id/register_id"
         app:layout_constraintVertical_bias="0.29" />
 
-    <EditText
-        android:id="@+id/register_age"
-        android:layout_width="278dp"
-        android:layout_height="37dp"
-        android:background="#AEFFFFFF"
-        android:ems="10"
-        android:hint="Age"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_id"
-        app:layout_constraintVertical_bias="0.477" />
-
     <Button
         android:id="@+id/register_btn"
         android:layout_width="283dp"

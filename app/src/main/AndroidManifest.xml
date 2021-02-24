@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.deedo">
-    <uses-permission android:name="android.permission.INTERNET"/> <!-- 인터넷 권한선언 -->
+
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 권한선언 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,11 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDeedo">
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".Compare_daily_plan"/>
-        <activity android:name=".Compare_Mydaily_Friend_plan"/>
-        <activity android:name=".Create_Lotate"/>
-        <activity android:name=".Inquiry_Daily"/>
+        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".Home_activity" />
+        <activity android:name=".Compare_daily_plan" />
+        <activity android:name=".Compare_Mydaily_Friend_plan" />
+        <activity android:name=".Create_Lotate" />
+        <activity android:name=".Inquiry" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,17 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Modify_Friend"/>
-        <activity android:name=".Plan"/>
-        <activity android:name=".Search_Somebody"/>
-
+        <activity android:name=".Modify_Friend" />
+        <activity android:name=".Plan" />
+        <activity android:name=".Search_Somebody" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA0uxVadooOLVfcz0kCrdB9W43nYKIvjZw"/>
-
-
-
+            android:value="AIzaSyA0uxVadooOLVfcz0kCrdB9W43nYKIvjZw" />
     </application>
 
 </manifest>
