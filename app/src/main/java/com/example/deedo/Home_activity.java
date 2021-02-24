@@ -43,7 +43,7 @@ public class Home_activity extends AppCompatActivity {
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Home_activity.this, Create_Lotate.class);
+                Intent intent = new Intent(Home_activity.this, Inquiry_Lotate.class);
                 intent.putExtra("id", login_id);
                 startActivity(intent);
             }
