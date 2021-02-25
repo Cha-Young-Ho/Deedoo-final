@@ -25,6 +25,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         db.execSQL("CREATE TABLE IF NOT EXISTS User (userId VARCHAR(20) PRIMARY KEY NOT NULL, userPassword varchar(20) NOT NULL, userName varchar(10) NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) PRIMARY KEY NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLogitude VARCHAR(15) NOT NULL, FOREIGN KEY (userId) REFERENCES User (userId)) ");
+
     }
 
     @Override
@@ -111,6 +113,15 @@ public class DBHelper extends SQLiteOpenHelper {
             return match_id;
         }
 
+    }
+
+    public String insert_create_lotate(String _id, String _name, String _latitude, String _longitude){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("INSERT INTO User (userId, userPassword, userName) VALUES('" + _id + "','" + _name + "','" + _latitude + "', '"+_longitude+"');");
+
+
+
+        return "구역 입력 성공!";
     }
 
 

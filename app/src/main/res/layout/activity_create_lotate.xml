@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="10">
+    android:weightSum="10"
+    >
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="10" />
+        android:layout_weight="10"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,16 +22,17 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/Create_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="구역명" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/create_Area_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="등록" />
+            android:text="등록"
+            android:onClick="onLastLocationButtonClicked"/>
 
     </LinearLayout>
 
