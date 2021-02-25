@@ -40,10 +40,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         login_ok_btn.setOnClickListener((new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
                 db = new DBHelper(LoginActivity.this);
+               // db.delete_table();
                 String _id = login_id.getText().toString();
                 String _password = login_password.getText().toString();
 

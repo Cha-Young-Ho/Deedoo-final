@@ -22,7 +22,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/Create_editText"
+            android:id="@+id/editText_lotate_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="구역명" />

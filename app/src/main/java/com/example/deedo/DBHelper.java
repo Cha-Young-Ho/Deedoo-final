@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "Deedoo.db";
+    private static final String DB_NAME = "example3.db";
 
     public DBHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -25,12 +25,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         db.execSQL("CREATE TABLE IF NOT EXISTS User (userId VARCHAR(20) PRIMARY KEY NOT NULL, userPassword varchar(20) NOT NULL, userName varchar(10) NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) PRIMARY KEY NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLogitude VARCHAR(15) NOT NULL, FOREIGN KEY (userId) REFERENCES User (userId)) ");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLongitude VARCHAR(15) NOT NULL) ");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+
+
         onCreate(db);
     }
 
@@ -115,14 +118,55 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public String insert_create_lotate(String _id, String _name, String _latitude, String _longitude){
+    public void insert_create_lotate(String _id, String _name, String _latitude, String _longitude){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO User (userId, userPassword, userName) VALUES('" + _id + "','" + _name + "','" + _latitude + "', '"+_longitude+"');");
+
+        try {
+            db.execSQL("INSERT INTO Area (userId, AreaName, AreaLatitude, AreaLongitude) VALUES('" + _id + "','" + _name + "','" + _latitude + "', '" + _longitude + "');");
+            Log.v("인서트 성공", "인서트 성공");
+        }catch(Exception e){
+            Log.v("인서트 실패", "인서트 실패");
+        }
 
 
 
-        return "구역 입력 성공!";
+
     }
+
+    public void delete_table(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE Area");
+    }
+
+
+    public ArrayList<String> get_Area_info(){
+
+            ArrayList<String> Areainfo = new ArrayList<String>();
+            SQLiteDatabase db = getWritableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM Area", null);
+
+            if (cursor.getCount() != 0) {
+                while (cursor.moveToNext()) {
+                    String id = cursor.getString(cursor.getColumnIndex("userId"));
+                    String areaName = cursor.getString(cursor.getColumnIndex("AreaName"));
+                    String AreaLatitude = cursor.getString(cursor.getColumnIndex("AreaLatitude"));
+                    String AreaLongitude = cursor.getString(cursor.getColumnIndex("AreaLongitude"));
+                    Areainfo.add(id);
+                    Areainfo.add(areaName);
+                    Areainfo.add(AreaLatitude);
+                    Areainfo.add(AreaLongitude);
+                }
+
+            } else {
+                Log.v("실패", "cursor.getCount = 0");
+            }
+            cursor.close();
+            return Areainfo;
+
+
+    }
+
+
 
 
 }

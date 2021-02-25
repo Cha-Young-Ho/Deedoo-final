@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -43,7 +44,8 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
     Double set_longitude;
     Button Create_btn;
     MarkerOptions set_Marker;
-    EditText create_EditText;
+    EditText editText_lotate_name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +54,25 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
 
         db = new DBHelper(Create_Lotate.this);
 
-
+        editText_lotate_name = findViewById(R.id.editText_lotate_name);
         Create_btn = findViewById(R.id.create_Area_button);
 
         Create_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userId = getIntent().getStringExtra("id");
-                Toast.makeText(getApplicationContext(), db.insert_create_lotate(userId, create_EditText.getText().toString(),set_latitude.toString(), set_longitude.toString() ), Toast.LENGTH_SHORT).show();
+                try {
+                   db.insert_create_lotate(userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
+
+                }catch(Exception e){
+                    Toast.makeText(getApplicationContext(), "실패!", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
 
 
+                Intent intent = new Intent(Create_Lotate.this, sampleActivity.class);
+                intent.putExtra("id", userId);
+                startActivity(intent);
             }
         });
 
