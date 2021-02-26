@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class Home_activity extends AppCompatActivity {
     private TextView main_id, main_pass;
     ImageButton map_button, plan_button, inquiry_button, friend_setting_button;
-    String login_id;
+    String userId;
 
     /*
     액션바에 돋보기 추가
@@ -34,8 +34,9 @@ public class Home_activity extends AppCompatActivity {
 
         if (id == R.id.action_search_btn) {
 
-                    Intent intent = new Intent(Home_activity.this, Search_Somebody.class);
-                    startActivity(intent);
+            Intent intent = new Intent(Home_activity.this, Search_Somebody.class);
+            intent.putExtra("id", userId);
+            startActivity(intent);
 
         }
 
@@ -49,11 +50,11 @@ public class Home_activity extends AppCompatActivity {
 
         //여기부터는 id값 넘어오는 지 확인
         Intent intent = getIntent();
-        String userId = intent.getStringExtra("id");
+        userId = intent.getStringExtra("id");
 
         //여기까지
 
-        login_id = intent.getStringExtra("id"); // 로그인한 id값 (primary key)
+        userId = intent.getStringExtra("id"); // 로그인한 id값 (primary key)
         map_button = findViewById(R.id.map_Button);
         plan_button = findViewById(R.id.plan_Button);
         inquiry_button = findViewById(R.id.inquiry_Button);
@@ -62,50 +63,46 @@ public class Home_activity extends AppCompatActivity {
         main_pass = findViewById(R.id.main_pass);
 
 
-        
-        
         //구역정하기 버튼 클릭 시
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("홈에서 id = ", "" + login_id);
+                Log.v("홈에서 id = ", "" + userId);
                 Intent intent = new Intent(Home_activity.this, Inquiry_Lotate.class);
-                intent.putExtra("id", login_id);
+                intent.putExtra("id", userId);
                 startActivity(intent);
             }
         });
-        
+
         // 계획세우기 버튼 클릭 시
         plan_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Home_activity.this, Plan.class);
-                intent.putExtra("id", login_id);
+                intent.putExtra("id", userId);
                 startActivity(intent);
             }
         });
-        
+
         // 내 일과 확인 버튼 클릭 시
         inquiry_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Home_activity.this, Inquiry.class);
-                intent.putExtra("id", login_id);
+                intent.putExtra("id", userId);
                 startActivity(intent);
             }
         });
-        
+
         // 친구 관리 버튼 클릭 시
         friend_setting_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Home_activity.this, Modify_Friend.class);
-                intent.putExtra("id", login_id);
+                intent.putExtra("id", userId);
                 startActivity(intent);
             }
         });
-
-
 
 
     }

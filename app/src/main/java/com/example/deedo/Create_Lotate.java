@@ -48,8 +48,9 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
     Button Create_btn;
     MarkerOptions set_Marker;
     EditText editText_lotate_name;
+
     /*
-        액션바에 돋보기 추가
+        액션바에 돋보기 추가s
          */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,12 +68,14 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
         if (id == R.id.action_search_btn) {
 
             Intent intent = new Intent(Create_Lotate.this, Search_Somebody.class);
+            getIntent().putExtra("id", userId);
             startActivity(intent);
 
         }
 
         return super.onOptionsItemSelected(menuItem);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,21 +86,20 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
         editText_lotate_name = findViewById(R.id.editText_lotate_name);
         Create_btn = findViewById(R.id.create_Area_button);
         userId = getIntent().getStringExtra("id");
-        Log.v("Create 에서 id값 =",""+userId);
+        Log.v("Create 에서 id값 =", "" + userId);
 
         Create_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userId = getIntent().getStringExtra("id");
                 try {
-                   db.insert_create_lotate(userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
+                    db.insert_create_lotate(userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
 
 
-                }catch(Exception e){
+                } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "실패!", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
-
 
 
                 finish();
@@ -105,12 +107,10 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
         });
 
 
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
 
     }
@@ -134,7 +134,7 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
                 context = Create_Lotate.this;
                 BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(R.drawable.marker);
                 Bitmap b = bd.getBitmap();
-                Bitmap bitMapImage = Bitmap.createScaledBitmap(b,80,100,false);
+                Bitmap bitMapImage = Bitmap.createScaledBitmap(b, 80, 100, false);
                 mMap.clear();
                 MarkerOptions mOptions = new MarkerOptions();
 
@@ -158,14 +158,12 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
         LatLng sydney = new LatLng(35.2379, 128.6342);
         BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(R.drawable.marker);
         Bitmap b = bd.getBitmap();
-        Bitmap bitMapImage = Bitmap.createScaledBitmap(b,80,100,false);
+        Bitmap bitMapImage = Bitmap.createScaledBitmap(b, 80, 100, false);
 
         mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(bitMapImage)).position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
     }
-
-
 
 
 }

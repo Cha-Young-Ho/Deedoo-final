@@ -36,21 +36,18 @@ public class RegisterActivity extends AppCompatActivity {
                 String _name = register_name.getText().toString();
                 boolean id_check = db.Insert_User_Data(_id, _password, _name);
 
-                if(id_check){
+                if (id_check) {
 
                     Toast.makeText(getApplicationContext(), "회원가입이 성공!", Toast.LENGTH_SHORT).show();
 
                     finish();
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "중복된 ID!", Toast.LENGTH_SHORT).show();
                 }
 
 
-
             }
         });
-
-
 
 
     }

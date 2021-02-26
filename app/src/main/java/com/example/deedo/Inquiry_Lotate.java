@@ -22,6 +22,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
     Button create_lotate_btn;
     String userId;
     DBHelper db;
+
     /*
      액션바에 돋보기 추가
       */
@@ -58,7 +59,6 @@ public class Inquiry_Lotate extends AppCompatActivity {
         userId = getIntent().getStringExtra("id");
 
 
-
         create_lotate_btn = findViewById(R.id.create_lotate_btn); //구역 추가 버튼
         create_lotate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +68,6 @@ public class Inquiry_Lotate extends AppCompatActivity {
                 startActivity(intent);
 
 
-
-
             }
         });
         recyclerView = findViewById(R.id.recyclerview_lotate); //리사이클러 뷰 연결
@@ -77,20 +75,17 @@ public class Inquiry_Lotate extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         db = new DBHelper(this);
-        
+
 
         InitializeData();  //리스트에 데이터 담기
-        
-        
-        
-        
-        
-        
+
+
         adapter = new AreaAdapter(Area_Data_list, this);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -107,18 +102,16 @@ public class Inquiry_Lotate extends AppCompatActivity {
                 startActivity(intent);
 
 
-
-
             }
         });
         recyclerView = findViewById(R.id.recyclerview_lotate); //리사이클러 뷰 연결
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        if(Area_Data_list != null){
+        if (Area_Data_list != null) {
             Area_Data_list.clear();
             Area_Data_list = new ArrayList<>();
 
-        }else{
+        } else {
             Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
 
@@ -128,16 +121,12 @@ public class Inquiry_Lotate extends AppCompatActivity {
         InitializeData();  //리스트에 데이터 담기
 
 
-
-
-
-
         adapter = new AreaAdapter(Area_Data_list, this);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
     }
 
-    public void InitializeData(){
+    public void InitializeData() {
 
         Area_Data_list = db.get_Area_info(userId);
 

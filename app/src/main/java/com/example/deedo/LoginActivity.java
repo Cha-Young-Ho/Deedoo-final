@@ -1,4 +1,5 @@
 package com.example.deedo;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     DBHelper db;
     private EditText login_id, login_password;
     private Button login_ok_btn, login_register_btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +47,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 db = new DBHelper(LoginActivity.this);
-               // db.delete_table();
+                // db.delete_table();
                 String _id = login_id.getText().toString();
                 String _password = login_password.getText().toString();
 
                 String str = db.login(_id, _password);
 
-                if(str.equals("")){
-                    Toast.makeText(getApplicationContext(), "로그인에 실패하였습니다. str = " + str, Toast.LENGTH_SHORT).show();;
-                }else{
+                if (str.equals("")) {
+                    Toast.makeText(getApplicationContext(), "로그인에 실패하였습니다. str = " + str, Toast.LENGTH_SHORT).show();
+                    ;
+                } else {
                     Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다. 로그인 ID = " + str, Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(LoginActivity.this, Home_activity.class);
@@ -64,8 +67,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         }));
-
-
 
 
     }

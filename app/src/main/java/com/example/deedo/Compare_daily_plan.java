@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Compare_daily_plan extends AppCompatActivity {
+    String userId;
+
     /*
     액션바에 돋보기 추가
      */
@@ -27,15 +29,18 @@ public class Compare_daily_plan extends AppCompatActivity {
         if (id == R.id.action_search_btn) {
 
             Intent intent = new Intent(Compare_daily_plan.this, Search_Somebody.class);
+            getIntent().putExtra("id", userId);
             startActivity(intent);
 
         }
 
         return super.onOptionsItemSelected(menuItem);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare_daily_plan);
+        userId = getIntent().getStringExtra("id");
     }
 }

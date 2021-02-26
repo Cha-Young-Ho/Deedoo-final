@@ -29,12 +29,14 @@ public class Modify_Friend extends AppCompatActivity {
         if (id == R.id.action_search_btn) {
 
             Intent intent = new Intent(Modify_Friend.this, Search_Somebody.class);
+            intent.putExtra("id", userId);
             startActivity(intent);
 
         }
 
         return super.onOptionsItemSelected(menuItem);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

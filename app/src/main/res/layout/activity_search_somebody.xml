@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/textView2"
+            android:id="@+id/Search_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="3dp"
@@ -26,14 +26,14 @@
             android:layout_marginBottom="3dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:text="TextView" />
+            android:hint="아이디 또는 이름 입력" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/ImageView_search_somebody_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="8"
-            android:background=""
+            android:background="@null"
             app:srcCompat="@drawable/search" />
 
     </LinearLayout>
@@ -44,6 +44,7 @@
         android:background="@color/gray"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_search_somebody"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"

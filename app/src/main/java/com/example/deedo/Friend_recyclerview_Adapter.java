@@ -1,7 +1,6 @@
 package com.example.deedo;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,8 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
     DBHelper db;
     String userId;
     Modify_Friend Modify_Friend;
-    public interface OnItemClickListener{
+
+    public interface OnItemClickListener {
         void onItemClick(View v, int pos);
 
     }
@@ -28,14 +28,14 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
     private OnItemClickListener onItemClickListener;
 
 
-
-    public Friend_recyclerview_Adapter(OnItemClickListener onItemClickListener){
+    public Friend_recyclerview_Adapter(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
 
         this.Modify_Friend = new Modify_Friend();
         this.userId = Modify_Friend.userId;
 
     }
+
     public Friend_recyclerview_Adapter(ArrayList<Friend_Data> friend_List, Context context) {
         Friend_List = friend_List;
         this.context = context;
@@ -44,7 +44,7 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
     @NonNull
     @Override
     public Friend_recyclerview_Adapter.FriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            // 카드 레이아웃 찾고(view) -> 지정하고(holder = view) -> 지정해준 holder 넘겨줌
+        // 카드 레이아웃 찾고(view) -> 지정하고(holder = view) -> 지정해준 holder 넘겨줌
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend, parent, false);
 
         FriendViewHolder holder = new FriendViewHolder(view);
@@ -58,14 +58,13 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
         holder.Friend_id.setText(Friend_List.get(position).getFriend_name());
 
 
-
         holder.item_delete_friend_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
                 db = new DBHelper(context);
 
-               // Log.v("선택된 번호 =",""+pos);
+                // Log.v("선택된 번호 =",""+pos);
                 //Log.v("선택된 곳의 정보",""+ Friend_List.get(pos).getFriend_id()+ " - "+Friend_List.get(pos).getFriend_name());
                 String FriendName = Friend_List.get(pos).getFriend_name();
                 String FriendId = Friend_List.get(pos).getFriend_id();
@@ -74,9 +73,6 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
                 Friend_List.remove(pos);
                 notifyItemRemoved(pos);
                 notifyItemRangeChanged(pos, Friend_List.size());
-
-
-
 
 
             }
@@ -110,11 +106,11 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
         public FriendViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.Friend_id = itemView.findViewById(R.id.textview_item_friend_userId);
-            this.Friend_name = itemView.findViewById(R.id.textview_item_friend_userName);
+            this.Friend_id = itemView.findViewById(R.id.item_textView_search_friend_id);
+            this.Friend_name = itemView.findViewById(R.id.item_textView_search_friend_name);
 
-           this.item_inquiry_friend_btn = itemView.findViewById(R.id.item_inquiry_friend_btn);
-            this.item_delete_friend_btn = itemView.findViewById(R.id.item_delete_friend_btn);
+            this.item_inquiry_friend_btn = itemView.findViewById(R.id.item_inquiry_friend_btn);
+            this.item_delete_friend_btn = itemView.findViewById(R.id.item_search_request_friend_btn);
 
 
         }

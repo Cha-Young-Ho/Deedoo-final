@@ -14,6 +14,7 @@ public class sampleActivity extends AppCompatActivity {
 
     EditText EditText_id, EditText_name, EditText_longi, EditText_lati;
     Button delete_btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +25,6 @@ public class sampleActivity extends AppCompatActivity {
         EditText_lati = findViewById(R.id.EditText_lati_);
         EditText_longi = findViewById(R.id.EditText_longi_);
         db = new DBHelper(this);
-
-
 
 
     }
