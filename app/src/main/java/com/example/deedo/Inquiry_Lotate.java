@@ -2,6 +2,7 @@ package com.example.deedo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,41 +13,108 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class Inquiry_Lotate extends AppCompatActivity {
-    ArrayList<String> list;
+    ArrayList<Area_Data> Area_Data_list;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
     Button create_lotate_btn;
     String userId;
     DBHelper db;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inquiry_lotate);
-
-        db = new DBHelper(this);
-        list = new ArrayList<>();
-        list.add("아이템 1");
-        list.add("아이템 2");
-        list.add("아이템 3");
-        list.add("아이템 4");
-
-        Adapter adapter = new Adapter(list);
-        RecyclerView recyclerView = findViewById(R.id.recyclerview_lotate);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-
-        create_lotate_btn = findViewById(R.id.create_lotate_btn);
         userId = getIntent().getStringExtra("id");
+
+
+
+        create_lotate_btn = findViewById(R.id.create_lotate_btn); //구역 추가 버튼
         create_lotate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Inquiry_Lotate.this, Create_Lotate.class);
                 intent.putExtra("id", userId);
                 startActivity(intent);
+
+
+
+
             }
         });
+        recyclerView = findViewById(R.id.recyclerview_lotate); //리사이클러 뷰 연결
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
+        db = new DBHelper(this);
+        
+
+        InitializeData();  //리스트에 데이터 담기
+        
+        
+        
+        
+        
+        
+        adapter = new AreaAdapter(Area_Data_list, this);
+        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_inquiry_lotate);
+        userId = getIntent().getStringExtra("id");
+
+
+        create_lotate_btn = findViewById(R.id.create_lotate_btn); //구역 추가 버튼
+        create_lotate_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Inquiry_Lotate.this, Create_Lotate.class);
+                intent.putExtra("id", userId);
+                startActivity(intent);
+
+
+
+
+            }
+        });
+        recyclerView = findViewById(R.id.recyclerview_lotate); //리사이클러 뷰 연결
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        if(Area_Data_list != null){
+            Area_Data_list.clear();
+            Area_Data_list = new ArrayList<>();
+
+        }else{
+            Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
+        }
+
+        db = new DBHelper(this);
+
+
+        InitializeData();  //리스트에 데이터 담기
+
+
+
+
+
+
+        adapter = new AreaAdapter(Area_Data_list, this);
+        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
     }
 
+    public void InitializeData(){
+
+        Area_Data_list = db.get_Area_info(userId);
+
+    }
 
 }

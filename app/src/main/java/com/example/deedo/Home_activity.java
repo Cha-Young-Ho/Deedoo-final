@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,13 +37,15 @@ public class Home_activity extends AppCompatActivity {
         friend_setting_button = findViewById(R.id.friend_setting_Button);
         main_id = findViewById(R.id.main_id);
         main_pass = findViewById(R.id.main_pass);
-        
+
+
         
         
         //구역정하기 버튼 클릭 시
         map_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("홈에서 id = ", "" + login_id);
                 Intent intent = new Intent(Home_activity.this, Inquiry_Lotate.class);
                 intent.putExtra("id", login_id);
                 startActivity(intent);

@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,6 +57,8 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
 
         editText_lotate_name = findViewById(R.id.editText_lotate_name);
         Create_btn = findViewById(R.id.create_Area_button);
+        userId = getIntent().getStringExtra("id");
+        Log.v("Create 에서 id값 =",""+userId);
 
         Create_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,15 +67,15 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
                 try {
                    db.insert_create_lotate(userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
 
+
                 }catch(Exception e){
                     Toast.makeText(getApplicationContext(), "실패!", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
 
 
-                Intent intent = new Intent(Create_Lotate.this, sampleActivity.class);
-                intent.putExtra("id", userId);
-                startActivity(intent);
+
+                finish();
             }
         });
 

@@ -25,11 +25,6 @@ public class sampleActivity extends AppCompatActivity {
         EditText_longi = findViewById(R.id.EditText_longi_);
         db = new DBHelper(this);
 
-        ArrayList<String> arr =  db.get_Area_info();
 
-     EditText_id.setText(arr.get(0));
-       EditText_name.setText(arr.get(1));
-       EditText_lati.setText(arr.get(2));
-       EditText_longi.setText(arr.get(3));
     }
 }

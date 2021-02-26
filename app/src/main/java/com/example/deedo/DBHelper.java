@@ -101,6 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (password.equals(_password)) {
 
                     cursor.close();
+                    Log.v("로그인 ID = ", "" + id);
                     return id;
                 } else {
 
@@ -122,8 +123,11 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         try {
+
             db.execSQL("INSERT INTO Area (userId, AreaName, AreaLatitude, AreaLongitude) VALUES('" + _id + "','" + _name + "','" + _latitude + "', '" + _longitude + "');");
+
             Log.v("인서트 성공", "인서트 성공");
+            Log.v("id =", ""+_id);
         }catch(Exception e){
             Log.v("인서트 실패", "인서트 실패");
         }
@@ -139,32 +143,47 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<String> get_Area_info(){
+    public ArrayList<Area_Data> get_Area_info(String userId){
 
-            ArrayList<String> Areainfo = new ArrayList<String>();
-            SQLiteDatabase db = getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM Area", null);
+        ArrayList<Area_Data> Area_Data_list = new ArrayList<>();
 
-            if (cursor.getCount() != 0) {
-                while (cursor.moveToNext()) {
-                    String id = cursor.getString(cursor.getColumnIndex("userId"));
-                    String areaName = cursor.getString(cursor.getColumnIndex("AreaName"));
-                    String AreaLatitude = cursor.getString(cursor.getColumnIndex("AreaLatitude"));
-                    String AreaLongitude = cursor.getString(cursor.getColumnIndex("AreaLongitude"));
-                    Areainfo.add(id);
-                    Areainfo.add(areaName);
-                    Areainfo.add(AreaLatitude);
-                    Areainfo.add(AreaLongitude);
-                }
 
-            } else {
-                Log.v("실패", "cursor.getCount = 0");
+
+
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Area WHERE userId = '" + userId + "'", null);
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                String AreaName = cursor.getString(cursor.getColumnIndex("AreaName"));
+                String latitude = cursor.getString(cursor.getColumnIndex("AreaLatitude"));
+                String longitude = cursor.getString(cursor.getColumnIndex("AreaLongitude"));
+
+                Area_Data_list.add(new Area_Data(AreaName, latitude, longitude));
             }
-            cursor.close();
-            return Areainfo;
 
+        } else {
+            Log.v("실패", "cursor.getCount = 0");
+        }
+        Log.v("userid = ", userId);
+        cursor.close();
+        return Area_Data_list;
 
     }
+
+public void Delete_Area(String _name, String _latitude, String _longitude){
+    SQLiteDatabase db = getWritableDatabase();
+
+    try {
+        db.execSQL("DELETE FROM Area WHERE AreaName = '" + _name + "' AND AreaLatitude = '" + _latitude + "' AND AreaLongitude = '" + _longitude + "'");
+        Log.v("딜리트성공", "성공!");
+    }catch(Exception e){
+        Log.v("딜리트실패", "실패!");
+    }
+
+
+
+}
 
 
 
