@@ -26,6 +26,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS User (userId VARCHAR(20) PRIMARY KEY NOT NULL, userPassword varchar(20) NOT NULL, userName varchar(10) NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLongitude VARCHAR(15) NOT NULL) ");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Friend (User1 VARCHAR(20), User2 VARCHAR(20))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Request_Friend (userId VARCHAR(20),Request_UserId VARCHAR(20), Request BOOLEAN)");
 
     }
 
@@ -184,6 +186,23 @@ public void Delete_Area(String _name, String _latitude, String _longitude){
 
 
 }
+
+
+public void Delete_Friend(String userId, String Friend_id){
+    SQLiteDatabase db = getWritableDatabase();
+
+    try {
+        db.execSQL("DELETE FROM Friend WHERE User1 = '" + userId + "' AND User2 = '" + Friend_id + "'");
+        db.execSQL("DELETE FROM Friend WHERE User1 = '" + Friend_id + "' AND User2 = '" + userId + "'");
+        Log.v("친구 딜리트성공", "성공!");
+    }catch(Exception e){
+        Log.v("친구 딜리트실패", "실패!");
+    }
+}
+public void Request_Friend(){
+
+}
+
 
 
 

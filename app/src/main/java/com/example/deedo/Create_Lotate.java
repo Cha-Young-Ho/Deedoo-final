@@ -16,6 +16,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,8 +48,31 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
     Button Create_btn;
     MarkerOptions set_Marker;
     EditText editText_lotate_name;
+    /*
+        액션바에 돋보기 추가
+         */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
 
+    /*
+   액션바에 돋보기 이벤트 추가
+    */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        int id = menuItem.getItemId();
 
+        if (id == R.id.action_search_btn) {
+
+            Intent intent = new Intent(Create_Lotate.this, Search_Somebody.class);
+            startActivity(intent);
+
+        }
+
+        return super.onOptionsItemSelected(menuItem);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
