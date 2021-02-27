@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_activity"
-    android:background="@color/doeny">
+    android:background="@color/doeny"
+    android:orientation="vertical"
+    tools:context=".Home_activity">
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="411dp"
-        android:layout_height="420dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.151"
-        android:background="@color/white"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--캘린더-->
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/plan_calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        app:mcv_selectionColor="#a9dbf0cb"
+        app:mcv_showOtherDates="defaults" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="차영호님의 월간 차트입니다!"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.anychart.AnyChartView
+        android:id="@+id/plan_chart_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</LinearLayout>

@@ -11,14 +11,27 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Pie;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Home_activity extends AppCompatActivity {
-    private TextView main_id, main_pass;
+    private TextView main_id;
     ImageButton map_button, plan_button, inquiry_button, friend_setting_button;
     String userId;
+    String[] chart_d = {"first", "second", "third"};
+    int [] earning = {500, 800, 1000};
+    AnyChartView home_chart_view;
 
     /*
     액션바에 돋보기 추가
      */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -47,6 +60,12 @@ public class Home_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        /*
+        Chart View 생성
+         */
+        home_chart_view = findViewById(R.id.plan_chart_view);
+        Setup_Pie_Chart();
 
         //여기부터는 id값 넘어오는 지 확인
         Intent intent = getIntent();
@@ -60,7 +79,8 @@ public class Home_activity extends AppCompatActivity {
         inquiry_button = findViewById(R.id.inquiry_Button);
         friend_setting_button = findViewById(R.id.friend_setting_Button);
         main_id = findViewById(R.id.main_id);
-        main_pass = findViewById(R.id.main_pass);
+        main_id.setText(userId + "님 어서오세요!");
+
 
 
         //구역정하기 버튼 클릭 시
@@ -105,5 +125,17 @@ public class Home_activity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void Setup_Pie_Chart(){
+        Pie pie = AnyChart.pie();
+        List<DataEntry> dataEntries = new ArrayList<>();
+
+        for (int i = 0; i < chart_d.length; i++) {
+            dataEntries.add(new ValueDataEntry(chart_d[i], earning[i]));
+        }
+
+        pie.data(dataEntries);
+        home_chart_view.setChart(pie);
     }
 }
