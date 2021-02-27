@@ -187,6 +187,8 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             db.execSQL("DELETE FROM Friend WHERE User1 = '" + userId + "' AND User2 = '" + Friend_id + "'");
             db.execSQL("DELETE FROM Friend WHERE User1 = '" + Friend_id + "' AND User2 = '" + userId + "'");
+
+            Log.v("딜리트 정보 보기 = " ,"userId = " + userId + " Friend_id = " + Friend_id);
             Log.v("친구 딜리트성공", "성공!");
         } catch (Exception e) {
             Log.v("친구 딜리트실패", "실패!");

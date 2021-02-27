@@ -111,9 +111,9 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
             this.Modify_Friend_name = itemView.findViewById(R.id.item_textView_modify_friend_name);
             this.Modify_Friend_id = itemView.findViewById(R.id.item_textView_modify_friend_id);
 
-            this.item_inquiry_friend_btn = itemView.findViewById(R.id.item_modify_delete_friend_btn);
+            this.item_inquiry_friend_btn = itemView.findViewById(R.id.item_inquiry_friend_btn);
 
-            this.item_delete_friend_btn = itemView.findViewById(R.id.item_inquiry_friend_btn);
+            this.item_delete_friend_btn = itemView.findViewById(R.id.item_modify_delete_friend_btn);
 
 
         }
