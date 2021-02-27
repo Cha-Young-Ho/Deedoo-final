@@ -19,6 +19,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
     private ArrayList<Area_Data> Area_List;
     private Context context;
     DBHelper db;
+    String userId;
 
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
@@ -27,13 +28,15 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
     private OnItemClickListener onItemClickListener;
 
 
-    public AreaAdapter(OnItemClickListener onItemClickListener) {
+    public AreaAdapter(OnItemClickListener onItemClickListener, String _id) {
         this.onItemClickListener = onItemClickListener;
+        this.userId = _id;
     }
 
-    public AreaAdapter(ArrayList<Area_Data> area_List, Context context) {
+    public AreaAdapter(ArrayList<Area_Data> area_List, Context context, String _id) {
         Area_List = area_List;
         this.context = context;
+        this.userId = _id;
     }
 
     @NonNull
@@ -65,7 +68,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
                 String AreaLatitude = Area_List.get(pos).getTextView_latitude();
                 String AreaLongitude = Area_List.get(pos).getTextView_longitude();
 
-                db.Delete_Area(AreaName, AreaLatitude, AreaLongitude);
+                db.Delete_Area(AreaName, AreaLatitude, AreaLongitude, userId);
                 Area_List.remove(pos);
                 notifyItemRemoved(pos);
                 notifyItemRangeChanged(pos, Area_List.size());

@@ -18,7 +18,7 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
     private ArrayList<Search_Friend_Data> Search_Friend_Data_list;
     private Context context;
     DBHelper db;
-
+    String userId;
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
@@ -26,13 +26,15 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
     private OnItemClickListener onItemClickListener;
 
 
-    public Search_Friend_Adapter(OnItemClickListener onItemClickListener) {
+    public Search_Friend_Adapter(OnItemClickListener onItemClickListener, String _id) {
         this.onItemClickListener = onItemClickListener;
+        this.userId = _id;
     }
 
-    public Search_Friend_Adapter(ArrayList<Search_Friend_Data> Search_Friend_Data_list, Context context) {
+    public Search_Friend_Adapter(ArrayList<Search_Friend_Data> Search_Friend_Data_list, Context context, String _id) {
         this.Search_Friend_Data_list = Search_Friend_Data_list;
         this.context = context;
+        this.userId = _id;
     }
 
     @NonNull
@@ -48,8 +50,8 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
     @Override
     public void onBindViewHolder(@NonNull Search_Friend_Adapter.Search_Somebody_ViewHolder holder, int position) {
 
-        holder.Search_Friend_name.setText(Search_Friend_Data_list.get(position).getSearch_Friend_name());
-        holder.Search_Friend_id.setText(Search_Friend_Data_list.get(position).getSearch_Friend_id());
+        holder.Search_Friend_name.setText("이름 = " + Search_Friend_Data_list.get(position).getSearch_Friend_name());
+        holder.Search_Friend_id.setText("아이디 = " + Search_Friend_Data_list.get(position).getSearch_Friend_id());
 
 
         holder.item_search_request_friend_btn.setOnClickListener(new View.OnClickListener() {
@@ -58,20 +60,19 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
                 int pos = holder.getAdapterPosition();
                 db = new DBHelper(context);
 
-                /*
+
                 Log.v("선택된 번호 =",""+pos);
-                Log.v("선택된 곳의 정보",""+ Search_Friend_Data_list.get(pos).getTextView_name()+ " - "+Search_Friend_Data_list.get(pos).getTextView_latitude()+" - " + Search_Friend_Data_list.get(pos).getTextView_longitude());
-                String AreaName = Search_Friend_Data_list.get(pos).getTextView_name();
-                String AreaLatitude = Search_Friend_Data_list.get(pos).getTextView_latitude();
-                String AreaLongitude = Search_Friend_Data_list.get(pos).getTextView_longitude();
 
 
 
-                db.Delete_Area(AreaName, AreaLatitude, AreaLongitude);
+                String Friend_Name = Search_Friend_Data_list.get(pos).getSearch_Friend_name();
+                String Friend_id = Search_Friend_Data_list.get(pos).getSearch_Friend_id();
+                Log.v("선택된 정보 = ", "이름 = "+Friend_Name+ " - 아이디 = " + Friend_id);
+                db.Request_Friend(userId, Friend_id, Friend_Name);
                 Search_Friend_Data_list.remove(pos);
                 notifyItemRemoved(pos);
                 notifyItemRangeChanged(pos, Search_Friend_Data_list.size());
-                */
+
 
 
             }
@@ -93,10 +94,11 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
 
         public Search_Somebody_ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.Search_Friend_name = itemView.findViewById(R.id.item_textView_search_friend_name);
-            this.Search_Friend_id = itemView.findViewById(R.id.item_textView_search_friend_id);
+            this.Search_Friend_name = itemView.findViewById(R.id.item_textView_modify_friend_name);
+            this.Search_Friend_id = itemView.findViewById(R.id.item_textView_modify_friend_id);
 
-            this.item_search_request_friend_btn = itemView.findViewById(R.id.item_search_request_friend_btn);
+            this.item_search_request_friend_btn = itemView.findViewById(R.id.item_modify_delete_friend_btn);
+
 
 
         }

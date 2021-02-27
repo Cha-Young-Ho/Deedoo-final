@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_textView_search_friend_name"
+                android:id="@+id/item_textView_modify_friend_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -47,7 +47,7 @@
                 />
 
             <TextView
-                android:id="@+id/item_textView_search_friend_id"
+                android:id="@+id/item_textView_modify_friend_id"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -79,7 +79,7 @@
                     android:text="구경가기" />
 
                 <Button
-                    android:id="@+id/item_search_request_friend_btn"
+                    android:id="@+id/item_modify_delete_friend_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"

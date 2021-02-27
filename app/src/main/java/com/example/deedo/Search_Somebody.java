@@ -26,8 +26,8 @@ public class Search_Somebody extends AppCompatActivity {
     ImageButton ImageView_search_somebody_btn; //검색 요청 버튼
     EditText Search_text; //사용자가 입력한 검색어
 
-    String SET_TEXT = "s";
-    String search_text = SET_TEXT; // editText에서 받아온 검색어 저장
+
+    String search_text; // editText에서 받아온 검색어 저장
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +36,6 @@ public class Search_Somebody extends AppCompatActivity {
         userId = getIntent().getStringExtra("id");
 
         ImageView_search_somebody_btn = findViewById(R.id.ImageView_search_somebody_btn);
-        ImageView_search_somebody_btn.setOnClickListener(new View.OnClickListener() {
-
-            /*
-        검색어 입력후 상단 검색 버튼 클릭 시 이벤트
-         */
-            @Override
-            public void onClick(View v) {
-
-                Search_text = findViewById(R.id.Search_text);
-
-                search_text = Search_text.getText().toString();
-
-                db.get_Search_Somebody(search_text, userId);
-
-                Search_text.setText(search_text);
-                Log.v("입력된 글자 =", "" + Search_text);
-            }
-        });
 
 
 
@@ -67,10 +49,11 @@ public class Search_Somebody extends AppCompatActivity {
         } else {
             Search_Friend_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        db = new DBHelper(this);
 
-        InitializeData(search_text, userId);  //리스트에 데이터 담기
-        adapter = new Search_Friend_Adapter(Search_Friend_Data_list, this);
+
+        First_InitializeData();  //첫 리사이클 뷰는 검색어가 입력되지 않아서, First_InitializeData 메서드 호출 - 리스트에 데이터 담기
+        Log.v("resume", "여기 실행됨2");
+        adapter = new Search_Friend_Adapter(Search_Friend_Data_list, this, userId);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
 
@@ -85,26 +68,42 @@ public class Search_Somebody extends AppCompatActivity {
         super.onResume();
         setContentView(R.layout.activity_search_somebody);
         ImageView_search_somebody_btn = findViewById(R.id.ImageView_search_somebody_btn);
-        ImageView_search_somebody_btn.setOnClickListener(new View.OnClickListener() {
-
-            /*
+        /*
         검색어 입력후 상단 검색 버튼 클릭 시 이벤트
          */
+        ImageView_search_somebody_btn.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
-                String search_text; // editText에서 받아온 검색어 저장
                 Search_text = findViewById(R.id.Search_text);
 
                 search_text = Search_text.getText().toString();
 
                 db.get_Search_Somebody(search_text, userId);
 
-                Search_text.setText(search_text);
-                Log.v("입력된 글자 =", "" + Search_text);
+
+                Log.v("입력된 글자 =", "" + search_text);
+                InitializeData(search_text, userId);
             }
         });
         userId = getIntent().getStringExtra("id");
 
+
+        InitializeData(search_text, userId);
+
+
+    }
+
+
+    public void First_InitializeData(){
+      // Search_Friend_Data_list.add(new Search_Friend_Data("", "검색을 해주세요!"));
+
+    }
+    public void InitializeData(String search_text, String userId) {
+
+        //DB에서 데이터리스트에 담아야하는 메서드
+        Search_Friend_Data_list.clear();
 
         recyclerView = findViewById(R.id.recyclerview_search_somebody); //리사이클러 뷰 연결
         layoutManager = new LinearLayoutManager(this);
@@ -118,19 +117,19 @@ public class Search_Somebody extends AppCompatActivity {
         }
         db = new DBHelper(this);
 
-        InitializeData(search_text, userId);  //리스트에 데이터 담기
-        adapter = new Search_Friend_Adapter(Search_Friend_Data_list, this);
+        Log.v("search_text =", "" + search_text);
+        if(search_text == null){
+            First_InitializeData();
+        }else{
+
+            Search_Friend_Data_list = db.get_Search_Somebody(search_text, userId);//리스트에 데이터 담기
+            Log.v("resume", "여기 실행됨");
+        }
+
+
+        adapter = new Search_Friend_Adapter(Search_Friend_Data_list, this, userId);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
-
-    }
-
-
-
-    public void InitializeData(String search_text, String userId) {
-
-        //DB에서 데이터리스트에 담아야하는 메서드
-        Search_Friend_Data_list = db.get_Search_Somebody(search_text, userId);
     }
 
 

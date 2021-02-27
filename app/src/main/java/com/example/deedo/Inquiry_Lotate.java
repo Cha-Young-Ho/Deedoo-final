@@ -42,6 +42,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
         if (id == R.id.action_search_btn) {
 
             Intent intent = new Intent(Inquiry_Lotate.this, Search_Somebody.class);
+            intent.putExtra("id", userId);
             startActivity(intent);
 
         }
@@ -80,7 +81,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
         InitializeData();  //리스트에 데이터 담기
 
 
-        adapter = new AreaAdapter(Area_Data_list, this);
+        adapter = new AreaAdapter(Area_Data_list, this, userId);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
 
@@ -121,7 +122,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
         InitializeData();  //리스트에 데이터 담기
 
 
-        adapter = new AreaAdapter(Area_Data_list, this);
+        adapter = new AreaAdapter(Area_Data_list, this, userId);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
     }

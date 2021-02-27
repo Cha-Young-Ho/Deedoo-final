@@ -9,6 +9,7 @@
     tools:context=".Home_activity">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Modify_Friend_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>
