@@ -26,6 +26,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS User (userId VARCHAR(20) PRIMARY KEY NOT NULL, userPassword varchar(20) NOT NULL, userName varchar(10) NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLongitude VARCHAR(15) NOT NULL) ");
         db.execSQL("CREATE TABLE IF NOT EXISTS Friend (User1 VARCHAR(20), User2 VARCHAR(20))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Daily (userId VARCHAR(20) NOT NULL,  DailyName Varchar(100) NOT NULL, StayDate DATE, Stay_Time int)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Planner (userId VARCHAR(20) NOT NULL,  PlanName varchar(100) NOT NULL, PlanDate DATE, PlanStayTime int)");
+
+
 
 
     }
@@ -286,6 +290,18 @@ public ArrayList<Modify_Friend_Data> get_friend_info(String userId){
 
 
         return modify_friend_data_list;
+}
+
+public ArrayList<Plan_details_Data> get_plan_details_info(String[] _Date, String _userId){
+    ArrayList<Plan_details_Data> plan_details_data = new ArrayList<>();
+
+
+
+    return plan_details_data;
+}
+
+public void Delete_Plan_Details(String _userId, String Plan_Details){
+
 }
 }
 

@@ -94,10 +94,10 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
 
         public Search_Somebody_ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.Search_Friend_name = itemView.findViewById(R.id.item_textView_modify_friend_name);
-            this.Search_Friend_id = itemView.findViewById(R.id.item_textView_modify_friend_id);
+            this.Search_Friend_name = itemView.findViewById(R.id.item_textview_plan_details_name);
+            this.Search_Friend_id = itemView.findViewById(R.id.item_textview_plan_details_time);
 
-            this.item_search_request_friend_btn = itemView.findViewById(R.id.item_modify_delete_friend_btn);
+            this.item_search_request_friend_btn = itemView.findViewById(R.id.item_plan_details_delete_btn);
 
 
 
