@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "example4.db";
+    private static final String DB_NAME = "example5.db";
 
     public DBHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -27,9 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLongitude VARCHAR(15) NOT NULL) ");
         db.execSQL("CREATE TABLE IF NOT EXISTS Friend (User1 VARCHAR(20), User2 VARCHAR(20))");
         db.execSQL("CREATE TABLE IF NOT EXISTS Daily (userId VARCHAR(20) NOT NULL,  DailyName Varchar(100) NOT NULL, StayDate DATE, Stay_Time int)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS Planner (userId VARCHAR(20) NOT NULL,  PlanName varchar(100) NOT NULL, PlanDate DATE, PlanStayTime int)");
-
-
+        db.execSQL("CREATE TABLE IF NOT EXISTS Planner (userId VARCHAR(20) NOT NULL,  PlanName varchar(100) NOT NULL, PlanDate DATE, PlanExecuting_hour int, PlanExecuting_minute int)");
 
 
     }
@@ -175,7 +173,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         try {
-            db.execSQL("DELETE FROM Area WHERE AreaName = '" + _name + "' AND AreaLatitude = '" + _latitude + "' AND AreaLongitude = '" + _longitude + "' AND userId = '"+userId+"'");
+            db.execSQL("DELETE FROM Area WHERE AreaName = '" + _name + "' AND AreaLatitude = '" + _latitude + "' AND AreaLongitude = '" + _longitude + "' AND userId = '" + userId + "'");
             Log.v("딜리트성공", "성공!");
         } catch (Exception e) {
             Log.v("딜리트실패", "실패!");
@@ -192,7 +190,7 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL("DELETE FROM Friend WHERE User1 = '" + userId + "' AND User2 = '" + Friend_id + "'");
             db.execSQL("DELETE FROM Friend WHERE User1 = '" + Friend_id + "' AND User2 = '" + userId + "'");
 
-            Log.v("딜리트 정보 보기 = " ,"userId = " + userId + " Friend_id = " + Friend_id);
+            Log.v("딜리트 정보 보기 = ", "userId = " + userId + " Friend_id = " + Friend_id);
             Log.v("친구 딜리트성공", "성공!");
         } catch (Exception e) {
             Log.v("친구 딜리트실패", "실패!");
@@ -206,12 +204,12 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         //친구 테이블의 User2에 등록되지 않고(친구 관계가 아닌), 자신의 아이디가 아니고, 이름과 id가 검색어와 일치하는 정보를 가져와라
-        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE (userId = '" + insert_text + "' OR userName = '" + insert_text + "') AND NOT userId IN ('"+ userId+"') "  , null);
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE (userId = '" + insert_text + "' OR userName = '" + insert_text + "') AND NOT userId IN ('" + userId + "') ", null);
 
 
-        Log.v("db-입력한 검색어", ""+ insert_text);
-        Log.v("db- 입력한 사용자 id", ""+ userId);
-        Log.v("커서 카운터 수 = ",""+ cursor.getCount());
+        Log.v("db-입력한 검색어", "" + insert_text);
+        Log.v("db- 입력한 사용자 id", "" + userId);
+        Log.v("커서 카운터 수 = ", "" + cursor.getCount());
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 String FriendName = cursor.getString(cursor.getColumnIndex("userName"));
@@ -228,10 +226,12 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return Search_Friend_Data_list;
     }
-public void Request_Friend(String _userId, String Friend_id, String Friend_Name){
 
-    SQLiteDatabase db = getWritableDatabase();
-    try {
+    public void Request_Friend(String _userId, String Friend_id, String Friend_Name) {
+
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+
         /*
         친구 관계 테이블
              User1  User2
@@ -246,62 +246,113 @@ public void Request_Friend(String _userId, String Friend_id, String Friend_Name)
         1:1 매칭되도록 쿼리문 2개 작성
 
          */
-        db.execSQL("INSERT INTO Friend (User1, User2) VALUES('" + _userId + "','" + Friend_id + "');");
-        db.execSQL("INSERT INTO Friend (User1, User2) VALUES('" + Friend_id + "','" + _userId + "');");
+            db.execSQL("INSERT INTO Friend (User1, User2) VALUES('" + _userId + "','" + Friend_id + "');");
+            db.execSQL("INSERT INTO Friend (User1, User2) VALUES('" + Friend_id + "','" + _userId + "');");
 
-        Log.v("친구 요청 인서트 성공!", "사용자 아이디 = " + _userId + "- 친구 아이디 = " + Friend_id);
-    }catch(Exception e){
-        Log.v("친구 요청 인서트 실패!", "사용자 아이디 = " + _userId + "- 친구 아이디 = " + Friend_id);
-    }
-
-
-}
-public ArrayList<Modify_Friend_Data> get_friend_info(String userId){
-    ArrayList<Modify_Friend_Data> modify_friend_data_list = new ArrayList<>();
-    SQLiteDatabase db = getWritableDatabase();
-
-   // Cursor cursor = db.rawQuery("SELECT * FROM User WHERE userId = (SELECT User2 FROM Friend WHERE User1 = '" + userId + "')", null);
-    Cursor cursor = db.rawQuery("SELECT User2 FROM Friend WHERE User1 = '" + userId + "'", null);
-    Log.v("커서 카운터 수 = ",""+ cursor.getCount());
-
-    if (cursor.getCount() != 0) {
-        while (cursor.moveToNext()) {
-
-
-            String friend_id1 = cursor.getString(cursor.getColumnIndex("User2"));
-
-            Cursor cursor2 = db.rawQuery("SELECT * FROM User WHERE userId = '" + friend_id1 + "'", null);
-            Log.v("커서 카운터 수 = ",""+ cursor2.getCount());
-            if (cursor2.getCount() != 0) {
-                while (cursor2.moveToNext()) {
-                    String friend_Name2 = cursor2.getString(cursor2.getColumnIndex("userName"));
-                    String friend_id2 = cursor2.getString(cursor2.getColumnIndex("userId"));
-
-                    modify_friend_data_list.add(new Modify_Friend_Data(friend_id2, friend_Name2));
-                }
-            }
+            Log.v("친구 요청 인서트 성공!", "사용자 아이디 = " + _userId + "- 친구 아이디 = " + Friend_id);
+        } catch (Exception e) {
+            Log.v("친구 요청 인서트 실패!", "사용자 아이디 = " + _userId + "- 친구 아이디 = " + Friend_id);
         }
 
-    } else {
-        Log.v("실패", "cursor.getCount = 0");
+
     }
-    Log.v("userid = ", userId);
-    cursor.close();
+
+    public ArrayList<Modify_Friend_Data> get_friend_info(String userId) {
+        ArrayList<Modify_Friend_Data> modify_friend_data_list = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+
+        // Cursor cursor = db.rawQuery("SELECT * FROM User WHERE userId = (SELECT User2 FROM Friend WHERE User1 = '" + userId + "')", null);
+        Cursor cursor = db.rawQuery("SELECT User2 FROM Friend WHERE User1 = '" + userId + "'", null);
+        Log.v("커서 카운터 수 = ", "" + cursor.getCount());
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+
+
+                String friend_id1 = cursor.getString(cursor.getColumnIndex("User2"));
+
+                Cursor cursor2 = db.rawQuery("SELECT * FROM User WHERE userId = '" + friend_id1 + "'", null);
+                Log.v("커서 카운터 수 = ", "" + cursor2.getCount());
+                if (cursor2.getCount() != 0) {
+                    while (cursor2.moveToNext()) {
+                        String friend_Name2 = cursor2.getString(cursor2.getColumnIndex("userName"));
+                        String friend_id2 = cursor2.getString(cursor2.getColumnIndex("userId"));
+
+                        modify_friend_data_list.add(new Modify_Friend_Data(friend_id2, friend_Name2));
+                    }
+                }
+            }
+
+        } else {
+            Log.v("실패", "cursor.getCount = 0");
+        }
+        Log.v("userid = ", userId);
+        cursor.close();
 
 
         return modify_friend_data_list;
-}
+    }
 
-public ArrayList<Plan_details_Data> get_plan_details_info(String[] _Date, String _userId){
-    ArrayList<Plan_details_Data> plan_details_data = new ArrayList<>();
+    public ArrayList<Plan_details_Data> get_plan_details_info(String[] _Date, String _userId) {
+        ArrayList<Plan_details_Data> plan_details_data = new ArrayList<>();
 
 
+        return plan_details_data;
+    }
 
-    return plan_details_data;
-}
+    public void Delete_Plan_Details(String _userId, String Plan_Details_name) {
+        SQLiteDatabase db = getWritableDatabase();
 
-public void Delete_Plan_Details(String _userId, String Plan_Details){
+        try {
+            db.execSQL("DELETE FROM Friend WHERE User1 = '" + _userId + "' AND User2 = '" + Plan_Details_name + "'");
 
-}
+            Log.v("딜리트 정보 보기 = ", "userId = " + _userId + " Friend_id = " + Plan_Details_name);
+            Log.v("친구 딜리트성공", "성공!");
+        } catch (Exception e) {
+            Log.v("친구 딜리트실패", "실패!");
+            Log.v("딜리트 정보 보기 = ", "userId = " + _userId + " Friend_id = " + Plan_Details_name);
+        }
+    }
+
+    public void Modify_plan_detail(String _userId, int _year, int _month, int _day, String _modify_plan_name, int executing_hour, int executing_minute,
+                                   String before_plan_name, int before_executing_hour, int before_executing_minute) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String _date = _year + "-" + _month + "-" + _day;
+        
+        try {
+            db.execSQL("UPDATE FROM Planner " +
+                    "Set PlanName = '" + _modify_plan_name + "', " +
+                    "PlanExecuting_hour = '" + executing_hour + "', " +
+                    "PlanExecuting_minute = '" + executing_minute + "' " +
+                    "WHERE PlanName = '" + _userId + "' " +
+                    "AND PlanExecuting_hour = '" + before_plan_name + "' " +
+                    "AND PlanExecuting_minute = '" + before_executing_minute + "' " +
+                    "AND PlanDate = '" + _date + "'");
+            Log.v("plan details modify!", "성공");
+        }catch(Exception e){
+
+
+            Log.v("plan details modify!", "실패");
+        }
+
+    }
+
+    public void create_plan_detail(String _userId, int _year, int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute) {
+        SQLiteDatabase db = getWritableDatabase();
+        String plan_date = _year + "-" + _month + "-" + _day;
+        try {
+            db.execSQL("INSERT INTO Planner (userId, PlanName, PlanDate, PlanExecuting_hour, PlanExecuting_minute) " +
+                    "VALUES('" + _userId + "','" + _create_plan_name + "', '" + plan_date + "', '" + executing_hour + "', '" + executing_minute + "');");
+            Log.v("create plan insert 성공!","아이디 = " + _userId + " planname = " + _create_plan_name + 
+                    " year = " + _year + " month = " + _month + " day = " + _day + " executing_hour =" + executing_hour + 
+                    " executing_minute = " + executing_minute);
+            
+        }catch(Exception e){
+            Log.v("create plan insert 실패!", "아이디 = " + _userId + " planname = " + _create_plan_name + 
+                    " year = " + _year + " month = " + _month + " day = " + _day + " executing_hour =" + executing_hour + 
+                    " executing_minute = " + executing_minute);
+        }
+    }
 }
 

@@ -55,13 +55,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (str.equals("")) {
                     Toast.makeText(getApplicationContext(), "로그인에 실패하였습니다. str = " + str, Toast.LENGTH_SHORT).show();
-                    ;
+
                 } else {
                     Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다. 로그인 ID = " + str, Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(LoginActivity.this, Home_activity.class);
                     intent.putExtra("id", str);
                     startActivity(intent);
+                    finish();
                 }
 
 

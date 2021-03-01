@@ -118,7 +118,9 @@ public class Plan extends AppCompatActivity {
              */
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-
+                
+                
+                Log.v("캘린더 클릭 이벤트 첫 부분 성공", " 성공");
 
                 selectedDay = date;
                 DATE = selectedDay.toString(); // ex : Calender{2021-02-28}
@@ -130,14 +132,23 @@ public class Plan extends AppCompatActivity {
 
                 parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
 
+                Log.v("캘린더 클릭 이벤트 두번째 부분 성공", " 성공");
                 year = Integer.parseInt(parsedDATA[0]);
                 month = Integer.parseInt(parsedDATA[1])+1;
                 day = Integer.parseInt(parsedDATA[2]);
 
 
+                Log.v("캘린더 클릭 이벤트 세번째 부분 성공", " 성공");
+
+
                 Intent intent = new Intent(Plan.this, Activity_plan_details.class);
+                intent.putExtra("id", userId);
                 intent.putExtra("DATE", parsedDATA);
+                Log.v("캘린더 클릭 이벤트 네번째 부분 성공", " 성공");
                 startActivity(intent); //날짜 데이터 담아서 넘겨줌
+
+
+
 ///////////////////////////////////////////////////////////////////////테이블 만들고 다이알로그나 액티비티이동 후 계획 조회가능하게 리사이클뷰로 만들어야함
 
             }

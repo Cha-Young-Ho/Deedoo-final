@@ -1,6 +1,7 @@
 package com.example.deedo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
     private Context context;
     DBHelper db;
     String userId;
+    String[] DATE;
 
 
     public interface OnItemClickListener {
@@ -37,10 +39,11 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
 
     }
 
-    public Plan_details_recyclerview_Adapter(ArrayList<Plan_details_Data> Plan_details_data_List, Context context, String userId) {
+    public Plan_details_recyclerview_Adapter(ArrayList<Plan_details_Data> Plan_details_data_List, Context context, String userId, String[] DATE) {
         this.Plan_details_data_List = Plan_details_data_List;
         this.context = context;
         this.userId = userId;
+        this.DATE = DATE;
     }
 
     @NonNull
@@ -55,14 +58,14 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
 
     @Override
     public void onBindViewHolder(@NonNull Plan_details_recyclerview_Adapter.Plan_Details_ViewHolder holder, int position) {
-        
+        //////////////////////////////PLAN NAME, 수정 다이얼로그에서 DB작업 구현해야함
         
         
         //받아온 plan 이름을 리사이클뷰에 배치
         holder.plan_name.setText(Plan_details_data_List.get(position).getPlan_name());
         
         //받아온 plan 할당 시간을 리사이클 뷰에 배치
-        //holder.executing_time.setText(Plan_details_data_List.get(position).getExecuting_time());
+        ////////////////////////holder.executing_time.setText(Plan_details_data_List.get(position).getExecuting_time());
         
         
         /*
@@ -112,7 +115,8 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
                 db = new DBHelper(context);
 
                 String Plan_name = Plan_details_data_List.get(pos).getPlan_name();
-                int executing_time = Plan_details_data_List.get(pos).getExecuting_time();
+                int executing_hour = Plan_details_data_List.get(pos).getExecuting_hour();
+                int executing_minute = Plan_details_data_List.get(pos).getExecuting_minute();
 
                 db.Delete_Plan_Details(userId, Plan_name);
                 Plan_details_data_List.remove(pos);
@@ -129,6 +133,16 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
                 db = new DBHelper(context);
+                String before_plan_name = Plan_details_data_List.get(pos).getPlan_name();
+                int before_plan_executing_hour = Plan_details_data_List.get(pos).getExecuting_hour();
+                int before_plan_executing_minute = Plan_details_data_List.get(pos).getExecuting_minute();
+                
+                /*
+                Plan detail modify 다이얼로그 생성
+                 */
+            Dialog_Plan_details_modify dialog_plan_details_modify =
+                    new Dialog_Plan_details_modify(
+                            Plan_details_recyclerview_Adapter.this.context, userId, DATE, before_plan_name, before_plan_executing_hour, before_plan_executing_minute);
 
 
 

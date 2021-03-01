@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class Activity_plan_details extends AppCompatActivity {
 
-    Button item_plan_details_modify_btn, item_plan_details_delete_btn;
+    Button plan_details_add_btn, plan_details_cancel_btn;
     ArrayList<Plan_details_Data> Plan_details_Data_list; //담아온 데이터
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -44,7 +44,7 @@ public class Activity_plan_details extends AppCompatActivity {
         if (id == R.id.action_search_btn) {
 
             Intent intent = new Intent(Activity_plan_details.this, Search_Somebody.class);
-            intent.putExtra("id",userId);
+            intent.putExtra("id", userId);
             startActivity(intent);
 
         }
@@ -56,14 +56,14 @@ public class Activity_plan_details extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_friend);
+        setContentView(R.layout.activity_plan_details);
         userId = getIntent().getStringExtra("id");
 
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
 
 
-        recyclerView = findViewById(R.id.Modify_Friend_recyclerview); //리사이클러 뷰 연결
+        recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -77,20 +77,38 @@ public class Activity_plan_details extends AppCompatActivity {
 
         First_InitializeData();  //첫 리사이클 뷰는 검색어가 입력되지 않아서, First_InitializeData 메서드 호출 - 리스트에 데이터 담기
         Log.v("resume", "여기 실행됨2");
-        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId);
+        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+        
+        /*
+        일정 생성 버튼 및 클릭 이벤트
+         */
+        plan_details_add_btn = findViewById(R.id.plan_details_add_btn);
+        plan_details_add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog_Plan_details_create dialog_plan_details_create =
+                        new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
+            }
+        });
 
+        plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
+        plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Activity_plan_details.this.finish();
+            }
+        });
+        
+        
 
     }
-
-
-
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        setContentView(R.layout.activity_modify_friend);
+        setContentView(R.layout.activity_plan_details);
 
         userId = getIntent().getStringExtra("id");
 
@@ -101,16 +119,17 @@ public class Activity_plan_details extends AppCompatActivity {
     }
 
 
-    public void First_InitializeData(){
+    public void First_InitializeData() {
 
 
     }
+
     public void InitializeData(String userId) {
 
         //DB에서 데이터리스트에 담아야하는 메서드
         Plan_details_Data_list.clear();
 
-        recyclerView = findViewById(R.id.Modify_Friend_recyclerview); //리사이클러 뷰 연결
+        recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -123,12 +142,11 @@ public class Activity_plan_details extends AppCompatActivity {
         db = new DBHelper(this);
 
 
-
         Plan_details_Data_list = db.get_plan_details_info(DATE, userId);//리스트에 데이터 담기
 
 
         Log.v("resume", "여기 실행됨");
-        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId);
+        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
     }

@@ -13,7 +13,7 @@
        android:visibility="visible">
 
        <TextView
-           android:id="@+id/modify_plan_dialog_title"
+           android:id="@+id/create_plan_dialog_title"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginTop="10dp"
@@ -32,7 +32,7 @@
             >
 
             <NumberPicker
-                android:id="@+id/modify_plan_hourpicker"
+                android:id="@+id/create_plan_hourpicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -52,7 +52,7 @@
                 android:visibility="visible" />
 
             <NumberPicker
-                android:id="@+id/modify_plan_minutepicker"
+                android:id="@+id/create_plan_minutepicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -88,11 +88,12 @@
                android:textSize="18sp" />
 
            <EditText
-               android:id="@+id/edittext_modify_plan_name"
+               android:id="@+id/edittext_create_plan_name"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:ems="10"
-               android:inputType="textPersonName" />
+               android:inputType="textPersonName"
+               android:hint="이름을 입력해주세요."/>
        </LinearLayout>
 
        <LinearLayout
@@ -104,7 +105,7 @@
            android:orientation="horizontal">
 
            <Button
-               android:id="@+id/modify_plan_cancel_btn"
+               android:id="@+id/create_plan_cancel_btn"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_marginLeft="10dp"
@@ -115,7 +116,7 @@
                android:text="취소" />
 
            <Button
-               android:id="@+id/modify_plan_ok_btn"
+               android:id="@+id/create_plan_ok_btn"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_marginLeft="10dp"

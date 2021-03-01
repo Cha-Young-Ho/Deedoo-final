@@ -3,11 +3,13 @@ package com.example.deedo;
 public class Plan_details_Data {
 
    private String plan_name;
-   private int executing_time;
+   private int executing_hour;
+   private int executing_minute;
 
-    public Plan_details_Data(String plan_name, int executing_time) {
+    public Plan_details_Data(String plan_name, int executing_hour, int executing_minute) {
         this.plan_name = plan_name;
-        this.executing_time = executing_time;
+        this.executing_hour = executing_hour;
+        this.executing_minute = executing_minute;
     }
 
     public String getPlan_name() {
@@ -18,11 +20,19 @@ public class Plan_details_Data {
         this.plan_name = plan_name;
     }
 
-    public int getExecuting_time() {
-        return executing_time;
+    public int getExecuting_hour() {
+        return executing_hour;
     }
 
-    public void setExecuting_time(int executing_time) {
-        this.executing_time = executing_time;
+    public void setExecuting_hour(int executing_hour) {
+        this.executing_hour = executing_hour;
+    }
+
+    public int getExecuting_minute() {
+        return executing_minute;
+    }
+
+    public void setExecuting_minute(int executing_minute) {
+        this.executing_minute = executing_minute;
     }
 }
