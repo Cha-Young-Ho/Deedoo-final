@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <string-array name="spinner_array">
+            <item>1년</item>
+            <item>6개월</item>
+            <item>3개월</item>
+            <item>1개월</item>
+            <item>1주일</item>
+            <item>1일</item>
+        </string-array>
+    </resources>
+

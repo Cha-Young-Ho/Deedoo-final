@@ -108,7 +108,7 @@ public class Home_activity extends AppCompatActivity {
         inquiry_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Home_activity.this, Inquiry.class);
+                Intent intent = new Intent(Home_activity.this, Inquiry_daily_Activity.class);
                 intent.putExtra("id", userId);
                 startActivity(intent);
             }

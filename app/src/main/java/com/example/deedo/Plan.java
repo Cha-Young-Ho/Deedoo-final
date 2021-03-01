@@ -103,6 +103,11 @@ public class Plan extends AppCompatActivity {
                 .setCalendarDisplayMode(CalendarMode.MONTHS)    //날짜단위
                 .commit();
 
+
+
+
+
+        plan_calendarView.addDecorators(new minMaxDecorator(CalendarDay.today(), CalendarDay.from(2030, 11, 31)));
         plan_calendarView.addDecorator(new SundayDecorator()); //일요일 색깔넣기
         plan_calendarView.addDecorator(new SaturdayDecorator()); // 토요일 색깔넣기
         plan_calendarView.addDecorator(oneDayDecorator); //현재날짜 색깔넣기

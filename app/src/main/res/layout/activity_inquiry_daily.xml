@@ -1,8 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_activity"
-    android:background="@color/doeny"/>
+    android:background="@color/white_doeny"
+    android:orientation="vertical"
+    tools:context=".Home_activity">
+
+    <!--캘린더-->
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/plan_calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        app:mcv_selectionColor="#a9dbf0cb"
+        app:mcv_showOtherDates="defaults">
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+    <TextView
+        android:id="@+id/textView_inquiry_daily_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="24sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
+    <Spinner
+        android:id="@+id/inquiry_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:spinnerMode="dropdown" />
+
+    <com.anychart.AnyChartView
+        android:id="@+id/inquiry_daily_chart_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+    </com.anychart.AnyChartView>
+
+
+</LinearLayout>
