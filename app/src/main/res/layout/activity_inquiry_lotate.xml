@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_doeny"
     android:orientation="vertical"
-    tools:context=".Create_Lotate"
+    tools:context=".area.Create_Lotate"
 
     >
 
