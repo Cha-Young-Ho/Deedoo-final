@@ -38,8 +38,9 @@
         <activity android:name=".Home_activity" />
         <activity android:name=".Compare_daily_plan" />
         <activity android:name=".Compare_Mydaily_Friend_plan" />
-        <activity android:name=".Inquiry" />
+        <activity android:name=".Inquiry_daily_Activity" />
         <activity android:name=".Inquiry_Lotate" />
+        <activity android:name=".Activity_plan_details"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

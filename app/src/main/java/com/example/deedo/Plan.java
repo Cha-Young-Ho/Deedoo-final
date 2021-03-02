@@ -96,9 +96,10 @@ public class Plan extends AppCompatActivity {
         /*
         캘린더 뷰에 설정 넣기
          */
+        Calendar today = Calendar.getInstance();
         plan_calendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2017, 0, 1)) //최소 날짜
+                .setMinimumDate(CalendarDay.from(today.get(Calendar.YEAR), today.get(Calendar.MONTH), 1)) //최소 날짜
                 .setMaximumDate(CalendarDay.from(2030, 11, 31)) // 최대 날짜
                 .setCalendarDisplayMode(CalendarMode.MONTHS)    //날짜단위
                 .commit();
@@ -106,12 +107,14 @@ public class Plan extends AppCompatActivity {
 
 
 
-
+        //이전 날짜 데코
         plan_calendarView.addDecorators(new minMaxDecorator(CalendarDay.today(), CalendarDay.from(2030, 11, 31)));
+        
         plan_calendarView.addDecorator(new SundayDecorator()); //일요일 색깔넣기
         plan_calendarView.addDecorator(new SaturdayDecorator()); // 토요일 색깔넣기
         plan_calendarView.addDecorator(oneDayDecorator); //현재날짜 색깔넣기
-
+        
+        //빨간점 넣기
         plan_calendarView.addDecorator(new EventDecorator(Color.RED, Collections.singleton(CalendarDay.today()), this)); //빨간점 넣기
         
         /*
@@ -137,13 +140,13 @@ public class Plan extends AppCompatActivity {
 
                 parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
 
-                Log.v("캘린더 클릭 이벤트 두번째 부분 성공", " 성공");
+
                 year = Integer.parseInt(parsedDATA[0]);
                 month = Integer.parseInt(parsedDATA[1])+1;
                 day = Integer.parseInt(parsedDATA[2]);
 
 
-                Log.v("캘린더 클릭 이벤트 세번째 부분 성공", " 성공");
+
 
 
                 Intent intent = new Intent(Plan.this, Activity_plan_details.class);

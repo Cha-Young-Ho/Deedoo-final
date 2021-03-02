@@ -10,7 +10,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import java.util.Calendar;
 
 public class minMaxDecorator implements DayViewDecorator {
-
+    private CalendarDay date;
     private final CalendarDay calendar_now;
     private final CalendarDay calendar_max;
     public minMaxDecorator(CalendarDay min, CalendarDay max) {
@@ -22,16 +22,17 @@ public class minMaxDecorator implements DayViewDecorator {
     @Override
     public boolean shouldDecorate(CalendarDay day) {
 
-       // day.copyTo();
-       // int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
-       // return weekDay == Calendar.SUNDAY;
 
-        return false;
+
+        return (day.getMonth() == calendar_max.getMonth() && day.getDay() > calendar_max.getDay())
+                || (day.getMonth() == calendar_now.getMonth() && day.getDay() < calendar_now.getDay());
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.addSpan(new ForegroundColorSpan(Color.RED));
+
+        view.addSpan(new ForegroundColorSpan(Color.parseColor("#d2d2d2")));
+        view.setDaysDisabled(true);
     }
 }
 /*

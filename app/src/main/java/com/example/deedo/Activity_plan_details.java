@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,11 @@ public class Activity_plan_details extends AppCompatActivity {
     DBHelper db;
     String userId; //로그인된 유저 아이디
     String[] DATE; // Plan 액티비티에서 넘어온 날짜 배열
+    TextView textview_plan_details_name;
+    int year;
+    int month;
+    int day;
+
 
     /*
      액션바에 돋보기 추가
@@ -62,6 +68,14 @@ public class Activity_plan_details extends AppCompatActivity {
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
 
+        year = Integer.parseInt(DATE[0]);
+        month = Integer.parseInt(DATE[1])+1;
+        day = Integer.parseInt(DATE[2]);
+
+
+        textview_plan_details_name = findViewById(R.id.textview_plan_details_name);
+        textview_plan_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
+
 
         recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
         layoutManager = new LinearLayoutManager(this);
@@ -79,7 +93,7 @@ public class Activity_plan_details extends AppCompatActivity {
         Log.v("resume", "여기 실행됨2");
         adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
-        
+
         /*
         일정 생성 버튼 및 클릭 이벤트
          */
@@ -89,6 +103,10 @@ public class Activity_plan_details extends AppCompatActivity {
             public void onClick(View v) {
                 Dialog_Plan_details_create dialog_plan_details_create =
                         new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
+
+
+
+
             }
         });
 
@@ -96,7 +114,8 @@ public class Activity_plan_details extends AppCompatActivity {
         plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Activity_plan_details.this.finish();
+
+               Activity_plan_details.this.finish();
             }
         });
         
@@ -112,9 +131,61 @@ public class Activity_plan_details extends AppCompatActivity {
 
         userId = getIntent().getStringExtra("id");
 
+        userId = getIntent().getStringExtra("id");
 
+        this.DATE = getIntent().getStringArrayExtra("DATE");
+
+
+        year = Integer.parseInt(DATE[0]);
+        month = Integer.parseInt(DATE[1])+1;
+        day = Integer.parseInt(DATE[2]);
+
+
+        textview_plan_details_name = findViewById(R.id.textview_plan_details_name);
+        textview_plan_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
+
+
+        recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        if (Plan_details_Data_list != null) {
+            Plan_details_Data_list.clear();
+            Plan_details_Data_list = new ArrayList<>();
+        } else {
+            Plan_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
+        }
         InitializeData(userId);
+        Log.v("resume", "여기 실행됨2");
+        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
+        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 
+        /*
+        일정 생성 버튼 및 클릭 이벤트
+         */
+        plan_details_add_btn = findViewById(R.id.plan_details_add_btn);
+        plan_details_add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog_Plan_details_create dialog_plan_details_create =
+                        new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
+
+                dialog_plan_details_create.show();
+
+
+
+
+            }
+        });
+
+        plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
+        plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Activity_plan_details.this.finish();
+            }
+        });
 
     }
 

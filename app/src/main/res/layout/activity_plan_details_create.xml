@@ -31,46 +31,14 @@
             android:orientation="horizontal"
             >
 
-            <NumberPicker
-                android:id="@+id/create_plan_hourpicker"
+            <TimePicker
+                android:id="@+id/create_plan_timepicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:timePickerMode="spinner"
                 android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:minHeight="42dp"
-                android:text="시간"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:visibility="visible" />
-
-            <NumberPicker
-                android:id="@+id/create_plan_minutepicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:minHeight="42dp"
-                android:text="분"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:visibility="visible" />
 
         </LinearLayout>
 
