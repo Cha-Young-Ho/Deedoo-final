@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "example5.db";
+    private static final String DB_NAME = "example7.db";
 
     public DBHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -26,8 +26,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS User (userId VARCHAR(20) PRIMARY KEY NOT NULL, userPassword varchar(20) NOT NULL, userName varchar(10) NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLongitude VARCHAR(15) NOT NULL) ");
         db.execSQL("CREATE TABLE IF NOT EXISTS Friend (User1 VARCHAR(20), User2 VARCHAR(20))");
-        db.execSQL("CREATE TABLE IF NOT EXISTS Daily (userId VARCHAR(20) NOT NULL,  DailyName Varchar(100) NOT NULL, StayDate DATE, Stay_Time int)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS Planner (userId VARCHAR(20) NOT NULL,  PlanName varchar(100) NOT NULL, PlanDate DATE, PlanExecuting_hour int, PlanExecuting_minute int)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Daily (userId VARCHAR(20) NOT NULL,  DailyName Varchar(100) NOT NULL, StayDate_year int, StayDate_month int, StayDate_day int, Stay_Time_hour int, Stay_Time_minute)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Planner (userId VARCHAR(20) NOT NULL,  PlanName varchar(100) NOT NULL, PlanDate_year int, PlanDate_month int, PlanDate_day int, PlanExecuting_hour int, PlanExecuting_minute int)");
 
 
     }
@@ -265,6 +265,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT User2 FROM Friend WHERE User1 = '" + userId + "'", null);
         Log.v("커서 카운터 수 = ", "" + cursor.getCount());
 
+
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
 
@@ -293,44 +294,39 @@ public class DBHelper extends SQLiteOpenHelper {
         return modify_friend_data_list;
     }
 
-    public ArrayList<Plan_details_Data> get_plan_details_info(String[] _Date, String _userId) {
-        ArrayList<Plan_details_Data> plan_details_data = new ArrayList<>();
 
-
-        return plan_details_data;
-    }
 
     public void Delete_Plan_Details(String _userId, String Plan_Details_name) {
         SQLiteDatabase db = getWritableDatabase();
 
         try {
-            db.execSQL("DELETE FROM Friend WHERE User1 = '" + _userId + "' AND User2 = '" + Plan_Details_name + "'");
+            db.execSQL("DELETE FROM Planner WHERE userId = '" + _userId + "' AND PlanName = '" + Plan_Details_name + "'");
 
-            Log.v("딜리트 정보 보기 = ", "userId = " + _userId + " Friend_id = " + Plan_Details_name);
-            Log.v("친구 딜리트성공", "성공!");
+
         } catch (Exception e) {
-            Log.v("친구 딜리트실패", "실패!");
-            Log.v("딜리트 정보 보기 = ", "userId = " + _userId + " Friend_id = " + Plan_Details_name);
+            Log.v("plan 딜리트실패", "실패!");
         }
+
+
     }
 
-    public void Modify_plan_detail(String _userId, int _year, int _month, int _day, String _modify_plan_name, int executing_hour, int executing_minute,
-                                   String before_plan_name, int before_executing_hour, int before_executing_minute) {
+    public void Modify_plan_detail(String _userId, int _year, int _month, int _day, String _modify_plan_name, int executing_hour, int executing_minute, String before_planName) {
         SQLiteDatabase db = getWritableDatabase();
 
         String _date = _year + "-" + _month + "-" + _day;
-        
+
         try {
-            db.execSQL("UPDATE FROM Planner " +
+            db.execSQL("UPDATE Planner " +
                     "Set PlanName = '" + _modify_plan_name + "', " +
                     "PlanExecuting_hour = '" + executing_hour + "', " +
                     "PlanExecuting_minute = '" + executing_minute + "' " +
-                    "WHERE PlanName = '" + _userId + "' " +
-                    "AND PlanExecuting_hour = '" + before_plan_name + "' " +
-                    "AND PlanExecuting_minute = '" + before_executing_minute + "' " +
-                    "AND PlanDate = '" + _date + "'");
+                    "WHERE PlanName = '" + before_planName + "' " +
+                    "AND PlanDate_year = '" + _year + "'" +
+                    "AND PlanDate_month = '"+_month+"'" +
+                    "AND PlanDate_day = '"+_day+"'" +
+                    "AND userId ='"+_userId+"'" );
             Log.v("plan details modify!", "성공");
-        }catch(Exception e){
+        } catch (Exception e) {
 
 
             Log.v("plan details modify!", "실패");
@@ -342,17 +338,54 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String plan_date = _year + "-" + _month + "-" + _day;
         try {
-            db.execSQL("INSERT INTO Planner (userId, PlanName, PlanDate, PlanExecuting_hour, PlanExecuting_minute) " +
-                    "VALUES('" + _userId + "','" + _create_plan_name + "', '" + plan_date + "', '" + executing_hour + "', '" + executing_minute + "');");
-            Log.v("create plan insert 성공!","아이디 = " + _userId + " planname = " + _create_plan_name + 
-                    " year = " + _year + " month = " + _month + " day = " + _day + " executing_hour =" + executing_hour + 
+
+            db.execSQL("INSERT INTO Planner (userId, PlanName, PlanDate_year, PlanDate_month, PlanDate_day, PlanExecuting_hour, PlanExecuting_minute) " +
+                    "VALUES('" + _userId + "','" + _create_plan_name + "', '" + _year + "', '"+_month+"', '"+_day+"', '" + executing_hour + "', '" + executing_minute + "');");
+            Log.v("create plan insert 성공!", "아이디 = " + _userId + " planname = " + _create_plan_name +
+                    " year = " + _year + " month = " + _month + " day = " + _day + " executing_hour =" + executing_hour +
                     " executing_minute = " + executing_minute);
-            
-        }catch(Exception e){
-            Log.v("create plan insert 실패!", "아이디 = " + _userId + " planname = " + _create_plan_name + 
-                    " year = " + _year + " month = " + _month + " day = " + _day + " executing_hour =" + executing_hour + 
+
+        } catch (Exception e) {
+            Log.v("create plan insert 실패!", "아이디 = " + _userId + " planname = " + _create_plan_name +
+                    " year = " + _year + " month = " + _month + " day = " + _day + " executing_hour =" + executing_hour +
                     " executing_minute = " + executing_minute);
         }
     }
+
+
+    public ArrayList<Plan_details_Data> get_plan_details_info(String _userId, String[] DATE) {
+
+        SQLiteDatabase db = getWritableDatabase();
+        ArrayList<Plan_details_Data> plan_details_data_list = new ArrayList<>();
+        int year = Integer.parseInt(DATE[0]);
+        int month = Integer.parseInt(DATE[1]) + 1;
+        int day = Integer.parseInt(DATE[2]);
+
+        Cursor cursor = db.rawQuery("SELECT * FROM Planner WHERE userId = '" + _userId + "' AND PlanDate_year = '"+year+"' AND PlanDate_month = '"+month+"' AND PlanDate_day = '"+day+"'", null);
+
+
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                String plan_name = cursor.getString(cursor.getColumnIndex("PlanName"));
+                int planExecuting_hour = cursor.getInt(cursor.getColumnIndex("PlanExecuting_hour"));
+                int planExecuting_minute = cursor.getInt(cursor.getColumnIndex("PlanExecuting_minute"));
+
+                plan_details_data_list.add(new Plan_details_Data(plan_name, planExecuting_hour, planExecuting_minute));
+
+            }
+
+        } else {
+            Log.v("실패", "cursor.getCount = 0");
+        }
+        Log.v("userid = ", _userId);
+
+
+        cursor.close();
+
+         
+        return plan_details_data_list;
+    }
+
 }
 

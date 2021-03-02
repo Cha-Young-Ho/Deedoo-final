@@ -104,6 +104,7 @@ public class Activity_plan_details extends AppCompatActivity {
                 Dialog_Plan_details_create dialog_plan_details_create =
                         new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
 
+                dialog_plan_details_create.show();
 
 
 
@@ -131,8 +132,6 @@ public class Activity_plan_details extends AppCompatActivity {
 
         userId = getIntent().getStringExtra("id");
 
-        userId = getIntent().getStringExtra("id");
-
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
 
@@ -155,10 +154,8 @@ public class Activity_plan_details extends AppCompatActivity {
         } else {
             Plan_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        InitializeData(userId);
-        Log.v("resume", "여기 실행됨2");
-        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+        InitializeData(userId); //데이터 정보를 리스트에 담아서옴
+
 
         /*
         일정 생성 버튼 및 클릭 이벤트
@@ -171,7 +168,6 @@ public class Activity_plan_details extends AppCompatActivity {
                         new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
 
                 dialog_plan_details_create.show();
-
 
 
 
@@ -213,12 +209,10 @@ public class Activity_plan_details extends AppCompatActivity {
         db = new DBHelper(this);
 
 
-        Plan_details_Data_list = db.get_plan_details_info(DATE, userId);//리스트에 데이터 담기
+       Plan_details_Data_list = db.get_plan_details_info(userId, DATE);//리스트에 데이터 담기
 
-
-        Log.v("resume", "여기 실행됨");
+        Log.v("resume", "여기 실행됨2");
         adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
-
     }
 }

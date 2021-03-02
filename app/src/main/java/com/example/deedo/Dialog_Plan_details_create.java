@@ -1,7 +1,9 @@
 package com.example.deedo;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 
 /**
@@ -74,12 +77,14 @@ public class Dialog_Plan_details_create extends Dialog {
 
 
         create_plan_ok_btn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 
-                /*
-                int executing_time_hour = create_plan_hourpicker.getValue();
-                int executing_time_minute = create_plan_minutepicker.getValue();
+
+
+                final int executing_time_hour = create_plan_timepicker.getHour();
+                final int executing_time_minute = create_plan_timepicker.getMinute();
                 String create_plan_name = edittext_create_plan_name.getText().toString();
 
 
@@ -92,11 +97,14 @@ public class Dialog_Plan_details_create extends Dialog {
                     //입력한 값 db에 저장
                     db.create_plan_detail(userId, year, month, day, create_plan_name, executing_time_hour, executing_time_minute);
                     Toast.makeText(Dialog_Plan_details_create.this.context, "성공적으로 입력되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+
                     // 커스텀 다이얼로그를 종료한다.
                     dismiss();
                 }
 
-                 */
+
 
 
             }
@@ -113,11 +121,6 @@ public class Dialog_Plan_details_create extends Dialog {
     }
 
 
-    // 호출할 다이얼로그 함수를 정의
-    public void callFunction(final TextView main_label) {
-
-
-    }
 }
 
 

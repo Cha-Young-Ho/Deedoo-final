@@ -129,12 +129,10 @@ public class Plan extends AppCompatActivity {
                 
                 
                 Log.v("캘린더 클릭 이벤트 첫 부분 성공", " 성공");
-
                 selectedDay = date;
                 DATE = selectedDay.toString(); // ex : Calender{2021-02-28}
 
                 String[] parsedDATA = DATE.split("[{]"); // ex : [0] = Calender || [1] = 2021-02-28}
-
 
                 parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
 
@@ -142,12 +140,10 @@ public class Plan extends AppCompatActivity {
 
 
                 year = Integer.parseInt(parsedDATA[0]);
+
                 month = Integer.parseInt(parsedDATA[1])+1;
+
                 day = Integer.parseInt(parsedDATA[2]);
-
-
-
-
 
                 Intent intent = new Intent(Plan.this, Activity_plan_details.class);
                 intent.putExtra("id", userId);

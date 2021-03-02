@@ -31,14 +31,6 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
     private OnItemClickListener onItemClickListener;
 
 
-    public Plan_details_recyclerview_Adapter(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-
-
-
-
-    }
-
     public Plan_details_recyclerview_Adapter(ArrayList<Plan_details_Data> Plan_details_data_List, Context context, String userId, String[] DATE) {
         this.Plan_details_data_List = Plan_details_data_List;
         this.context = context;
@@ -63,14 +55,16 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
         
         //받아온 plan 이름을 리사이클뷰에 배치
         holder.plan_name.setText(Plan_details_data_List.get(position).getPlan_name());
+        holder.executing_time.setText(Plan_details_data_List.get(position).getExecuting_hour() + "시간 " + Plan_details_data_List.get(position).getExecuting_minute() +"분");
         
         //받아온 plan 할당 시간을 리사이클 뷰에 배치
         ////////////////////////holder.executing_time.setText(Plan_details_data_List.get(position).getExecuting_time());
         
-        
+
         /*
         받아온 plan name에 따라 이미지 배치
          */
+
         if ((Plan_details_data_List.get(position).getPlan_name()).contains("공부") ||
                 Plan_details_data_List.get(position).getPlan_name().contains("학습") ||
                 Plan_details_data_List.get(position).getPlan_name().contains("수강") ||
@@ -84,7 +78,8 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
                  Plan_details_data_List.get(position).getPlan_name().contains("축구")||
                 Plan_details_data_List.get(position).getPlan_name().contains("헬스") ||
                 Plan_details_data_List.get(position).getPlan_name().contains("등산") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("자전거")) {
+                Plan_details_data_List.get(position).getPlan_name().contains("자전거")||
+                Plan_details_data_List.get(position).getPlan_name().contains("exercise")) {
             holder.item_imageview_plan_details.setImageResource(R.drawable.exercise);
 
         }else if(Plan_details_data_List.get(position).getPlan_name().contains("학교")||
@@ -142,11 +137,11 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
                  */
             Dialog_Plan_details_modify dialog_plan_details_modify =
                     new Dialog_Plan_details_modify(
-                            Plan_details_recyclerview_Adapter.this.context, userId, DATE, before_plan_name, before_plan_executing_hour, before_plan_executing_minute);
+                            Plan_details_recyclerview_Adapter.this.context, userId, DATE, before_plan_name);
 
+                    dialog_plan_details_modify.show();
 
-
-
+                    notifyItemChanged(pos);
             }
         });
 
