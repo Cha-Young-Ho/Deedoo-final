@@ -11,10 +11,10 @@
     <!--캘린더-->
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/plan_calendarView"
+        android:id="@+id/daily_calendarView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
         android:background="@color/white"
         app:mcv_selectionColor="#a9dbf0cb"
@@ -22,23 +22,36 @@
 
     </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
 
-    <TextView
-        android:id="@+id/textView_inquiry_daily_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="TextView"
-        android:textSize="24sp" />
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/inquiry_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray"
+            />
+
+        <TextView
+            android:id="@+id/textView_inquiry_daily_text"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="TextView"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray"/>
-    <Spinner
-        android:id="@+id/inquiry_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:spinnerMode="dropdown" />
 
     <com.anychart.AnyChartView
         android:id="@+id/inquiry_daily_chart_view"
@@ -47,6 +60,14 @@
         android:layout_weight="1">
 
     </com.anychart.AnyChartView>
+
+    <Button
+        android:id="@+id/daily_compare_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="계획이랑 비교하기!" />
 
 
 </LinearLayout>

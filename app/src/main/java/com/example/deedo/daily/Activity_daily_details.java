@@ -1,4 +1,4 @@
-package com.example.deedo.inquiry_plan;
+package com.example.deedo.daily;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deedo.DB.DBHelper;
-import com.example.deedo.R;
 import com.example.deedo.Friend.Search_Somebody;
+import com.example.deedo.R;
+import com.example.deedo.inquiry_plan.Dialog_Plan_details_create;
+import com.example.deedo.inquiry_plan.Plan_details_Data;
+import com.example.deedo.inquiry_plan.Plan_details_recyclerview_Adapter;
 
 import java.util.ArrayList;
 
-public class Activity_plan_details extends AppCompatActivity {
+public class Activity_daily_details extends AppCompatActivity {
 
     Button plan_details_add_btn, plan_details_cancel_btn;
     ArrayList<Plan_details_Data> Plan_details_Data_list; //담아온 데이터
@@ -53,7 +56,7 @@ public class Activity_plan_details extends AppCompatActivity {
 
         if (id == R.id.action_search_btn) {
 
-            Intent intent = new Intent(Activity_plan_details.this, Search_Somebody.class);
+            Intent intent = new Intent(com.example.deedo.daily.Activity_daily_details.this, Search_Somebody.class);
             intent.putExtra("id", userId);
             startActivity(intent);
 
@@ -106,7 +109,7 @@ public class Activity_plan_details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Dialog_Plan_details_create dialog_plan_details_create =
-                        new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
+                        new Dialog_Plan_details_create(com.example.deedo.daily.Activity_daily_details.this, userId, DATE);
 
                 dialog_plan_details_create.show();
 
@@ -120,11 +123,11 @@ public class Activity_plan_details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               Activity_plan_details.this.finish();
+                com.example.deedo.daily.Activity_daily_details.this.finish();
             }
         });
-        
-        
+
+
 
     }
 
@@ -169,7 +172,7 @@ public class Activity_plan_details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Dialog_Plan_details_create dialog_plan_details_create =
-                        new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
+                        new Dialog_Plan_details_create(com.example.deedo.daily.Activity_daily_details.this, userId, DATE);
 
                 dialog_plan_details_create.show();
 
@@ -183,10 +186,10 @@ public class Activity_plan_details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Activity_plan_details.this.finish();
+                com.example.deedo.daily.Activity_daily_details.this.finish();
             }
         });
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -213,10 +216,11 @@ public class Activity_plan_details extends AppCompatActivity {
         db = new DBHelper(this);
 
 
-       Plan_details_Data_list = db.get_plan_details_info(userId, DATE);//리스트에 데이터 담기
+        Plan_details_Data_list = db.get_plan_details_info(userId, DATE);//리스트에 데이터 담기
 
         Log.v("resume", "여기 실행됨2");
         adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
         recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
     }
+
 }

@@ -12,14 +12,37 @@ import androidx.annotation.Nullable;
 import com.example.deedo.Friend.Modify_Friend_Data;
 import com.example.deedo.Friend.Search_Friend_Data;
 import com.example.deedo.area.Area_Data;
+import com.example.deedo.daily.daily_data;
 import com.example.deedo.inquiry_plan.Plan_details_Data;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "example7.db";
+    /*
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
+    // Read from the database
+myRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            // This method is called once with the initial value and again
+            // whenever data at this location is updated.
+            String value = dataSnapshot.getValue(String.class);
+            Log.d(TAG, "Value is: " + value);
+        }
 
+        @Override
+        public void onCancelled(DatabaseError error) {
+            // Failed to read value
+            Log.w(TAG, "Failed to read value.", error.toException());
+        }
+    });
+
+     */
     public DBHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -27,13 +50,11 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) { //데이터 베이스 생성될 때 호출
 
-
         db.execSQL("CREATE TABLE IF NOT EXISTS User (userId VARCHAR(20) PRIMARY KEY NOT NULL, userPassword varchar(20) NOT NULL, userName varchar(10) NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS Area (userId VARCHAR(20) NOT NULL,  AreaName VARCHAR(30) NOT NULL, AreaLatitude VARCHAR(15) NOT NULL, AreaLongitude VARCHAR(15) NOT NULL) ");
         db.execSQL("CREATE TABLE IF NOT EXISTS Friend (User1 VARCHAR(20), User2 VARCHAR(20))");
         db.execSQL("CREATE TABLE IF NOT EXISTS Daily (userId VARCHAR(20) NOT NULL,  DailyName Varchar(100) NOT NULL, StayDate_year int, StayDate_month int, StayDate_day int, Stay_Time_hour int, Stay_Time_minute)");
         db.execSQL("CREATE TABLE IF NOT EXISTS Planner (userId VARCHAR(20) NOT NULL,  PlanName varchar(100) NOT NULL, PlanDate_year int, PlanDate_month int, PlanDate_day int, PlanExecuting_hour int, PlanExecuting_minute int)");
-
 
     }
 
@@ -390,6 +411,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
          
         return plan_details_data_list;
+    }
+
+    public ArrayList<daily_data> get_daily_info(int date_amount, int year, int month, int day){
+        ArrayList<daily_data> daily_data_list = null;
+
+        // 날짜 사이로
+        return daily_data_list;
     }
 
 }

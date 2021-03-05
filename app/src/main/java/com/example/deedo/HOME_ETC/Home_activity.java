@@ -35,10 +35,12 @@ import com.example.deedo.inquiry_plan.Plan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
-public class Home_activity extends AppCompatActivity {
+public class Home_activity extends AppCompatActivity{
+    public static Object mcontext;
     private GpsTracker gpsTracker;
-
+    Handler mHandler;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -49,6 +51,7 @@ public class Home_activity extends AppCompatActivity {
     int [] earning = {500, 800, 1000};
     AnyChartView home_chart_view;
     private Intent serviceIntent;
+
     /*
     액션바에 돋보기 추가
      */
@@ -81,16 +84,17 @@ public class Home_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mcontext = Home_activity.this;
         if (checkLocationServicesStatus()) {
             checkRunTimePermission();
         } else {
             showDialogForLocationServiceSetting();
         }
         //이 부분을 백그라운드에서 실행하고 메인 액티비티로 넘겨줘야함
+
         gpsTracker = new GpsTracker(Home_activity.this);
         double now_latitude = gpsTracker.getLatitude();
         double now_longitude = gpsTracker.getLongitude();
-
 
 
     /*
@@ -130,7 +134,9 @@ public class Home_activity extends AppCompatActivity {
         friend_setting_button = findViewById(R.id.friend_setting_Button);
         main_id = findViewById(R.id.main_id);
         //main_id.setText(userId + "님 어서오세요!");
-        main_id.setText(now_latitude + " --" + now_longitude);
+
+        main_id.setText(now_latitude + " -- " + now_longitude);
+        //main_id.setText(now_latitude + " --" + now_longitude);
 
 
 
@@ -348,4 +354,7 @@ public class Home_activity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
+
+
 }

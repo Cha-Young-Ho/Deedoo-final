@@ -42,6 +42,8 @@ public class Plan extends AppCompatActivity {
     int [] earning = {500, 800, 1000};
     TextView textView;
 
+
+
     /*
     캘린더 뷰 클릭 이벤트에 필요한 변수
      */

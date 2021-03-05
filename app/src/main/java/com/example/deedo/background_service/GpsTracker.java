@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
+
 /*
 1. GpsTracker 객체가 생성되면 getLocation 메소드를 실행한다.
 
@@ -30,8 +31,9 @@ public class GpsTracker extends Service implements LocationListener {
     double latitude;
     double longitude;
 
+
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 1000; // 1초
     protected LocationManager locationManager;
 
 
@@ -132,6 +134,11 @@ public class GpsTracker extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location)
     {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
+
+
     }
 
     @Override

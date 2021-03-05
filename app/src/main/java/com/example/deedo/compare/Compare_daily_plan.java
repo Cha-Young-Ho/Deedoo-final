@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +14,8 @@ import com.example.deedo.R;
 
 public class Compare_daily_plan extends AppCompatActivity {
     String userId;
+
+    Button compare_cancel_btn;
 
     /*
     액션바에 돋보기 추가
@@ -45,5 +49,14 @@ public class Compare_daily_plan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare_daily_plan);
         userId = getIntent().getStringExtra("id");
+
+        compare_cancel_btn = findViewById(R.id.compare_cancel_btn);
+
+        compare_cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
