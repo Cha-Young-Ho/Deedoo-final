@@ -14,12 +14,10 @@ import com.example.deedo.Friend.Search_Friend_Data;
 import com.example.deedo.area.Area_Data;
 import com.example.deedo.daily.daily_data;
 import com.example.deedo.inquiry_plan.Plan_details_Data;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "example7.db";
     /*
