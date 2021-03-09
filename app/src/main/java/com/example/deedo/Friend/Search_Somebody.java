@@ -1,5 +1,6 @@
 package com.example.deedo.Friend;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Get_Search_Somebody_onCallback;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,7 @@ public class Search_Somebody extends AppCompatActivity {
     String userId; //로그인된 유저 아이디
     ImageButton ImageView_search_somebody_btn; //검색 요청 버튼
     EditText Search_text; //사용자가 입력한 검색어
-
+    DBHelperFirebase firebase;
 
     String search_text; // editText에서 받아온 검색어 저장
 
@@ -36,7 +39,7 @@ public class Search_Somebody extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_somebody);
         userId = getIntent().getStringExtra("id");
-
+        firebase = new DBHelperFirebase();
         ImageView_search_somebody_btn = findViewById(R.id.ImageView_search_somebody_btn);
 
 
@@ -124,13 +127,21 @@ public class Search_Somebody extends AppCompatActivity {
             First_InitializeData();
         }else{
 
-            Search_Friend_Data_list = db.get_Search_Somebody(search_text, userId);//리스트에 데이터 담기
+            firebase.get_Search_Somebody(new Get_Search_Somebody_onCallback() {
+                @Override
+                public void get_Search_Somebody(ArrayList<Search_Friend_Data> Area_Data_list, Context con) {
+                    adapter = new Search_Friend_Adapter(Search_Friend_Data_list, con, userId);
+                    recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+                }
+            }, search_text, userId, this);
+
             Log.v("resume", "여기 실행됨");
+
+
         }
 
 
-        adapter = new Search_Friend_Adapter(Search_Friend_Data_list, this, userId);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
 
     }
 

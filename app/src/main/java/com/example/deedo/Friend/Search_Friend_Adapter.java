@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
     private Context context;
     DBHelper db;
     String userId;
+    DBHelperFirebase firebase;
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
@@ -32,6 +34,7 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
     public Search_Friend_Adapter(OnItemClickListener onItemClickListener, String _id) {
         this.onItemClickListener = onItemClickListener;
         this.userId = _id;
+        this.firebase = new DBHelperFirebase();
     }
 
     public Search_Friend_Adapter(ArrayList<Search_Friend_Data> Search_Friend_Data_list, Context context, String _id) {
@@ -71,7 +74,8 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
                 String Friend_Name = Search_Friend_Data_list.get(pos).getSearch_Friend_name();
                 String Friend_id = Search_Friend_Data_list.get(pos).getSearch_Friend_id();
                 Log.v("선택된 정보 = ", "이름 = "+Friend_Name+ " - 아이디 = " + Friend_id);
-                db.Request_Friend(userId, Friend_id, Friend_Name);
+
+                firebase.Create_Friend(userId, Friend_id, Friend_Name);
                 Search_Friend_Data_list.remove(pos);
                 notifyItemRemoved(pos);
                 notifyItemRangeChanged(pos, Search_Friend_Data_list.size());

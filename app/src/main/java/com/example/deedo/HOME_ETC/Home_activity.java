@@ -84,7 +84,7 @@ public class Home_activity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mcontext = Home_activity.this;
-
+        Log.v("시작", "ㅅ자시작시작@@@@@@@@@@@@@@@@@@@@@@@@");
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -244,7 +244,7 @@ public class Home_activity extends AppCompatActivity {
                 double latitude = intent.getDoubleExtra("latitude", 0);
                 double longiude = intent.getDoubleExtra("longitude", 0);
 
-
+                main_id.setText("latitude = " + latitude + "  longitude = " + longiude);
             }
         }
     }

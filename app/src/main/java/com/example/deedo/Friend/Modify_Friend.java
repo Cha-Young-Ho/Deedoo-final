@@ -1,5 +1,6 @@
 package com.example.deedo.Friend;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Get_Friend_onCallback;
 
 import java.util.ArrayList;
 
@@ -21,7 +24,7 @@ public class Modify_Friend extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     DBHelper db;
-
+    DBHelperFirebase firebase;
 
     String userId; //로그인된 유저 아이디
 
@@ -60,7 +63,7 @@ public class Modify_Friend extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_friend);
         userId = getIntent().getStringExtra("id");
-
+        firebase = new DBHelperFirebase();
 
 
 
@@ -125,12 +128,21 @@ public class Modify_Friend extends AppCompatActivity {
 
 
 
-            Modify_Friend_Data_list = db.get_friend_info(userId);//리스트에 데이터 담기
 
 
-        Log.v("resume", "여기 실행됨");
-        adapter = new Modify_Friend_Adapter(Modify_Friend_Data_list, this, userId);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+        firebase.Get_friend_info(new Get_Friend_onCallback() {
+            @Override
+            public void get_Friend_onCallback(ArrayList<Modify_Friend_Data> modify_Friend_Data_list, Context con) {
+                Modify_Friend_Data_list = modify_Friend_Data_list;
+                Log.v("resume", "여기 실행됨");
+                adapter = new Modify_Friend_Adapter(Modify_Friend_Data_list, con, userId);
+                recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+            }
+        }, userId, this);
+
+
+
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.deedo.area;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deedo.DB.DBHelper;
-import com.example.deedo.R;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
+import com.example.deedo.R;
+import com.example.deedo.callback.Get_Area_info_onCallback;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
     Button create_lotate_btn;
     String userId;
     DBHelper db;
+    DBHelperFirebase firebase;
 
     /*
      액션바에 돋보기 추가
@@ -57,7 +61,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
+        firebase = new DBHelperFirebase();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inquiry_lotate);
         userId = getIntent().getStringExtra("id");
@@ -125,15 +129,19 @@ public class Inquiry_Lotate extends AppCompatActivity {
         InitializeData();  //리스트에 데이터 담기
 
 
-        adapter = new AreaAdapter(Area_Data_list, this, userId);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
 
     }
 
     public void InitializeData() {
 
-        Area_Data_list = db.get_Area_info(userId);
-
+        firebase.get_Area_info(new Get_Area_info_onCallback() {
+            @Override
+            public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list, Context con) {
+                adapter = new AreaAdapter(Area_Data_list, con, userId);
+                recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+            }
+        }, userId,this);
     }
 
 }

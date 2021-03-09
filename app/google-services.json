@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "888608414179",
-    "project_id": "deedoo-d3709",
-    "storage_bucket": "deedoo-d3709.appspot.com"
+    "project_number": "81398931727",
+    "project_id": "deedo-second",
+    "storage_bucket": "deedo-second.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:888608414179:android:76b5baa18f0e3379f3e8d6",
+        "mobilesdk_app_id": "1:81398931727:android:16dfe5b9defa5431769e7a",
         "android_client_info": {
           "package_name": "com.example.deedo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "888608414179-bneldm5kq78o0o3un8v2m6fqcbho53hv.apps.googleusercontent.com",
+          "client_id": "81398931727-h6nfucst2jdfvkerem65mrnok4aat841.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAOKZXhm5wQjEsqS5b1-MfHXGnBoDY2ZLo"
+          "current_key": "AIzaSyCMay1JmUFyH6rW53kh3z58onE_JPtMr74"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "888608414179-bneldm5kq78o0o3un8v2m6fqcbho53hv.apps.googleusercontent.com",
+              "client_id": "81398931727-h6nfucst2jdfvkerem65mrnok4aat841.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

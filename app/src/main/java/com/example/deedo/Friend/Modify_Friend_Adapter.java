@@ -54,7 +54,7 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
     @Override
     public void onBindViewHolder(@NonNull Modify_Friend_Adapter.Modify_Friend_ViewHolder holder, int position) {
 
-        holder.Modify_Friend_name.setText("이름 = " + Modify_Friend_Data_list.get(position).getModify_Friend_name());
+
         holder.Modify_Friend_id.setText("아이디 = " + Modify_Friend_Data_list.get(position).getModify_Friend_id());
         
         
@@ -111,8 +111,7 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
 
         public Modify_Friend_ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.Modify_Friend_name = itemView.findViewById(R.id.item_textview_plan_details_name);
-            this.Modify_Friend_id = itemView.findViewById(R.id.item_textview_plan_details_time);
+            this.Modify_Friend_id = itemView.findViewById(R.id.item_textview_friend_id);
 
             this.item_inquiry_friend_btn = itemView.findViewById(R.id.item_inquiry_friend_btn);
 

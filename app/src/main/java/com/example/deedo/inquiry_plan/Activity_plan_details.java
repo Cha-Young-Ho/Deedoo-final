@@ -1,5 +1,6 @@
 package com.example.deedo.inquiry_plan;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
 import com.example.deedo.Friend.Search_Somebody;
+import com.example.deedo.callback.Get_Plan_Detail_info;
 
 import java.util.ArrayList;
 
@@ -33,7 +36,7 @@ public class Activity_plan_details extends AppCompatActivity {
     int year;
     int month;
     int day;
-
+    DBHelperFirebase firebase;
 
     /*
      액션바에 돋보기 추가
@@ -68,6 +71,7 @@ public class Activity_plan_details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_details);
         userId = getIntent().getStringExtra("id");
+        firebase = new DBHelperFirebase();
 
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
@@ -210,13 +214,19 @@ public class Activity_plan_details extends AppCompatActivity {
         } else {
             Plan_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        db = new DBHelper(this);
 
 
-       Plan_details_Data_list = db.get_plan_details_info(userId, DATE);//리스트에 데이터 담기
+        firebase.Get_plan_details_info(new Get_Plan_Detail_info() {
+            @Override
+            public void get_plan_details_onCallback(ArrayList<Plan_details_Data> plan_details_data_list, Context con) {
+                Plan_details_Data_list = plan_details_data_list;
+                Log.v("resume", "여기 실행됨2");
+                adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, con,userId, DATE);
+                recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+            }
+        }, userId, DATE,this);
 
-        Log.v("resume", "여기 실행됨2");
-        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
+
     }
 }
