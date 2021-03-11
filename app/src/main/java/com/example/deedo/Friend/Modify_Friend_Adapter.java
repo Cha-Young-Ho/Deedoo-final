@@ -11,8 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Delete_Friend_Callback;
 
 import java.util.ArrayList;
 
@@ -20,8 +21,8 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
 
     private ArrayList<Modify_Friend_Data> Modify_Friend_Data_list;
     private Context context;
-    DBHelper db;
     String userId;
+    DBHelperFirebase firebase = new DBHelperFirebase();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
@@ -76,7 +77,6 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
 
 
                 Log.v("선택된 번호 =", "" + pos);
@@ -85,10 +85,15 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
                 String Friend_Name = Modify_Friend_Data_list.get(pos).getModify_Friend_name();
                 String Friend_id = Modify_Friend_Data_list.get(pos).getModify_Friend_id();
                 Log.v("선택된 정보 = ", "이름 = " + Friend_Name + " - 아이디 = " + Friend_id);
-                db.Delete_Friend(userId, Friend_id);
-                Modify_Friend_Data_list.remove(pos);
-                notifyItemRemoved(pos);
-                notifyItemRangeChanged(pos, Modify_Friend_Data_list.size());
+                firebase.Delete_Friend(new Delete_Friend_Callback() {
+                    @Override
+                    public void delete_Friend_Callback() {
+                        Modify_Friend_Data_list.remove(pos);
+                        notifyItemRemoved(pos);
+                        notifyItemRangeChanged(pos, Modify_Friend_Data_list.size());
+                    }
+                },userId, Friend_id);
+
 
 
             }

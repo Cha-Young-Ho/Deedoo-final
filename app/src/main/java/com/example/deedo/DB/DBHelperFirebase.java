@@ -8,11 +8,21 @@ import androidx.annotation.NonNull;
 import com.example.deedo.Friend.Modify_Friend_Data;
 import com.example.deedo.Friend.Search_Friend_Data;
 import com.example.deedo.area.Area_Data;
+import com.example.deedo.callback.Create_Area_Callback;
+import com.example.deedo.callback.Create_Friends_Callback;
+import com.example.deedo.callback.Create_Plan_Callback;
+import com.example.deedo.callback.Delete_Area_Callback;
+import com.example.deedo.callback.Delete_Friend_Callback;
+import com.example.deedo.callback.Delete_Plan_Callback;
 import com.example.deedo.callback.Get_Area_info_onCallback;
+import com.example.deedo.callback.Get_Daily_Detail_info;
 import com.example.deedo.callback.Get_Friend_onCallback;
 import com.example.deedo.callback.Get_Plan_Detail_info;
 import com.example.deedo.callback.Get_Search_Somebody_onCallback;
+import com.example.deedo.callback.Modify_Plan_Callback;
 import com.example.deedo.callback.MyCallback;
+import com.example.deedo.callback.Register_Call_back;
+import com.example.deedo.inquiry_plan.Plan;
 import com.example.deedo.inquiry_plan.Plan_details_Data;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,31 +43,35 @@ public class DBHelperFirebase{
 
     String match_id = "";
     final String TAG = "1";
-    public void SignUp(String _id, String _password, String name){
+    public void SignUp(Register_Call_back register_call_back, String _id, String _password, String name){
+
+
+
+        Log.v("파이어베이스 시작", " 시작시작시작");
+// Add a new document with a generated ID
         Map<String, Object> user = new HashMap<>();
         user.put("userId", _id);
         user.put("userPassword", _password);
         user.put("userName", name);
 
-        Log.v("파이어베이스 시작", " 시작시작시작");
 // Add a new document with a generated ID
-        db.collection("users")
+        db.collection("User")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        register_call_back.Register_onCallback(_id);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
-                        Log.v("파이어베이스 시작", " 실패실패");
                     }
                 });
     }
-    public void insert_create_Area(String _id, String _name, String _latitude, String _longitude) {
+    public void insert_create_Area(Create_Area_Callback create_area_callback, String _id, String _name, String _latitude, String _longitude) {
         Map<String, Object> Area = new HashMap<>();
         Area.put("userId", _id);
         Area.put("AreaName", _name);
@@ -71,18 +85,47 @@ public class DBHelperFirebase{
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Area 인서트 성공");
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        create_area_callback.create_Area_Callback( _name,  _latitude,  _longitude);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
-                        Log.d(TAG, "Area 인서트 실패");
                     }
                 });
     }
-    public void create_plan_detail(String _userId, int _year, int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute) {
+
+    public void insert_daily(String _userId, String[] DATE, String _latitude, String longitude){
+        Map<String, Object> Daily = new HashMap<>();
+        Daily.put("userId", _userId);
+        Daily.put("Plan_Year", _year);
+        Daily.put("Plan_Month", _month);
+        Daily.put("Plan_Day", _day);
+        Daily.put("Plan_Name", _create_plan_name);
+        Daily.put("Executing_Hour", executing_hour);
+        Daily.put("Executing_Minute", executing_minute);
+
+        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId+" _year = " + _year+" _create_plan_name = " + _create_plan_name+" executing_minute " + executing_minute);
+        // Add a new document with a generated ID
+        db.collection("Plan")
+                .add(Daily)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+    public void create_plan_detail(Create_Plan_Callback create_plan_callback, String _userId, int _year, int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute) {
         Map<String, Object> Plan = new HashMap<>();
         Plan.put("userId", _userId);
         Plan.put("Plan_Year", _year);
@@ -99,16 +142,17 @@ public class DBHelperFirebase{
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Plan 인서트 성공");
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
-                        Log.d(TAG, "Plan 인서트 실패");
                     }
                 });
+        create_plan_callback.create_Plan_Callback();
     }
 
 /*
@@ -145,7 +189,7 @@ public class DBHelperFirebase{
     
     */
 
-    public void Create_Friend(String _userId, String Friend_id, String Friend_Name){
+    public void Create_Friend(Create_Friends_Callback create_friends_callback, String _userId, String Friend_id, String Friend_Name){
          /*
         친구 관계 테이블
              User1  User2
@@ -176,14 +220,14 @@ public class DBHelperFirebase{
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "User1_Friend 인서트 성공");
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
-                        Log.d(TAG, "User1_Friend 인서트 실패");
                     }
                 });
         // 유저 B
@@ -200,23 +244,25 @@ public class DBHelperFirebase{
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "User2_Friend 인서트 성공");
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
-                        Log.d(TAG, "User2_Friend 인서트 실패");
                     }
                 });
+
+        create_friends_callback.create_Friends_Callback();
 
     }
  
 
     public void login(MyCallback myCallback){
 
-        db.collection("users")
+        db.collection("User")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -253,7 +299,7 @@ public class DBHelperFirebase{
     public void get_Area_info(Get_Area_info_onCallback get_area_info_onCallback, String _id, Context con) {
         ArrayList<Area_Data> Area_Data_list = new ArrayList<>();
 
-        db.collection("Plan")
+            db.collection("Area")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -271,6 +317,7 @@ public class DBHelperFirebase{
                                 }
 
                             }
+
                             get_area_info_onCallback.get_Area_info_onCallback(Area_Data_list, con);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -283,24 +330,31 @@ public class DBHelperFirebase{
 
     public void get_Search_Somebody(Get_Search_Somebody_onCallback get_search_somebody_onCallback, String insert_text, String userId, Context con) {
         ArrayList<Search_Friend_Data> Search_Friend_Data_list = new ArrayList<>();
-        db.collection("users")
+        db.collection("User")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            Log.v("입력한 아이디 = ", "id = " + userId );
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.v("파이어", "" + document.getData());
-                                QueryDocumentSnapshot temp = (QueryDocumentSnapshot) document.getData();
-                                if((temp.get("userId").toString().contains(insert_text) || temp.get("userName").toString().contains(insert_text)) && !(temp.get("userId").toString().contains(userId))){
+                                Log.v("파이어------", "" + document.getData().get("userId").toString());
+                                if((document.getData().get("userId").toString().contains(insert_text) || document.getData().get("userName").toString().contains(insert_text))){
 
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + userId);
-                                    String FriendName = document.getData().get("userId").toString();
-                                    String FriendId = document.getData().get("userName").toString();
-                                    Search_Friend_Data_list.add(new Search_Friend_Data(FriendId, FriendName));
+
+                                    if(!(document.getData().get("userId").toString().equals(userId))){
+                                        Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + userId);
+                                        String FriendId = document.getData().get("userId").toString();
+                                        String FriendName = document.getData().get("userName").toString();
+                                        Search_Friend_Data_list.add(new Search_Friend_Data(FriendId, FriendName));
+                                    }
+
                                 }
 
                             }
+
+                            Log.v("여기시작", ":!@#!@#" + Search_Friend_Data_list.size());
                             get_search_somebody_onCallback.get_Search_Somebody(Search_Friend_Data_list, con);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -321,12 +375,11 @@ public class DBHelperFirebase{
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.v("파이어", "" + document.getData());
-                                QueryDocumentSnapshot temp = (QueryDocumentSnapshot) document.getData();
-                                if((temp.get("userId").equals(userId))){
+                                if((document.getData().get("userId").equals(userId))){
 
                                     Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + userId);
 
-                                    String FriendId = document.getData().get("userId").toString();
+                                    String FriendId = document.getData().get("Friend_Id").toString();
                                     modify_friend_data_list.add(new Modify_Friend_Data(FriendId));
                                 }
 
@@ -343,9 +396,10 @@ public class DBHelperFirebase{
 
     public void Get_plan_details_info(Get_Plan_Detail_info get_plan_detail_info, String _userId, String[] DATE, Context con) {
         ArrayList<Plan_details_Data> plan_details_data_list = new ArrayList<>();
-        int year = Integer.parseInt(DATE[0]);
-        int month = Integer.parseInt(DATE[1]) + 1;
-        int day = Integer.parseInt(DATE[2]);
+        String year = Integer.toString(Integer.parseInt(DATE[0]));
+        String month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
+        String day = Integer.toString(Integer.parseInt(DATE[2]));
+
 
         db.collection("Plan")
                 .get()
@@ -354,9 +408,12 @@ public class DBHelperFirebase{
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
-                                QueryDocumentSnapshot temp = (QueryDocumentSnapshot) document.getData();
-                                if(temp.get("userId").equals(_userId) && temp.get("Plan_Year").equals(year) && temp.get("Plan_Month").equals(month)&& temp.get("Plan_Day").equals(day)){
+
+                                Log.v("파이어asdf", "" + document.getData());
+                                Log.v("사용자가 입력한 날짜 = ", "userId=" + _userId+"\n Plan_Year="+year+"\nPlan_month=" + month + "\nPlan_day="+day);
+
+                                if(document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Year").toString().equals(year) &&
+                                        document.getData().get("Plan_Month").toString().equals(month)&& document.getData().get("Plan_Day").toString().equals(day)){
 
                                     Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
 
@@ -378,6 +435,220 @@ public class DBHelperFirebase{
     }
 
 
+    public void Get_daily_details_info(Get_Daily_Detail_info get_daily_detail_info, String _userId, String[] DATE, Context con){
+
+
+        get_daily_detail_info.get_Daily_details_onCallback(con);
+    }
+    public void Delete_Area(Delete_Area_Callback delete_area_callback, String _name, String _latitude, String _longitude, String userId){
+        db.collection("Area")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v("파이어", "" + document.getData());
+                                if(document.getData().get("userId").equals(userId) && document.getData().get("AreaLatitude").equals(_latitude) && document.getData().get("AreaLongitude").equals(_longitude)&& document.getData().get("AreaName").equals(_name)){
+                                    String documentpath = document.getId();
+
+                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
+                                    db.collection("Area").document(documentpath)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+
+
+                                }
+
+                            }
+
+                            delete_area_callback.delete_Area_Callback(_name,  _latitude, _longitude);
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+
+                });
+    }
+
+    public void Delete_Friend(Delete_Friend_Callback delete_friend_callback, String userId, String Friend_id) {
+        db.collection("User1_Friend")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v("파이어", "" + document.getData());
+                                if(document.getData().get("userId").equals(userId) && document.getData().get("Friend_Id").equals(Friend_id)){
+                                    String documentpath = document.getId();
+
+                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
+                                    db.collection("User1_Friend").document(documentpath)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+
+
+                                }
+
+                            }
+
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+
+                });
+
+        //친구 B목록 삭제
+        db.collection("User2_Friend")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v("파이어", "" + document.getData());
+                                if(document.getData().get("userId").equals(Friend_id) && document.getData().get("Friend_Id").equals(userId)){
+                                    String documentpath = document.getId();
+
+                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
+                                    db.collection("User2_Friend").document(documentpath)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+
+
+                                }
+
+                            }
+                            delete_friend_callback.delete_Friend_Callback();
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+
+                });
+
+    }
+
+    public void Delete_Plan_Details(Delete_Plan_Callback delete_plan_callback, String _userId, String Plan_Details_name) {
+        db.collection("Plan")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v("파이어", "" + document.getData());
+                                if(document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Name").equals(Plan_Details_name)){
+                                    String documentpath = document.getId();
+
+                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
+                                    db.collection("Plan").document(documentpath)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+
+
+                                }
+
+                            }
+                            delete_plan_callback.delete_Plan_Callback();
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+
+                });
+    }
+
+    public void Modify_plan_detail(Modify_Plan_Callback modify_plan_callback,String _userId, int _year, int _month, int _day, String _modify_plan_name, int executing_hour, int executing_minute, String before_planName) {
+        db.collection("Plan")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v("modify plan", "실행 중");
+                                if(document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Name").equals(before_planName)){
+                                    String documentpath = document.getId();
+                                    Log.v("document path=", documentpath);
+                                    db.collection("Plan").document(documentpath)
+                                            .update(
+
+                                                    "Plan_Year", _year,
+                                                    "Plan_Month", _month,
+                                                    "Plan_Day", _day,
+                                                    "Executing_Hour", executing_hour,
+                                                    "Executing_Minute", executing_minute,
+                                                    "Plan_Name", _modify_plan_name
+                                            );
+
+
+                                }
+
+                            }
+
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+
+                });
+        modify_plan_callback.modifyh_Plan_Callback();
+    }
+
+    /*
+
+     */
 }
 
 

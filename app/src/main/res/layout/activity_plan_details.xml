@@ -47,12 +47,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/plan_details_add_btn"
+            android:id="@+id/plan_details_compare_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:text="일정 추가" />
+            android:text="계획과 비교" />
 
         <Button
             android:id="@+id/plan_details_cancel_btn"

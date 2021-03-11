@@ -16,6 +16,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.decorator.EventDecorator;
 import com.example.deedo.decorator.OneDayDecorator;
 import com.example.deedo.R;
@@ -41,6 +42,7 @@ public class Plan extends AppCompatActivity {
     String[] chart_d = {"first", "second", "third"};
     int [] earning = {500, 800, 1000};
     TextView textView;
+    DBHelperFirebase firebase;
 
 
 
@@ -88,6 +90,7 @@ public class Plan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
+        firebase = new DBHelperFirebase();
         userId = getIntent().getStringExtra("id");
         textView = findViewById(R.id.na);
 

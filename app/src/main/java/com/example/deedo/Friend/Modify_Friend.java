@@ -10,8 +10,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
 import com.example.deedo.callback.Get_Friend_onCallback;
@@ -23,7 +21,6 @@ public class Modify_Friend extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
-    DBHelper db;
     DBHelperFirebase firebase;
 
     String userId; //로그인된 유저 아이디
@@ -124,7 +121,6 @@ public class Modify_Friend extends AppCompatActivity {
         } else {
             Modify_Friend_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        db = new DBHelper(this);
 
 
 

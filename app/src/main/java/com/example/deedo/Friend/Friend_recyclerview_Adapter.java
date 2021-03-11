@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.R;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
 
     private ArrayList<Friend_Data> Friend_List;
     private Context context;
-    DBHelper db;
     String userId;
     Modify_Friend Modify_Friend;
 
@@ -65,14 +62,13 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
 
                 // Log.v("선택된 번호 =",""+pos);
                 //Log.v("선택된 곳의 정보",""+ Friend_List.get(pos).getFriend_id()+ " - "+Friend_List.get(pos).getFriend_name());
                 String FriendName = Friend_List.get(pos).getFriend_name();
                 String FriendId = Friend_List.get(pos).getFriend_id();
 
-                db.Delete_Friend(userId, FriendId);
+                //db.Delete_Friend(userId, FriendId);
                 Friend_List.remove(pos);
                 notifyItemRemoved(pos);
                 notifyItemRangeChanged(pos, Friend_List.size());
@@ -85,7 +81,7 @@ public class Friend_recyclerview_Adapter extends RecyclerView.Adapter<Friend_rec
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
+                //db = new DBHelper(context);
 
 
             }

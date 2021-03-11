@@ -11,8 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Delete_Plan_Callback;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,9 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
 
     private ArrayList<Plan_details_Data> Plan_details_data_List;
     private Context context;
-    DBHelper db;
     String userId;
     String[] DATE;
-
+    DBHelperFirebase firebase = new DBHelperFirebase();
 
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
@@ -109,16 +109,20 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
 
                 String Plan_name = Plan_details_data_List.get(pos).getPlan_name();
                 int executing_hour = Plan_details_data_List.get(pos).getExecuting_hour();
                 int executing_minute = Plan_details_data_List.get(pos).getExecuting_minute();
 
-                db.Delete_Plan_Details(userId, Plan_name);
-                Plan_details_data_List.remove(pos);
-                notifyItemRemoved(pos);
-                notifyItemRangeChanged(pos, Plan_details_data_List.size());
+                firebase.Delete_Plan_Details(new Delete_Plan_Callback() {
+                    @Override
+                    public void delete_Plan_Callback() {
+                        Plan_details_data_List.remove(pos);
+                        notifyItemRemoved(pos);
+                        notifyItemRangeChanged(pos, Plan_details_data_List.size());
+                    }
+                }, userId, Plan_name);
+
 
 
             }
@@ -129,7 +133,6 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
                 String before_plan_name = Plan_details_data_List.get(pos).getPlan_name();
                 int before_plan_executing_hour = Plan_details_data_List.get(pos).getExecuting_hour();
                 int before_plan_executing_minute = Plan_details_data_List.get(pos).getExecuting_minute();

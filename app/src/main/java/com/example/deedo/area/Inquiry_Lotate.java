@@ -3,6 +3,7 @@ package com.example.deedo.area;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +12,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
@@ -27,7 +26,6 @@ public class Inquiry_Lotate extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     Button create_lotate_btn;
     String userId;
-    DBHelper db;
     DBHelperFirebase firebase;
 
     /*
@@ -82,14 +80,13 @@ public class Inquiry_Lotate extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
-        db = new DBHelper(this);
 
 
+        Log.v("onCreate에서 ", "initialize시작");
         InitializeData();  //리스트에 데이터 담기
 
 
-        adapter = new AreaAdapter(Area_Data_list, this, userId);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
 
 
     }
@@ -123,7 +120,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
             Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
 
-        db = new DBHelper(this);
+
 
 
         InitializeData();  //리스트에 데이터 담기
@@ -138,6 +135,12 @@ public class Inquiry_Lotate extends AppCompatActivity {
         firebase.get_Area_info(new Get_Area_info_onCallback() {
             @Override
             public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list, Context con) {
+
+
+
+                    Log.v("list size ======= ", ""+ Area_Data_list.size());
+                Log.v("지금 아이디 ======= ", ""+ userId);
+
                 adapter = new AreaAdapter(Area_Data_list, con, userId);
                 recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
             }

@@ -9,12 +9,13 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
 
 public class Compare_daily_plan extends AppCompatActivity {
     String userId;
-
+    DBHelperFirebase firebase;
     Button compare_cancel_btn;
 
     /*
@@ -48,6 +49,7 @@ public class Compare_daily_plan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare_daily_plan);
+        firebase = new DBHelperFirebase();
         userId = getIntent().getStringExtra("id");
 
         compare_cancel_btn = findViewById(R.id.compare_cancel_btn);

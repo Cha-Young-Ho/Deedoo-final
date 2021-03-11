@@ -1,7 +1,5 @@
 package com.example.deedo.area;
 
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,9 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.deedo.DB.DBHelper;
-import com.example.deedo.R;
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
+import com.example.deedo.R;
+import com.example.deedo.callback.Create_Area_Callback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,7 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class Create_Lotate extends FragmentActivity implements OnMapReadyCallback {
     String userId;
     Context context;
-    DBHelper db;
+    DBHelperFirebase firebase;
     private GoogleMap mMap;
     Double set_latitude;
     Double set_longitude;
@@ -69,8 +70,8 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_lotate);
 
-        db = new DBHelper(Create_Lotate.this);
-
+        //db = new DBHelper(Create_Lotate.this);
+        firebase = new DBHelperFirebase();
         editText_lotate_name = findViewById(R.id.editText_lotate_name);
         Create_btn = findViewById(R.id.create_Area_button);
         userId = getIntent().getStringExtra("id");
@@ -81,8 +82,16 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 userId = getIntent().getStringExtra("id");
                 try {
-                    db.insert_create_lotate(userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
+                   // db.insert_create_lotate();
+                    firebase.insert_create_Area(new Create_Area_Callback() {
+                        @Override
+                        public void create_Area_Callback(String area_name, String latitude, String longitude) {
+                            Toast.makeText(getApplicationContext(), "구역이 생성되었습니다. \n 구역 이름 = " + area_name +
+                                    "\n 구역 위도 = " + latitude + "\n 구역 경도 = " + longitude, Toast.LENGTH_SHORT).show();
 
+                            finish();
+                        }
+                    }, userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "실패!", Toast.LENGTH_SHORT).show();

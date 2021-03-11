@@ -20,7 +20,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
-import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
 import com.example.deedo.compare.Compare_daily_plan;
@@ -38,7 +38,6 @@ import java.util.List;
 
 public class Inquiry_daily_Activity extends AppCompatActivity {
     final OneDayDecorator oneDayDecorator = new OneDayDecorator();
-    DBHelper db;
     String userId;
     String[] chart_d = {"first", "second", "third"};
     int[] earning = {500, 800, 1000};
@@ -48,6 +47,7 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
     TextView textView_inquiry_daily_text;
     Button daily_compare_btn;
     ArrayList<daily_data> daily_data_list = new ArrayList<>();
+    DBHelperFirebase firebase;
 
     int inquiry_total_date;
     int year;
@@ -87,7 +87,7 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inquiry_daily);
-        db = new DBHelper(this);
+        firebase = new DBHelperFirebase();
 
         String[] str = getResources().getStringArray(R.array.spinner_array);
 
@@ -221,7 +221,11 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
 
                 day = Integer.parseInt(parsedDATA[2]);
 
-
+                Intent intent = new Intent(Inquiry_daily_Activity.this, Activity_daily_details.class);
+                intent.putExtra("id", userId);
+                intent.putExtra("DATE", parsedDATA);
+                Log.v("캘린더 클릭 이벤트 네번째 부분 성공", " 성공");
+                startActivity(intent); //날짜 데이터 담아서 넘겨줌
             }
         });
 

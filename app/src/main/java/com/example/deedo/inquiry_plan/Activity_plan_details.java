@@ -14,10 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.DB.DBHelperFirebase;
-import com.example.deedo.R;
 import com.example.deedo.Friend.Search_Somebody;
+import com.example.deedo.R;
 import com.example.deedo.callback.Get_Plan_Detail_info;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class Activity_plan_details extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
-    DBHelper db;
+
     String userId; //로그인된 유저 아이디
     String[] DATE; // Plan 액티비티에서 넘어온 날짜 배열
     TextView textview_plan_details_name;
@@ -85,10 +84,6 @@ public class Activity_plan_details extends AppCompatActivity {
         textview_plan_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
 
 
-        recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
         if (Plan_details_Data_list != null) {
             Plan_details_Data_list.clear();
             Plan_details_Data_list = new ArrayList<>();
@@ -97,10 +92,9 @@ public class Activity_plan_details extends AppCompatActivity {
         }
 
 
-        First_InitializeData();  //첫 리사이클 뷰는 검색어가 입력되지 않아서, First_InitializeData 메서드 호출 - 리스트에 데이터 담기
+        InitializeData(userId);  //첫 리사이클 뷰는 검색어가 입력되지 않아서, First_InitializeData 메서드 호출 - 리스트에 데이터 담기
         Log.v("resume", "여기 실행됨2");
-        adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, this, userId, DATE);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
 
         /*
         일정 생성 버튼 및 클릭 이벤트
@@ -190,7 +184,7 @@ public class Activity_plan_details extends AppCompatActivity {
                 Activity_plan_details.this.finish();
             }
         });
-            adapter.notifyDataSetChanged();
+
     }
 
 
@@ -223,6 +217,7 @@ public class Activity_plan_details extends AppCompatActivity {
                 Log.v("resume", "여기 실행됨2");
                 adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, con,userId, DATE);
                 recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+
             }
         }, userId, DATE,this);
 

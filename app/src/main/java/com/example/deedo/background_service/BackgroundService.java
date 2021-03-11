@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.HOME_ETC.Home_activity;
 import com.example.deedo.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,11 +35,11 @@ public class BackgroundService extends Service {
     public static Intent serviceIntent = null;
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationCallback locationCallback;
-
+    DBHelperFirebase firebase;
     @Override
     public void onCreate() {
         super.onCreate();
-
+        firebase = new DBHelperFirebase();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         locationCallback = new LocationCallback() {
@@ -47,6 +48,7 @@ public class BackgroundService extends Service {
                 super.onLocationResult(locationResult);
                 Log.d("mylong", "Lat is" + locationResult.getLastLocation().getLatitude() +
                         ",  Lng is : " + locationResult.getLastLocation().getLongitude());
+                firebase.insert_daily();
                 Intent intent = new Intent("ACT_LOC");
                 intent.putExtra("latitude", locationResult.getLastLocation().getLatitude());
                 intent.putExtra("longitude", locationResult.getLastLocation().getLongitude());

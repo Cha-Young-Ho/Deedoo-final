@@ -11,9 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Create_Friends_Callback;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,8 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
 
     private ArrayList<Search_Friend_Data> Search_Friend_Data_list;
     private Context context;
-    DBHelper db;
     String userId;
-    DBHelperFirebase firebase;
+    DBHelperFirebase firebase = new DBHelperFirebase();
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
@@ -34,7 +33,7 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
     public Search_Friend_Adapter(OnItemClickListener onItemClickListener, String _id) {
         this.onItemClickListener = onItemClickListener;
         this.userId = _id;
-        this.firebase = new DBHelperFirebase();
+
     }
 
     public Search_Friend_Adapter(ArrayList<Search_Friend_Data> Search_Friend_Data_list, Context context, String _id) {
@@ -64,7 +63,6 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
 
 
                 Log.v("선택된 번호 =",""+pos);
@@ -75,10 +73,19 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
                 String Friend_id = Search_Friend_Data_list.get(pos).getSearch_Friend_id();
                 Log.v("선택된 정보 = ", "이름 = "+Friend_Name+ " - 아이디 = " + Friend_id);
 
-                firebase.Create_Friend(userId, Friend_id, Friend_Name);
-                Search_Friend_Data_list.remove(pos);
-                notifyItemRemoved(pos);
-                notifyItemRangeChanged(pos, Search_Friend_Data_list.size());
+                Log.v("userId =",""+userId);
+
+
+
+                firebase.Create_Friend(new Create_Friends_Callback() {
+                    @Override
+                    public void create_Friends_Callback() {
+                        Search_Friend_Data_list.remove(pos);
+                        notifyItemRemoved(pos);
+                        notifyItemRangeChanged(pos, Search_Friend_Data_list.size());
+                    }
+                },userId, Friend_id, Friend_Name);
+
 
 
 
@@ -101,10 +108,10 @@ public class Search_Friend_Adapter extends RecyclerView.Adapter<Search_Friend_Ad
 
         public Search_Somebody_ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.Search_Friend_name = itemView.findViewById(R.id.item_textview_plan_details_name);
-            this.Search_Friend_id = itemView.findViewById(R.id.item_textview_plan_details_time);
+            this.Search_Friend_name = itemView.findViewById(R.id.item_search_sombody_name);
+            this.Search_Friend_id = itemView.findViewById(R.id.item_search_sombody_id);
 
-            this.item_search_request_friend_btn = itemView.findViewById(R.id.item_plan_details_delete_btn);
+            this.item_search_request_friend_btn = itemView.findViewById(R.id.item_search_sombody_request_friend_btn);
 
 
 

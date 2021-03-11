@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
 import com.example.deedo.callback.Get_Search_Somebody_onCallback;
@@ -25,7 +24,6 @@ public class Search_Somebody extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
-    DBHelper db;
     Button item_search_request_friend_btn; //친구 요청 버튼
     String userId; //로그인된 유저 아이디
     ImageButton ImageView_search_somebody_btn; //검색 요청 버튼
@@ -56,10 +54,7 @@ public class Search_Somebody extends AppCompatActivity {
         }
 
 
-        First_InitializeData();  //첫 리사이클 뷰는 검색어가 입력되지 않아서, First_InitializeData 메서드 호출 - 리스트에 데이터 담기
-        Log.v("resume", "여기 실행됨2");
-        adapter = new Search_Friend_Adapter(Search_Friend_Data_list, this, userId);
-        recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+        InitializeData(search_text, userId);
 
 
     }
@@ -73,6 +68,7 @@ public class Search_Somebody extends AppCompatActivity {
         super.onResume();
         setContentView(R.layout.activity_search_somebody);
         ImageView_search_somebody_btn = findViewById(R.id.ImageView_search_somebody_btn);
+        userId = getIntent().getStringExtra("id");
         /*
         검색어 입력후 상단 검색 버튼 클릭 시 이벤트
          */
@@ -85,17 +81,17 @@ public class Search_Somebody extends AppCompatActivity {
 
                 search_text = Search_text.getText().toString();
 
-                db.get_Search_Somebody(search_text, userId);
+               // db.get_Search_Somebody(search_text, userId);
 
 
                 Log.v("입력된 글자 =", "" + search_text);
                 InitializeData(search_text, userId);
             }
         });
-        userId = getIntent().getStringExtra("id");
 
 
-        InitializeData(search_text, userId);
+
+
 
 
     }
@@ -120,16 +116,19 @@ public class Search_Somebody extends AppCompatActivity {
         } else {
             Search_Friend_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        db = new DBHelper(this);
 
         Log.v("search_text =", "" + search_text);
-        if(search_text == null){
-            First_InitializeData();
+        if(search_text == null || search_text.equals("")){
+
         }else{
 
             firebase.get_Search_Somebody(new Get_Search_Somebody_onCallback() {
                 @Override
-                public void get_Search_Somebody(ArrayList<Search_Friend_Data> Area_Data_list, Context con) {
+                public void get_Search_Somebody(ArrayList<Search_Friend_Data> Search_Friend_Data_list, Context con) {
+
+                    for (int i = 0; i < Search_Friend_Data_list.size(); i++) {
+                        Log.v("search somebody메서드 시작 :", i + "번째 친구 아이디 = " + Search_Friend_Data_list.get(i).getSearch_Friend_id() + " \n"+ i + "번째 친구 이름 = " + Search_Friend_Data_list.get(i).getSearch_Friend_name());
+                    }
                     adapter = new Search_Friend_Adapter(Search_Friend_Data_list, con, userId);
                     recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
                 }
@@ -140,11 +139,6 @@ public class Search_Somebody extends AppCompatActivity {
 
         }
 
-
-
-
     }
-
-
 
 }

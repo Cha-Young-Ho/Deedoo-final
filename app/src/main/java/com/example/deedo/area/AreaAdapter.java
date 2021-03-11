@@ -11,9 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Delete_Area_Callback;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
 
     private ArrayList<Area_Data> Area_List;
     private Context context;
-    DBHelper db;
+    DBHelperFirebase firebase = new DBHelperFirebase();
     String userId;
 
     public interface OnItemClickListener {
@@ -63,7 +63,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
             @Override
             public void onClick(View v) {
                 int pos = holder.getAdapterPosition();
-                db = new DBHelper(context);
+
 
                 Log.v("선택된 번호 =", "" + pos);
                 Log.v("선택된 곳의 정보", "" + Area_List.get(pos).getTextView_name() + " - " + Area_List.get(pos).getTextView_latitude() + " - " + Area_List.get(pos).getTextView_longitude());
@@ -71,10 +71,15 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
                 String AreaLatitude = Area_List.get(pos).getTextView_latitude();
                 String AreaLongitude = Area_List.get(pos).getTextView_longitude();
 
-                db.Delete_Area(AreaName, AreaLatitude, AreaLongitude, userId);
-                Area_List.remove(pos);
-                notifyItemRemoved(pos);
-                notifyItemRangeChanged(pos, Area_List.size());
+                firebase.Delete_Area(new Delete_Area_Callback() {
+                    @Override
+                    public void delete_Area_Callback(String area_name, String latitude, String longitude) {
+                        Area_List.remove(pos);
+                        notifyItemRemoved(pos);
+                        notifyItemRangeChanged(pos, Area_List.size());
+
+                    }
+                },AreaName, AreaLatitude, AreaLongitude, userId);
 
 
             }

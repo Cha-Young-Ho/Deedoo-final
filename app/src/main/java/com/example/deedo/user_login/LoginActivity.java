@@ -10,15 +10,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.deedo.DB.DBHelper;
 import com.example.deedo.DB.DBHelperFirebase;
-import com.example.deedo.callback.MyCallback;
 import com.example.deedo.HOME_ETC.Home_activity;
 import com.example.deedo.R;
+import com.example.deedo.callback.MyCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
-    DBHelper db;
     private EditText login_id, login_password;
     private Button login_ok_btn, login_register_btn;
     DBHelperFirebase firebase;
@@ -47,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                db = new DBHelper(LoginActivity.this);
                 // db.delete_table();
                 String _id = login_id.getText().toString();
                 String _password = login_password.getText().toString();

@@ -15,8 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.example.deedo.DB.DBHelper;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.R;
+import com.example.deedo.callback.Create_Plan_Callback;
 
 
 /**
@@ -24,11 +25,9 @@ import com.example.deedo.R;
  */
 
 public class Dialog_Plan_details_create extends Dialog {
-
+    DBHelperFirebase firebase = new DBHelperFirebase();
     private Context context;
-    DBHelper db;
     String userId;
-
     int year;
     int month;
     int day;
@@ -37,7 +36,6 @@ public class Dialog_Plan_details_create extends Dialog {
         super(context);
         this.context = context;
         this.userId = _userId;
-        this.db = new DBHelper(this.context);
         this.year = Integer.parseInt(_DATE[0]);
         this.month = Integer.parseInt(_DATE[1]) + 1;
         this.day = Integer.parseInt(_DATE[2]);
@@ -96,13 +94,20 @@ public class Dialog_Plan_details_create extends Dialog {
                     Toast.makeText(Dialog_Plan_details_create.this.context, "이름이 입력되지 않았습니다. 확인해주세요!", Toast.LENGTH_SHORT).show();
                 } else {
                     //입력한 값 db에 저장
-                    db.create_plan_detail(userId, year, month, day, create_plan_name, executing_time_hour, executing_time_minute);
-                    Toast.makeText(Dialog_Plan_details_create.this.context, "성공적으로 입력되었습니다.", Toast.LENGTH_SHORT).show();
+
+                  firebase.create_plan_detail(new Create_Plan_Callback() {
+                      @Override
+                      public void create_Plan_Callback() {
+                          Toast.makeText(Dialog_Plan_details_create.this.context, "성공적으로 입력되었습니다.", Toast.LENGTH_SHORT).show();
+                          // 커스텀 다이얼로그를 종료한다.
+                          dismiss();
+                      }
+                  },userId, year, month, day, create_plan_name, executing_time_hour, executing_time_minute);
 
 
 
-                    // 커스텀 다이얼로그를 종료한다.
-                    dismiss();
+
+
                 }
 
 

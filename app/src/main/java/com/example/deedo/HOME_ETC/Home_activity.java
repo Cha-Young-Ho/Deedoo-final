@@ -23,6 +23,7 @@ import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Modify_Friend;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
@@ -49,6 +50,7 @@ public class Home_activity extends AppCompatActivity {
     AnyChartView home_chart_view;
     private Intent serviceIntent;
     Intent foregroundServiceIntent = null;
+    DBHelperFirebase firebase;
 
     /*
     액션바에 돋보기 추가
@@ -82,9 +84,9 @@ public class Home_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        firebase = new DBHelperFirebase();
         mcontext = Home_activity.this;
-        Log.v("시작", "ㅅ자시작시작@@@@@@@@@@@@@@@@@@@@@@@@");
+        Log.v("홈 액티비티 시작", "Home_Activity Start");
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -123,7 +125,7 @@ public class Home_activity extends AppCompatActivity {
         home_chart_view = findViewById(R.id.plan_chart_view);
         Setup_Pie_Chart();
 
-        //여기부터는 id값 넘어오는 지 확인
+        //id값 확인
         Intent intent = getIntent();
         userId = intent.getStringExtra("id");
 
