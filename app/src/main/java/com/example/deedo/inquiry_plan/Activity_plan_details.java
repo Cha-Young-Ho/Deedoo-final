@@ -98,7 +98,7 @@ public class Activity_plan_details extends AppCompatActivity {
 
         /*
         일정 생성 버튼 및 클릭 이벤트
-         */
+
         plan_details_add_btn = findViewById(R.id.plan_details_add_btn);
         plan_details_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +112,8 @@ public class Activity_plan_details extends AppCompatActivity {
 
             }
         });
+
+         */
 
         plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
         plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +163,7 @@ public class Activity_plan_details extends AppCompatActivity {
 
         /*
         일정 생성 버튼 및 클릭 이벤트
-         */
+
         plan_details_add_btn = findViewById(R.id.plan_details_add_btn);
         plan_details_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +177,8 @@ public class Activity_plan_details extends AppCompatActivity {
 
             }
         });
+
+         */
 
         plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
         plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {

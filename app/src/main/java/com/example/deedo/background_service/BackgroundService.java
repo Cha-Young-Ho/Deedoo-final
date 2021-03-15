@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
@@ -23,12 +24,17 @@ import androidx.core.app.NotificationCompat;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.HOME_ETC.Home_activity;
 import com.example.deedo.R;
+import com.example.deedo.area.Area_Data;
+import com.example.deedo.callback.Get_Area_info_onCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class BackgroundService extends Service {
@@ -36,22 +42,77 @@ public class BackgroundService extends Service {
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationCallback locationCallback;
     DBHelperFirebase firebase;
+    String userId;
+    String DATE;
+
     @Override
     public void onCreate() {
         super.onCreate();
         firebase = new DBHelperFirebase();
+        Log.d("222222222", "여기 실행");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 super.onLocationResult(locationResult);
+                Log.d("3333333333", "여기 실행");
                 Log.d("mylong", "Lat is" + locationResult.getLastLocation().getLatitude() +
-                        ",  Lng is : " + locationResult.getLastLocation().getLongitude());
-                firebase.insert_daily();
+                        ",  Lng is : " + locationResult.getLastLocation().getLongitude() + "id = " + userId);
+                firebase.get_Area_info(new Get_Area_info_onCallback() {
+                    @Override
+                    public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list, Context con) { }
+                    @Override
+                    public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list) {
+                        Log.v("background에서 Area 크기 받기", "");
+                        Log.v("list size ======= ", ""+ Area_Data_list.size());
+                        float distance = 30;
+                        for (int i = 0; i < Area_Data_list.size(); i++) {
+                            LatLng nowRocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+                            LatLng registeredArea = new LatLng(Double.parseDouble(Area_Data_list.get(i).getTextView_latitude()), Double.parseDouble(Area_Data_list.get(i).getTextView_longitude()));
+                            distance = calculateLocationDifference(nowRocation, registeredArea);
+                            Log.v("사이 거리  = " , " " + distance);
+
+                            if(distance < 30){
+                                Log.v("위치로 진입", Area_Data_list.get(i).getTextView_name());
+                                CalendarDay date = CalendarDay.today();
+                                DATE = date.toString(); // ex : Calender{2021-02-28}
+
+                                String[] parsedDATA = DATE.split("[{]"); // ex : [0] = Calender || [1] = 2021-02-28}
+
+                                parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
+
+                                parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
+                                firebase.create_daily(userId, parsedDATA,  Area_Data_list.get(i).getTextView_name());
+                                break;
+                            }
+                        }
+                            if(distance >=30) {
+                                Log.v("기타로 진입", "");
+                                CalendarDay date = CalendarDay.today();
+                                DATE = date.toString(); // ex : Calender{2021-02-28}
+
+                                String[] parsedDATA = DATE.split("[{]"); // ex : [0] = Calender || [1] = 2021-02-28}
+
+                                parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
+
+                                parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
+                                firebase.create_daily(userId, parsedDATA, "기타");
+                            }
+
+
+
+                        Log.v("지금 아이디 ======= ", ""+ userId);
+                    }
+                }, userId);
+
+
+                //firebase.insert_daily();
                 Intent intent = new Intent("ACT_LOC");
                 intent.putExtra("latitude", locationResult.getLastLocation().getLatitude());
                 intent.putExtra("longitude", locationResult.getLastLocation().getLongitude());
+
                 sendBroadcast(intent);
             }
         };
@@ -60,8 +121,12 @@ public class BackgroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         serviceIntent = intent;
+        Log.d("111111111", "여기 실행");
+        Log.d("스타트에서 id = ", "" + serviceIntent.getStringExtra("id"));
+        userId = serviceIntent.getStringExtra("id");
         initializeNotification();
         requestLocation();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -131,5 +196,11 @@ public class BackgroundService extends Service {
         PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+    }
+
+    private float calculateLocationDifference(LatLng lastLocation, LatLng firstLocation) {
+        float[] dist = new float[1];
+        Location.distanceBetween(lastLocation.latitude, lastLocation.longitude, firstLocation.latitude, firstLocation.longitude, dist);
+        return dist[0];
     }
 }

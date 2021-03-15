@@ -152,6 +152,7 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
 
         // Add a marker in Sydney and move the camera
         context = Create_Lotate.this;
+        
         LatLng sydney = new LatLng(35.2379, 128.6342);
         BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(R.drawable.marker);
         Bitmap b = bd.getBitmap();

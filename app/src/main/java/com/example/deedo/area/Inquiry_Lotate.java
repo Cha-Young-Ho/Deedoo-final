@@ -144,6 +144,11 @@ public class Inquiry_Lotate extends AppCompatActivity {
                 adapter = new AreaAdapter(Area_Data_list, con, userId);
                 recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
             }
+
+            @Override
+            public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list) {
+
+            }
         }, userId,this);
     }
 

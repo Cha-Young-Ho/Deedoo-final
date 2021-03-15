@@ -1,9 +1,7 @@
 package com.example.deedo.daily;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
-import com.example.deedo.callback.Get_Daily_Detail_info;
 import com.example.deedo.inquiry_plan.Dialog_Plan_details_create;
 import com.example.deedo.inquiry_plan.Plan_details_Data;
-import com.example.deedo.inquiry_plan.Plan_details_recyclerview_Adapter;
 
 import java.util.ArrayList;
 
@@ -91,7 +87,7 @@ public class Activity_daily_details extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        InitializeData(userId);
+        //InitializeData(userId);
 
 
         plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
@@ -127,7 +123,7 @@ public class Activity_daily_details extends AppCompatActivity {
         } else {
             Plan_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        InitializeData(userId); //데이터 정보를 리스트에 담아서옴
+        //InitializeData(userId); //데이터 정보를 리스트에 담아서옴
 
 
 
@@ -161,7 +157,7 @@ public class Activity_daily_details extends AppCompatActivity {
 
 
     }
-
+/*
     public void InitializeData(String userId) {
 
         //DB에서 데이터리스트에 담아야하는 메서드
@@ -186,5 +182,7 @@ public class Activity_daily_details extends AppCompatActivity {
 
 
     }
+
+ */
 
 }

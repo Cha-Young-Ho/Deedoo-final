@@ -29,8 +29,11 @@ import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
 import com.example.deedo.area.Inquiry_Lotate;
 import com.example.deedo.background_service.BackgroundService;
+import com.example.deedo.callback.Create_Chart_view_daily;
 import com.example.deedo.daily.Inquiry_daily_Activity;
+import com.example.deedo.daily.daily_data;
 import com.example.deedo.inquiry_plan.Plan;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,8 @@ public class Home_activity extends AppCompatActivity {
     private Intent serviceIntent;
     Intent foregroundServiceIntent = null;
     DBHelperFirebase firebase;
+    ArrayList<daily_data> daily_data_list;
+
 
     /*
     액션바에 돋보기 추가
@@ -84,6 +89,8 @@ public class Home_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("id");
         firebase = new DBHelperFirebase();
         mcontext = Home_activity.this;
         Log.v("홈 액티비티 시작", "Home_Activity Start");
@@ -98,6 +105,14 @@ public class Home_activity extends AppCompatActivity {
         } else {
             startService();
         }
+        CalendarDay today_date = CalendarDay.today();
+        firebase.get_daily_info(new Create_Chart_view_daily() {
+            @Override
+            public void create_Chart_view_daily(ArrayList<daily_data> daily_data_list) {
+
+            }
+        }, userId, 1, today_date);
+
 
 
 
@@ -126,8 +141,7 @@ public class Home_activity extends AppCompatActivity {
         Setup_Pie_Chart();
 
         //id값 확인
-        Intent intent = getIntent();
-        userId = intent.getStringExtra("id");
+
 
         //여기까지
 
@@ -221,7 +235,10 @@ public class Home_activity extends AppCompatActivity {
          intent가 생성되지 않은 상태 (이미 백그라운드가 실행중이 아닐 때 home_activity가 실행되면) intent를 새로 만들어라
              */
         if (null == BackgroundService.serviceIntent) {
+            Log.d("0.5:", "여기 실행");
+            Log.d("id = ", ""+userId);
             foregroundServiceIntent = new Intent(this, BackgroundService.class);
+            foregroundServiceIntent.putExtra("id", userId);
             startService(foregroundServiceIntent);
             Toast.makeText(getApplicationContext(), "start service", Toast.LENGTH_LONG).show();
         } else {
