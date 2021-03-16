@@ -15,24 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
-import com.example.deedo.inquiry_plan.Dialog_Plan_details_create;
-import com.example.deedo.inquiry_plan.Plan_details_Data;
 
 import java.util.ArrayList;
 
 public class Activity_daily_details extends AppCompatActivity {
 
-    Button plan_details_compare_btn, plan_details_cancel_btn;
-    ArrayList<Plan_details_Data> Plan_details_Data_list; //담아온 데이터
+    Button daily_details_compare_btn, daily_details_cancel_btn;
+    ArrayList<daily_data> daily_details_Data_list; //담아온 데이터
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     String userId; //로그인된 유저 아이디
     String[] DATE; // Plan 액티비티에서 넘어온 날짜 배열
-    TextView textview_plan_details_name;
-    int year;
-    int month;
-    int day;
+    TextView textview_daily_details_name;
+    String year;
+    String month;
+    String day;
     DBHelperFirebase firebase;
 
 
@@ -67,31 +65,32 @@ public class Activity_daily_details extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan_details);
+        setContentView(R.layout.activity_daily_details);
         firebase = new DBHelperFirebase();
         userId = getIntent().getStringExtra("id");
 
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
 
-        year = Integer.parseInt(DATE[0]);
-        month = Integer.parseInt(DATE[1])+1;
-        day = Integer.parseInt(DATE[2]);
+        year = DATE[0];
+        month = String.valueOf(Integer.parseInt(DATE[1])+1);
+        day = DATE[2];
+
+        String date = year + month + day;
+
+        textview_daily_details_name = findViewById(R.id.textview_daily_details_name);
+        textview_daily_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
 
 
-        textview_plan_details_name = findViewById(R.id.textview_plan_details_name);
-        textview_plan_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
-
-
-        recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
+        recyclerView = findViewById(R.id.daily_details_recyclerview); //리사이클러 뷰 연결
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         //InitializeData(userId);
 
 
-        plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
-        plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
+        daily_details_cancel_btn = findViewById(R.id.daily_details_cancel_btn);
+        daily_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -107,42 +106,42 @@ public class Activity_daily_details extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setContentView(R.layout.activity_plan_details);
+        setContentView(R.layout.activity_daily_details);
 
         userId = getIntent().getStringExtra("id");
 
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
-        textview_plan_details_name = findViewById(R.id.textview_plan_details_name);
-        textview_plan_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
+        textview_daily_details_name = findViewById(R.id.textview_daily_details_name);
+        textview_daily_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
 
 
-        if (Plan_details_Data_list != null) {
-            Plan_details_Data_list.clear();
-            Plan_details_Data_list = new ArrayList<>();
+        if (daily_details_Data_list != null) {
+            daily_details_Data_list.clear();
+            daily_details_Data_list = new ArrayList<>();
         } else {
-            Plan_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
+            daily_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
         //InitializeData(userId); //데이터 정보를 리스트에 담아서옴
 
 
 
-        plan_details_compare_btn = findViewById(R.id.plan_details_compare_btn);
-        plan_details_compare_btn.setOnClickListener(new View.OnClickListener() {
+        daily_details_compare_btn = findViewById(R.id.daily_details_compare_btn);
+        daily_details_compare_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog_Plan_details_create dialog_plan_details_create =
-                        new Dialog_Plan_details_create(com.example.deedo.daily.Activity_daily_details.this, userId, DATE);
+                Activity_daily_compare dialog_daily_compare =
+                        new Activity_daily_compare(com.example.deedo.daily.Activity_daily_details.this, userId, DATE);
 
-                dialog_plan_details_create.show();
+                dialog_daily_compare.show();
 
 
 
             }
         });
 
-        plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
-        plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
+        daily_details_cancel_btn = findViewById(R.id.daily_details_cancel_btn);
+        daily_details_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

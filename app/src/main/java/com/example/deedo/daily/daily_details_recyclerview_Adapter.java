@@ -55,8 +55,7 @@ public class daily_details_recyclerview_Adapter extends RecyclerView.Adapter<dai
         
         //받아온 daily 이름을 리사이클뷰에 배치
         holder.daily_name.setText(daily_details_data_List.get(position).getDaily_name());
-        holder.executing_time_hour.setText(daily_details_data_List.get(position).getHour() + "시간 ");
-        holder.executing_time_minute.setText(daily_details_data_List.get(position).getMinute() +"분");
+        holder.executing_time_hour.setText(daily_details_data_List.get(position).getSecond());
         
         //받아온 daily 할당 시간을 리사이클 뷰에 배치
         

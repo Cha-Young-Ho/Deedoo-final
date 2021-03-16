@@ -33,9 +33,9 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class BackgroundService extends Service {
     public static Intent serviceIntent = null;
@@ -67,28 +67,24 @@ public class BackgroundService extends Service {
                     public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list) {
                         Log.v("background에서 Area 크기 받기", "");
                         Log.v("list size ======= ", ""+ Area_Data_list.size());
-                        float distance = 30;
+                        float distance = 70;
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(new Date());
                         for (int i = 0; i < Area_Data_list.size(); i++) {
                             LatLng nowRocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                             LatLng registeredArea = new LatLng(Double.parseDouble(Area_Data_list.get(i).getTextView_latitude()), Double.parseDouble(Area_Data_list.get(i).getTextView_longitude()));
                             distance = calculateLocationDifference(nowRocation, registeredArea);
                             Log.v("사이 거리  = " , " " + distance);
 
-                            if(distance < 30){
+                            if(distance < 70){
                                 Log.v("위치로 진입", Area_Data_list.get(i).getTextView_name());
-                                CalendarDay date = CalendarDay.today();
-                                DATE = date.toString(); // ex : Calender{2021-02-28}
 
-                                String[] parsedDATA = DATE.split("[{]"); // ex : [0] = Calender || [1] = 2021-02-28}
 
-                                parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
-
-                                parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
-                                firebase.create_daily(userId, parsedDATA,  Area_Data_list.get(i).getTextView_name());
+                                firebase.create_daily(userId, cal,  Area_Data_list.get(i).getTextView_name());
                                 break;
                             }
                         }
-                            if(distance >=30) {
+                            if(distance >=70) {
                                 Log.v("기타로 진입", "");
                                 CalendarDay date = CalendarDay.today();
                                 DATE = date.toString(); // ex : Calender{2021-02-28}
@@ -98,7 +94,7 @@ public class BackgroundService extends Service {
                                 parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
 
                                 parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
-                                firebase.create_daily(userId, parsedDATA, "기타");
+                                firebase.create_daily(userId, cal, "기타");
                             }
 
 

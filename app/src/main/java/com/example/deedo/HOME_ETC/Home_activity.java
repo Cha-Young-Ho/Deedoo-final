@@ -33,9 +33,10 @@ import com.example.deedo.callback.Create_Chart_view_daily;
 import com.example.deedo.daily.Inquiry_daily_Activity;
 import com.example.deedo.daily.daily_data;
 import com.example.deedo.inquiry_plan.Plan;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Handler;
 
@@ -48,8 +49,8 @@ public class Home_activity extends AppCompatActivity {
     private TextView main_id;
     ImageButton map_button, plan_button, inquiry_button, friend_setting_button;
     String userId;
-    String[] chart_d = {"first", "second", "third"};
-    int[] earning = {500, 800, 1000};
+    ArrayList<String> chart_d = new ArrayList<>();
+    ArrayList<Integer> earning = new ArrayList<>();
     AnyChartView home_chart_view;
     private Intent serviceIntent;
     Intent foregroundServiceIntent = null;
@@ -105,13 +106,39 @@ public class Home_activity extends AppCompatActivity {
         } else {
             startService();
         }
-        CalendarDay today_date = CalendarDay.today();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+
+        
         firebase.get_daily_info(new Create_Chart_view_daily() {
             @Override
             public void create_Chart_view_daily(ArrayList<daily_data> daily_data_list) {
+                Log.v("데일리 사이즈 = ", ""+daily_data_list.size());
+                for (int i = 0; i < daily_data_list.size(); i++) {
+                   chart_d.add(daily_data_list.get(i).getDaily_name());
+                   Log.v("차트뷰 = ",""+daily_data_list.get(i).getDaily_name());
+                }
+                for (int i = 0; i < daily_data_list.size(); i++) {
+                    earning.add(Integer.parseInt(daily_data_list.get(i).getSecond()));
+                }
+                /*
+             Chart View 생성
+                  */
+                home_chart_view = findViewById(R.id.plan_chart_view);
+                Pie pie = AnyChart.pie();
+                List<DataEntry> dataEntries = new ArrayList<>();
 
+                for (int i = 0; i < chart_d.size(); i++) {
+                    dataEntries.add(new ValueDataEntry(chart_d.get(i), earning.get(i)));
+                }
+
+                pie.data(dataEntries);
+                home_chart_view.setChart(pie);
             }
-        }, userId, 1, today_date);
+        }, userId, 1, cal);
+
+         
 
 
 
@@ -134,11 +161,7 @@ public class Home_activity extends AppCompatActivity {
 
      */
 
-        /*
-        Chart View 생성
-         */
-        home_chart_view = findViewById(R.id.plan_chart_view);
-        Setup_Pie_Chart();
+
 
         //id값 확인
 
@@ -201,15 +224,7 @@ public class Home_activity extends AppCompatActivity {
     }
 
     public void Setup_Pie_Chart() {
-        Pie pie = AnyChart.pie();
-        List<DataEntry> dataEntries = new ArrayList<>();
 
-        for (int i = 0; i < chart_d.length; i++) {
-            dataEntries.add(new ValueDataEntry(chart_d[i], earning[i]));
-        }
-
-        pie.data(dataEntries);
-        home_chart_view.setChart(pie);
     }
 
     @Override
@@ -263,7 +278,7 @@ public class Home_activity extends AppCompatActivity {
                 double latitude = intent.getDoubleExtra("latitude", 0);
                 double longiude = intent.getDoubleExtra("longitude", 0);
 
-                main_id.setText("latitude = " + latitude + "  longitude = " + longiude);
+
             }
         }
     }

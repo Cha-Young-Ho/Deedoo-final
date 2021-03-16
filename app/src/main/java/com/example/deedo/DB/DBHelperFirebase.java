@@ -1,9 +1,11 @@
 package com.example.deedo.DB;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.example.deedo.Friend.Modify_Friend_Data;
 import com.example.deedo.Friend.Search_Friend_Data;
@@ -35,9 +37,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,15 +78,15 @@ public class DBHelperFirebase {
                     }
                 });
     }
-    public void create_daily(String _userId, String[] DATE, String _daily_name){
+    public void create_daily(String _userId, Calendar today_date, String _daily_name){
         Map<String, Object> Daily = new HashMap<>();
+
         Daily.put("userId", _userId);
         Daily.put("기타", "0");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String date = sdf.format(today_date.getTime());
 
-        String year = DATE[0];
-        String month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
-        String day = DATE[2];
-        String date = year + month+day;
+
         DocumentReference docRef = db.collection("Daily").document(""+date);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -95,7 +98,7 @@ public class DBHelperFirebase {
 
                         DocumentReference washingtonRef = db.collection("Daily").document(""+date);
 
-                        washingtonRef.update(_daily_name, FieldValue.increment(5));
+                        washingtonRef.update(_daily_name, FieldValue.increment(10));
                     } else {
                         Log.d(TAG, "No such document");
                         db.collection("Daily").document(date)
@@ -105,7 +108,7 @@ public class DBHelperFirebase {
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "DocumentSnapshot successfully written!");
                                         DocumentReference washingtonRef = db.collection("Daily").document(""+date);
-                                        washingtonRef.update(_daily_name, FieldValue.increment(5));
+                                        washingtonRef.update(_daily_name, FieldValue.increment(10));
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -149,48 +152,7 @@ public class DBHelperFirebase {
                 });
     }
 
-    public void insert_daily(String _userId, String[] DATE, String _daily_name, String _latitude, String _longitude) {
-        Map<String, Object> Daily = new HashMap<>();
-        Daily.put("userId", _userId);
 
-        String year = DATE[0];
-        String month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
-        String day = DATE[2];
-        String date = year+month+day;
-
-
-        db.collection("Daily")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("firebase insert", " daily 실행 중");
-                                if(document.getData().get("userId").equals(_userId) && document.getData().get("Daily_Name").equals(_daily_name) &&
-                                        document.getData().get("Latitude").equals(_latitude) && document.getData().get("Longitude").equals(_longitude)){
-                                    String documentpath = document.getId();
-                                    String time = String.valueOf(Integer.parseInt(document.getData().get("Daily_Time").toString()) + 5);
-
-                                    Log.v("document path=", documentpath);
-                                    db.collection("Plan").document(documentpath)
-                                            .update(
-                                                "Daily_Time", time
-                                            );
-
-
-                                }
-
-                            }
-
-
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-
-                });
-    }
 
     public void create_plan_detail(Create_Plan_Callback create_plan_callback, String _userId, int _year, int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute) {
         Map<String, Object> Plan = new HashMap<>();
@@ -396,17 +358,20 @@ public class DBHelperFirebase {
         db.collection("Area")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
+                                Log.v("@@파이어@@", "" + document.getData());
+
                                 if (document.getData().get("userId").equals(_id)) {
 
                                     Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + _id);
                                     String AreaName = document.getData().get("AreaName").toString();
                                     String AreaLatitude = document.getData().get("AreaLatitude").toString();
                                     String AreaLongitude = document.getData().get("AreaLongitude").toString();
+
                                     Area_Data_list.add(new Area_Data(AreaName, AreaLatitude, AreaLongitude));
                                 }
 
@@ -421,23 +386,55 @@ public class DBHelperFirebase {
                 });
 
     }
-    public void get_daily_info(Create_Chart_view_daily chart_view_daily, String userId, int numberOfDay, CalendarDay today_date){
-        String today = today_date.toString();
+    public void get_daily_info(Create_Chart_view_daily chart_view_daily, String userId, int numberOfDay, Calendar today_date){
 
-
-        String[] parsedDATA = DATE.split("[{]"); // ex : [0] = Calender || [1] = 2021-02-28}
-
-        parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
-
-        parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
-
-
-        year = Integer.parseInt(parsedDATA[0]);
-
-        month = Integer.parseInt(parsedDATA[1])+1;
-
-        day = Integer.parseInt(parsedDATA[2]);
         ArrayList<daily_data> chart_view_daily_list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        //for (int i = 0; i < numberOfDay; i++) {
+           // today_date.add(Calendar.DATE, -i);
+            String date = sdf.format(today_date.getTime());
+            Log.v("데이트 = ", date);
+            DocumentReference docRef = db.collection("Daily").document(""+date);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.v("짱짱짱", "WNWN");
+                            if(document.getData().get("userId").equals(userId)){
+                                Log.v("르르르", "리리리");
+                                String[] splitdata = document.getData().toString().replaceAll("\\{", "")
+                                        .replaceAll("\\}", "").split("=");
+                                for (int i = 0; i < splitdata.length; i++) {
+                                    Log.v("-1-", splitdata[i]);
+                                }
+                                String[] splitdata2 = (String.join("-", splitdata)).split(", ");
+                                for (int i = 0; i < splitdata2.length - 1; i++) {
+                                    Log.v("-2-", ""+splitdata2[i]);
+                                    String[] splitdata3 = splitdata2[i].split("-");
+                                    String dailyname = splitdata3[0];
+                                    String dailysecond = splitdata3[1];
+                                    Log.v("데일리 리스트에 추가 = ", dailyname +  dailysecond);
+                                    chart_view_daily_list.add(new daily_data(dailyname, dailysecond));
+                                }
+
+
+                            }
+
+                        } else {
+                            Log.d(TAG, "No such document");
+
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                    chart_view_daily.create_Chart_view_daily(chart_view_daily_list);
+                }
+            });
+       // }
+
 
     }
 
@@ -462,6 +459,7 @@ public class DBHelperFirebase {
                                         Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + userId);
                                         String FriendId = document.getData().get("userId").toString();
                                         String FriendName = document.getData().get("userName").toString();
+
                                         Search_Friend_Data_list.add(new Search_Friend_Data(FriendId, FriendName));
                                     }
 
