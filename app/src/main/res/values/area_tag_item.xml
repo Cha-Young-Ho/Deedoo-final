@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <string-array name="spinner_array_area">
+            <item>기타활동</item>
+            <item>식사</item>
+            <item>근무</item>
+            <item>공부</item>
+            <item>휴식</item>
+            <item>여가활동</item>
+            <item>쇼핑</item>
+            <item>집</item>
+            <item>학교</item>
+            <item>유흥</item>
+            <item>운동</item>
+        </string-array>
+    </resources>
+

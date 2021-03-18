@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,8 +52,8 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
     EditText editText_lotate_name;
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationCallback locationCallback;
-
-
+    Spinner area_tag_spinner;
+    String area_TAG = "기타";
     /*
         액션바에 돋보기 추가s
          */
@@ -98,13 +101,13 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
                     // db.insert_create_lotate();
                     firebase.insert_create_Area(new Create_Area_Callback() {
                         @Override
-                        public void create_Area_Callback(String area_name, String latitude, String longitude) {
+                        public void create_Area_Callback(String area_name, String latitude, String longitude, String area_tag) {
                             Toast.makeText(getApplicationContext(), "구역이 생성되었습니다. \n 구역 이름 = " + area_name +
-                                    "\n 구역 위도 = " + latitude + "\n 구역 경도 = " + longitude, Toast.LENGTH_SHORT).show();
+                                    "\n 구역 위도 = " + latitude + "\n 구역 경도 = " + longitude + "\n 구역 정보 = " + area_tag, Toast.LENGTH_SHORT).show();
 
                             finish();
                         }
-                    }, userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString());
+                    }, userId, editText_lotate_name.getText().toString(), set_latitude.toString(), set_longitude.toString(), area_TAG);
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "실패!", Toast.LENGTH_SHORT).show();
@@ -136,6 +139,8 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
                 LatLng current_location = new LatLng(current_Lat, current_Lng);
                 context = Create_Lotate.this;
 
+                set_latitude = locationResult.getLastLocation().getLatitude();
+                set_longitude = locationResult.getLastLocation().getLongitude();
                 BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(R.drawable.marker);
                 Bitmap b = bd.getBitmap();
                 Bitmap bitMapImage = Bitmap.createScaledBitmap(b, 80, 100, false);
@@ -153,6 +158,28 @@ public class Create_Lotate extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        String[] str = getResources().getStringArray(R.array.spinner_array_area);
+        //드롭박스 스피너 생성
+        area_tag_spinner = (Spinner) findViewById(R.id.create_area_spinner);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, str);
+
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        area_tag_spinner.setAdapter(adapter);
+
+        //spinner 이벤트 리스너
+
+        area_tag_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                area_TAG = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                area_TAG = "기타";
+            }
+        });
 
     }
 

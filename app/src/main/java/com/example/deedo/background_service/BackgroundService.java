@@ -80,7 +80,7 @@ public class BackgroundService extends Service {
                                 Log.v("위치로 진입", Area_Data_list.get(i).getTextView_name());
 
 
-                                firebase.create_daily(userId, cal,  Area_Data_list.get(i).getTextView_name());
+                                firebase.create_daily(userId, cal,  Area_Data_list.get(i).getTextView_name(), Area_Data_list.get(i).getArea_tag());
                                 break;
                             }
                         }
@@ -94,7 +94,7 @@ public class BackgroundService extends Service {
                                 parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
 
                                 parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
-                                firebase.create_daily(userId, cal, "기타");
+                                firebase.create_daily(userId, cal, "기타", "기타");
                             }
 
 

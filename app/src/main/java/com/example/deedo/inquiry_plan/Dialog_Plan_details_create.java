@@ -6,8 +6,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -31,6 +34,8 @@ public class Dialog_Plan_details_create extends Dialog {
     int year;
     int month;
     int day;
+    Spinner create_plan_spinner;
+    String plan_Tag = "기타";
 
     public Dialog_Plan_details_create(@NonNull Context context, String _userId, String[] _DATE) {
         super(context);
@@ -84,6 +89,7 @@ public class Dialog_Plan_details_create extends Dialog {
 
                 final int executing_time_hour = create_plan_timepicker.getHour();
                 final int executing_time_minute = create_plan_timepicker.getMinute();
+
                 String create_plan_name = edittext_create_plan_name.getText().toString();
 
 
@@ -102,7 +108,7 @@ public class Dialog_Plan_details_create extends Dialog {
                           // 커스텀 다이얼로그를 종료한다.
                           dismiss();
                       }
-                  },userId, year, month, day, create_plan_name, executing_time_hour, executing_time_minute);
+                  },userId, year, month, day, create_plan_name, executing_time_hour, executing_time_minute, plan_Tag);
 
 
 
@@ -122,6 +128,28 @@ public class Dialog_Plan_details_create extends Dialog {
 
                 // 커스텀 다이얼로그를 종료한다.
                 dismiss();
+            }
+        });
+        String[] str = getContext().getResources().getStringArray(R.array.spinner_array_area);
+        //드롭박스 스피너 생성
+        create_plan_spinner = (Spinner) findViewById(R.id.create_plan_spinner);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.context, R.layout.spinner_layout, str);
+
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        create_plan_spinner.setAdapter(adapter);
+
+        //spinner 이벤트 리스너
+
+        create_plan_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                plan_Tag = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

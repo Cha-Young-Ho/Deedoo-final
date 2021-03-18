@@ -20,11 +20,28 @@
         android:layout_height="146dp"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText_lotate_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="구역명" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editText_lotate_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="구역명" />
+
+            <Spinner
+                android:id="@+id/create_area_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:scrollbarSize="4dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/create_Area_button"

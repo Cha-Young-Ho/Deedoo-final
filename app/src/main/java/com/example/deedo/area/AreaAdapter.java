@@ -55,7 +55,7 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
     @Override
     public void onBindViewHolder(@NonNull AreaAdapter.AreaViewHolder holder, int position) {
 
-        holder.AreaName.setText(Area_List.get(position).getTextView_name());
+        holder.AreaName.setText(Area_List.get(position).getTextView_name() + " (" + Area_List.get(position).getArea_tag() + ")");
         holder.AreaLatitude.setText(Area_List.get(position).getTextView_latitude());
         holder.AreaLongitude.setText(Area_List.get(position).getTextView_longitude());
 

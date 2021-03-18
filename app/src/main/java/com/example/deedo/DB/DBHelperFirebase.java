@@ -78,7 +78,7 @@ public class DBHelperFirebase {
                     }
                 });
     }
-    public void create_daily(String _userId, Calendar today_date, String _daily_name){
+    public void create_daily(String _userId, Calendar today_date, String _daily_name, String _area_tag){
         Map<String, Object> Daily = new HashMap<>();
 
         Daily.put("userId", _userId);
@@ -98,6 +98,7 @@ public class DBHelperFirebase {
 
                         DocumentReference washingtonRef = db.collection("Daily").document(""+date);
 
+                        washingtonRef.update(_area_tag, FieldValue.increment(10));
                         washingtonRef.update(_daily_name, FieldValue.increment(10));
                     } else {
                         Log.d(TAG, "No such document");
@@ -108,6 +109,7 @@ public class DBHelperFirebase {
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "DocumentSnapshot successfully written!");
                                         DocumentReference washingtonRef = db.collection("Daily").document(""+date);
+                                        washingtonRef.update(_area_tag, FieldValue.increment(10));
                                         washingtonRef.update(_daily_name, FieldValue.increment(10));
                                     }
                                 })
@@ -126,12 +128,13 @@ public class DBHelperFirebase {
 
     }
 
-    public void insert_create_Area(Create_Area_Callback create_area_callback, String _id, String _name, String _latitude, String _longitude) {
+    public void insert_create_Area(Create_Area_Callback create_area_callback, String _id, String _name, String _latitude, String _longitude, String _area_tag) {
         Map<String, Object> Area = new HashMap<>();
         Area.put("userId", _id);
         Area.put("AreaName", _name);
         Area.put("AreaLatitude", _latitude);
         Area.put("AreaLongitude", _longitude);
+        Area.put("AreaTag", _area_tag);
 
         Log.v("파이어베이스 로테이트 인서트 시작", " id = " + _id + " AreaName = " + _name + " AreaLatitude = " + _latitude + " AreaLongitude " + _longitude);
         // Add a new document with a generated ID
@@ -141,7 +144,7 @@ public class DBHelperFirebase {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        create_area_callback.create_Area_Callback(_name, _latitude, _longitude);
+                        create_area_callback.create_Area_Callback(_name, _latitude, _longitude, _area_tag);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -154,7 +157,8 @@ public class DBHelperFirebase {
 
 
 
-    public void create_plan_detail(Create_Plan_Callback create_plan_callback, String _userId, int _year, int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute) {
+    public void create_plan_detail(Create_Plan_Callback create_plan_callback, String _userId, int _year,
+                                   int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute, String _plan_Tag) {
         Map<String, Object> Plan = new HashMap<>();
         Plan.put("userId", _userId);
         Plan.put("Plan_Year", _year);
@@ -163,8 +167,10 @@ public class DBHelperFirebase {
         Plan.put("Plan_Name", _create_plan_name);
         Plan.put("Executing_Hour", executing_hour);
         Plan.put("Executing_Minute", executing_minute);
+        Plan.put("Plan_Tag", _plan_Tag);
 
-        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId + " _year = " + _year + " _create_plan_name = " + _create_plan_name + " executing_minute " + executing_minute);
+        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId + " _year = " + _year + " _create_plan_name = " + _create_plan_name + " executing_minute " + executing_minute +
+                "plan_tag = " + _plan_Tag);
         // Add a new document with a generated ID
         db.collection("Plan")
                 .add(Plan)
@@ -286,7 +292,7 @@ public class DBHelperFirebase {
     }
 
 
-    public void login(MyCallback myCallback) {
+    public void login(MyCallback myCallback, String userId, String userPassword) {
 
         db.collection("User")
                 .get()
@@ -296,10 +302,10 @@ public class DBHelperFirebase {
 
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (document.getData().get("userId").equals("ckdudgh") && document.getData().get("userPassword").equals("123")) {
+                                if (document.getData().get("userId").equals(userId) && document.getData().get("userPassword").equals(userPassword)) {
 
 
-                                    match_id = "ckdudgh";
+                                    match_id = userId;
                                     Log.v("11111111111", "파이어베이스 로그인 성공!. 로그인 아이디 =" + match_id);
                                 }
                             }
@@ -338,7 +344,14 @@ public class DBHelperFirebase {
                                     String AreaName = document.getData().get("AreaName").toString();
                                     String AreaLatitude = document.getData().get("AreaLatitude").toString();
                                     String AreaLongitude = document.getData().get("AreaLongitude").toString();
-                                    Area_Data_list.add(new Area_Data(AreaName, AreaLatitude, AreaLongitude));
+                                    try {
+                                        String Area_Tag = document.getData().get("AreaTag").toString();
+                                        Area_Data_list.add(new Area_Data(AreaName, AreaLatitude, AreaLongitude, Area_Tag));
+                                    }catch (Exception e){
+                                        String Area_Tag = document.getData().get("AreaTag").toString();
+                                        Area_Data_list.add(new Area_Data(AreaName, AreaLatitude, AreaLongitude, "기타"));
+                                    }
+
                                 }
 
                             }
@@ -371,8 +384,8 @@ public class DBHelperFirebase {
                                     String AreaName = document.getData().get("AreaName").toString();
                                     String AreaLatitude = document.getData().get("AreaLatitude").toString();
                                     String AreaLongitude = document.getData().get("AreaLongitude").toString();
-
-                                    Area_Data_list.add(new Area_Data(AreaName, AreaLatitude, AreaLongitude));
+                                    String Area_Tag = document.getData().get("AreaTag").toString();
+                                    Area_Data_list.add(new Area_Data(AreaName, AreaLatitude, AreaLongitude, Area_Tag));
                                 }
 
                             }
@@ -411,13 +424,18 @@ public class DBHelperFirebase {
                                     Log.v("-1-", splitdata[i]);
                                 }
                                 String[] splitdata2 = (String.join("-", splitdata)).split(", ");
-                                for (int i = 0; i < splitdata2.length - 1; i++) {
+                                for (int i = 0; i < splitdata2.length; i++) {
                                     Log.v("-2-", ""+splitdata2[i]);
                                     String[] splitdata3 = splitdata2[i].split("-");
-                                    String dailyname = splitdata3[0];
-                                    String dailysecond = splitdata3[1];
-                                    Log.v("데일리 리스트에 추가 = ", dailyname +  dailysecond);
-                                    chart_view_daily_list.add(new daily_data(dailyname, dailysecond));
+                                    if("운동식사근무공부휴식여가활동쇼핑집학교유흥기타활동".contains(splitdata3[0])){
+                                        Log.v("차트뷰에 추가 성공", "tagname = " + splitdata3[0] + " second = " + splitdata3[1]);
+                                        String dailyname = splitdata3[0];
+                                        String dailysecond = splitdata3[1];
+
+                                        Log.v("데일리 리스트에 추가 = ", dailyname +  dailysecond);
+                                        chart_view_daily_list.add(new daily_data(dailyname, dailysecond));
+                                    }
+
                                 }
 
 
@@ -533,7 +551,8 @@ public class DBHelperFirebase {
                                     String plan_name = document.getData().get("Plan_Name").toString();
                                     int planExecuting_hour =Integer.parseInt(document.getData().get("Executing_Hour").toString());
                                     int planExecuting_minute =Integer.parseInt(document.getData().get("Executing_Minute").toString());
-                                    plan_details_data_list.add(new Plan_details_Data(plan_name, planExecuting_hour, planExecuting_minute));
+                                    String planExecuting_tag = document.getData().get("Plan_Tag").toString();
+                                    plan_details_data_list.add(new Plan_details_Data(plan_name, planExecuting_hour, planExecuting_minute, planExecuting_tag));
                                 }
 
                             }

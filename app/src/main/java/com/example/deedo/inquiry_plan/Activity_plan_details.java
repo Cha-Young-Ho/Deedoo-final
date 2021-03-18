@@ -105,6 +105,7 @@ public class Activity_plan_details extends AppCompatActivity {
         plan_details_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("클릭", "클릭됨");
                 Dialog_Plan_details_create dialog_plan_details_create =
                         new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
 
@@ -166,10 +167,13 @@ public class Activity_plan_details extends AppCompatActivity {
         /*
         일정 생성 버튼 및 클릭 이벤트
 
+         */
+
         plan_details_add_btn = findViewById(R.id.plan_details_add_btn);
         plan_details_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("클릭", "클릭됨");
                 Dialog_Plan_details_create dialog_plan_details_create =
                         new Dialog_Plan_details_create(Activity_plan_details.this, userId, DATE);
 
@@ -179,8 +183,6 @@ public class Activity_plan_details extends AppCompatActivity {
 
             }
         });
-
-         */
 
         plan_details_cancel_btn = findViewById(R.id.plan_details_cancel_btn);
         plan_details_cancel_btn.setOnClickListener(new View.OnClickListener() {

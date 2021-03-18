@@ -29,6 +29,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 dependencies {
@@ -45,6 +48,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' // MPAndroidChart
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

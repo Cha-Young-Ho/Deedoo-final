@@ -5,12 +5,21 @@ public class Area_Data {
     private String textView_name;
     private String textView_latitude;
     private String textView_longitude;
+    private String area_tag;
 
-
-    public Area_Data(String textView_name, String textView_latitude, String textView_longitude) {
+    public Area_Data(String textView_name, String textView_latitude, String textView_longitude, String area_tag) {
         this.textView_name = textView_name;
         this.textView_latitude = textView_latitude;
         this.textView_longitude = textView_longitude;
+        this.area_tag = area_tag;
+    }
+
+    public String getArea_tag() {
+        return area_tag;
+    }
+
+    public void setArea_tag(String area_tag) {
+        this.area_tag = area_tag;
     }
 
     public String getTextView_name() {

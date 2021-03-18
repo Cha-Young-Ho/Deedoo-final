@@ -56,7 +56,7 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
         
         
         //받아온 plan 이름을 리사이클뷰에 배치
-        holder.plan_name.setText(Plan_details_data_List.get(position).getPlan_name());
+        holder.plan_name.setText(Plan_details_data_List.get(position).getPlan_name() + "(" + Plan_details_data_List.get(position).getPlan_tag() + ")");
         holder.executing_time.setText(Plan_details_data_List.get(position).getExecuting_hour() + "시간 " + Plan_details_data_List.get(position).getExecuting_minute() +"분");
         
         //받아온 plan 할당 시간을 리사이클 뷰에 배치
@@ -67,34 +67,16 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
         받아온 plan name에 따라 이미지 배치
          */
 
-        if ((Plan_details_data_List.get(position).getPlan_name()).contains("공부") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("학습") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("수강") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("스터디") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("study") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("숙제") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("homework")){
+        if ((Plan_details_data_List.get(position).getPlan_tag()).contains("공부")){
             holder.item_imageview_plan_details.setImageResource(R.drawable.study);
 
-        }else if(Plan_details_data_List.get(position).getPlan_name().contains("운동")||
-                 Plan_details_data_List.get(position).getPlan_name().contains("축구")||
-                Plan_details_data_List.get(position).getPlan_name().contains("헬스") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("등산") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("자전거")||
-                Plan_details_data_List.get(position).getPlan_name().contains("exercise")) {
+        }else if(Plan_details_data_List.get(position).getPlan_tag().contains("운동")) {
             holder.item_imageview_plan_details.setImageResource(R.drawable.exercise);
 
-        }else if(Plan_details_data_List.get(position).getPlan_name().contains("학교")||
-                Plan_details_data_List.get(position).getPlan_name().contains("학원")||
-                Plan_details_data_List.get(position).getPlan_name().contains("강의") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("수업") ||
-                 Plan_details_data_List.get(position).getPlan_name().contains("school")) {
+        }else if(Plan_details_data_List.get(position).getPlan_tag().contains("학교")) {
             holder.item_imageview_plan_details.setImageResource(R.drawable.school2);
 
-        }else if(Plan_details_data_List.get(position).getPlan_name().contains("일")||
-                Plan_details_data_List.get(position).getPlan_name().contains("회사")||
-                Plan_details_data_List.get(position).getPlan_name().contains("프레젠테이션") ||
-                Plan_details_data_List.get(position).getPlan_name().contains("work")) {
+        }else if(Plan_details_data_List.get(position).getPlan_tag().contains("근무")) {
             holder.item_imageview_plan_details.setImageResource(R.drawable.work);
 
         }else{

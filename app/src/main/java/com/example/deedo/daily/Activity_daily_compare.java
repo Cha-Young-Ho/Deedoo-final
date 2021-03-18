@@ -27,6 +27,7 @@ public class Activity_daily_compare extends Dialog {
     int month;
     int day;
 
+
     public Activity_daily_compare(@NonNull Context context, String _userId, String[] _DATE) {
         super(context);
         this.context = context;
@@ -64,6 +65,8 @@ public class Activity_daily_compare extends Dialog {
                 dismiss();
             }
         });
+
+
     }
 
 

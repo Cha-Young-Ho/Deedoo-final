@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
+                Log.v("아이디비번", login_id.getText().toString() + "--" + login_password.getText().toString());
                 // db.delete_table();
                 String _id = login_id.getText().toString();
                 String _password = login_password.getText().toString();
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
 
-                });
+                }, login_id.getText().toString(), login_password.getText().toString());
 
 
 

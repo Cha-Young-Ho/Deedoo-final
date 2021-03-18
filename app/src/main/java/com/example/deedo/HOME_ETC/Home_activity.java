@@ -110,14 +110,14 @@ public class Home_activity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
 
-        
+
         firebase.get_daily_info(new Create_Chart_view_daily() {
             @Override
             public void create_Chart_view_daily(ArrayList<daily_data> daily_data_list) {
                 Log.v("데일리 사이즈 = ", ""+daily_data_list.size());
                 for (int i = 0; i < daily_data_list.size(); i++) {
-                   chart_d.add(daily_data_list.get(i).getDaily_name());
-                   Log.v("차트뷰 = ",""+daily_data_list.get(i).getDaily_name());
+                   chart_d.add(daily_data_list.get(i).getArea_tag());
+                   Log.v("차트뷰 = ",""+daily_data_list.get(i).getArea_tag());
                 }
                 for (int i = 0; i < daily_data_list.size(); i++) {
                     earning.add(Integer.parseInt(daily_data_list.get(i).getSecond()));
@@ -137,6 +137,7 @@ public class Home_activity extends AppCompatActivity {
                 home_chart_view.setChart(pie);
             }
         }, userId, 1, cal);
+
 
          
 
