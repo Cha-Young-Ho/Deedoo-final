@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.deedo">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -19,13 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDeedo">
+        <activity android:name=".Friend.activity_visit_friend_details"></activity>
+        <activity android:name=".Friend.Visit_Friend" />
+
         <service
             android:name=".background_service.BackgroundService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service android:name=".background_service.RestartService" />
+
         <receiver android:name=".background_service.RebootReceiver" />
         <receiver android:name=".background_service.AlarmReceiver" />
+
         <activity android:name=".HOME_ETC.sampleActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -49,19 +53,19 @@
         <activity android:name=".daily.Inquiry_daily_Activity" />
         <activity android:name=".area.Inquiry_Lotate" />
         <activity android:name=".inquiry_plan.Activity_plan_details" />
+        <activity android:name=".daily.Activity_daily_details" />
         <activity android:name=".user_login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </activity>
         <activity android:name=".Friend.Modify_Friend" />
         <activity android:name=".inquiry_plan.Plan" />
         <activity android:name=".Friend.Search_Somebody" />
-
-
     </application>
 
 </manifest>

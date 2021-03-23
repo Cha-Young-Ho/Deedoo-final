@@ -1,4 +1,4 @@
-package com.example.deedo.daily;
+package com.example.deedo.compare;
 
 import android.app.Dialog;
 import android.content.Context;

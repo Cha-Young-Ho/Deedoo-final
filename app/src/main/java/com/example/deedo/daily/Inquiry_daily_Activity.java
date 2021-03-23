@@ -6,10 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +40,6 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
     int[] earning = {500, 800, 1000};
     AnyChartView inquiry_daily_chart_view;
     MaterialCalendarView daily_calendarView;
-    Spinner inquiry_spinner;
     TextView textView_inquiry_daily_text;
     Button daily_compare_btn;
     ArrayList<daily_data> daily_data_list = new ArrayList<>();
@@ -88,8 +84,8 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inquiry_daily);
         firebase = new DBHelperFirebase();
+        userId = getIntent().getStringExtra("id");
 
-        String[] str = getResources().getStringArray(R.array.spinner_array);
 
         //비교하러가기 버튼
         daily_compare_btn = findViewById(R.id.daily_compare_btn);
@@ -103,71 +99,11 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
             }
 
         });
-
-        //드롭박스 스피너 생성
-        inquiry_spinner = (Spinner) findViewById(R.id.inquiry_spinner);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, str);
-
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-        inquiry_spinner.setAdapter(adapter);
-
-        //spinner 이벤트 리스너
-
-        inquiry_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        textView_inquiry_daily_text = findViewById(R.id.textView_inquiry_daily_text);
+        textView_inquiry_daily_text.setText("오늘의 일과");
 
 
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                    //선택된 항목
-                    textView_inquiry_daily_text.setText("지난 "+parent.getItemAtPosition(position)+" 동안의 일과입니다!");
-                     daily_compare_btn.setText(parent.getItemAtPosition(position)+"계획이랑 비교하기!");
-                        /*
-
-                        switch(position){
-
-                            case 0: // 1년
-                                this.inquiry_total_date = 365;
-                                daily_data_list = db.get_daily_info(365, year, month, day);
-                                break;
-                            case 1: // 6개월
-                                this.inquiry_total_date = 183;
-                                daily_data_list = db.get_daily_info(183, year, month, day);
-                                break;
-                            case 2: // 3개월
-                                this.inquiry_total_date = 91;
-                                daily_data_list = db.get_daily_info(91, year, month, day);
-                                break;
-                            case 3: // 1개월
-                                this.inquiry_total_date = 30;
-                                daily_data_list = db.get_daily_info(30, year, month, day);
-                                break;
-                            case 4: // 1주일
-                                this.inquiry_total_date = 7;
-                                daily_data_list = db.get_daily_info(7, year, month, day);
-                                break;
-                        }
-
-                        if(daily_data_list == null){
-
-                        }else{
-                            Setup_Pie_Chart(daily_data_list);
-                        }
-
-                         */
-                    Log.v("알림", inquiry_spinner.getSelectedItem().toString() + "is selected");
-
-
-            }
-
-            @Override
-
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-
-        });
 
         /*
         Chart View 생성
@@ -223,6 +159,7 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
 
                 Intent intent = new Intent(Inquiry_daily_Activity.this, Activity_daily_details.class);
                 intent.putExtra("id", userId);
+                intent.putExtra("friend_Id", userId);
                 intent.putExtra("DATE", parsedDATA);
                 Log.v("캘린더 클릭 이벤트 네번째 부분 성공", " 성공");
                 startActivity(intent); //날짜 데이터 담아서 넘겨줌

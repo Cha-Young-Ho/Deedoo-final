@@ -1,6 +1,7 @@
 package com.example.deedo.Friend;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
     String userId;
     DBHelperFirebase firebase = new DBHelperFirebase();
 
+
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
@@ -31,10 +33,7 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
     private OnItemClickListener onItemClickListener;
 
 
-    public Modify_Friend_Adapter(OnItemClickListener onItemClickListener, String _id) {
-        this.onItemClickListener = onItemClickListener;
-        this.userId = _id;
-    }
+
 
     public Modify_Friend_Adapter(ArrayList<Modify_Friend_Data> modify_Friend_Data_list, Context context, String _id) {
         this.Modify_Friend_Data_list = modify_Friend_Data_list;
@@ -67,6 +66,14 @@ public class Modify_Friend_Adapter extends RecyclerView.Adapter<Modify_Friend_Ad
             public void onClick(View v) {
                 //구경가기 버튼 - 그래프 구현 후에 작성
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                int pos = holder.getAdapterPosition();
+                String Friend_id = Modify_Friend_Data_list.get(pos).getModify_Friend_id();
+
+
+                Intent intent = new Intent(context, Visit_Friend.class);
+                intent.putExtra("id", userId);
+                intent.putExtra("friendId", Friend_id);
+                context.startActivity(intent);
             }
         });
 

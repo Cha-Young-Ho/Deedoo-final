@@ -1,6 +1,7 @@
 package com.example.deedo.inquiry_plan;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
         this.context = context;
         this.userId = userId;
         this.DATE = DATE;
+        Log.v("1번째", "");
     }
 
     @NonNull
@@ -47,13 +49,14 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_plan_details_dialog, parent, false);
 
         Plan_Details_ViewHolder holder = new Plan_Details_ViewHolder(view);
+        Log.v("2번째", "");
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull Plan_details_recyclerview_Adapter.Plan_Details_ViewHolder holder, int position) {
         //////////////////////////////PLAN NAME, 수정 다이얼로그에서 DB작업 구현해야함
-        
+        Log.v("3번째", "");
         
         //받아온 plan 이름을 리사이클뷰에 배치
         holder.plan_name.setText(Plan_details_data_List.get(position).getPlan_name() + "(" + Plan_details_data_List.get(position).getPlan_tag() + ")");
@@ -163,7 +166,7 @@ public class Plan_details_recyclerview_Adapter extends RecyclerView.Adapter<Plan
 
             this.item_imageview_plan_details = itemView.findViewById(R.id.item_imageview_plan_details);
 
-
+            Log.v("4번째", "");
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.example.deedo.daily;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deedo.DB.DBHelperFirebase;
 import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.R;
+import com.example.deedo.callback.Get_Daily_Detail_info;
+import com.example.deedo.compare.Compare_daily_plan;
 
 import java.util.ArrayList;
 
@@ -32,6 +36,7 @@ public class Activity_daily_details extends AppCompatActivity {
     String month;
     String day;
     DBHelperFirebase firebase;
+    String friend_Id;
 
 
     /*
@@ -68,6 +73,7 @@ public class Activity_daily_details extends AppCompatActivity {
         setContentView(R.layout.activity_daily_details);
         firebase = new DBHelperFirebase();
         userId = getIntent().getStringExtra("id");
+        friend_Id = getIntent().getStringExtra("friend_Id");
 
         this.DATE = getIntent().getStringArrayExtra("DATE");
 
@@ -82,11 +88,9 @@ public class Activity_daily_details extends AppCompatActivity {
         textview_daily_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
 
 
-        recyclerView = findViewById(R.id.daily_details_recyclerview); //리사이클러 뷰 연결
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
 
-        //InitializeData(userId);
+
+        InitializeData(userId);
 
 
         daily_details_cancel_btn = findViewById(R.id.daily_details_cancel_btn);
@@ -115,14 +119,16 @@ public class Activity_daily_details extends AppCompatActivity {
         textview_daily_details_name = findViewById(R.id.textview_daily_details_name);
         textview_daily_details_name.setText(year + "년 " + month + "월 " + day+"일 ");
 
-
+        recyclerView = findViewById(R.id.daily_details_recyclerview); //리사이클러 뷰 연결
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         if (daily_details_Data_list != null) {
             daily_details_Data_list.clear();
             daily_details_Data_list = new ArrayList<>();
         } else {
             daily_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
-        //InitializeData(userId); //데이터 정보를 리스트에 담아서옴
+        InitializeData(userId); //데이터 정보를 리스트에 담아서옴
 
 
 
@@ -130,13 +136,11 @@ public class Activity_daily_details extends AppCompatActivity {
         daily_details_compare_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Activity_daily_compare dialog_daily_compare =
-                        new Activity_daily_compare(com.example.deedo.daily.Activity_daily_details.this, userId, DATE);
-
-                dialog_daily_compare.show();
-
-
-
+                Intent intent = new Intent(Activity_daily_details.this, Compare_daily_plan.class);
+                intent.putExtra("id", userId);
+                intent.putExtra("friend_Id", friend_Id);
+                intent.putExtra("date", DATE);
+                startActivity(intent);
             }
         });
 
@@ -148,7 +152,7 @@ public class Activity_daily_details extends AppCompatActivity {
                 Activity_daily_details.this.finish();
             }
         });
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
     }
 
 
@@ -156,32 +160,35 @@ public class Activity_daily_details extends AppCompatActivity {
 
 
     }
-/*
+
     public void InitializeData(String userId) {
 
         //DB에서 데이터리스트에 담아야하는 메서드
-        Plan_details_Data_list.clear();
 
-        if (Plan_details_Data_list != null) {
-            Plan_details_Data_list.clear();
-            Plan_details_Data_list = new ArrayList<>();
+        if (daily_details_Data_list != null) {
+            daily_details_Data_list.clear();
+            daily_details_Data_list = new ArrayList<>();
         } else {
-            Plan_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
+            daily_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
         }
 
       firebase.Get_daily_details_info(new Get_Daily_Detail_info() {
 
           @Override
-          public void get_Daily_details_onCallback(Context con) {
+          public void get_Daily_details_onCallback(ArrayList<daily_data> daily_data_list, Context con) {
               Log.v("get_Daily_onCallback", "이후");
-              adapter = new daily_details_recyclerview_Adapter(Plan_details_Data_list, con, userId, DATE);
+              daily_details_Data_list = daily_data_list;
+              Log.v("dadada길이 = " , ""+daily_data_list.size());
+              adapter = new daily_details_recyclerview_Adapter(daily_details_Data_list, con, userId, DATE);
+              Log.v("4번이요", "");
               recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
+              Log.v("5번이요", "");
           }
       },userId, DATE, this);//리스트에 데이터 담기
 
 
     }
 
- */
+
 
 }
