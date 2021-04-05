@@ -1,5 +1,6 @@
 package com.example.deedo.DB;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.example.deedo.callback.Get_Daily_Detail_info;
 import com.example.deedo.callback.Get_Friend_onCallback;
 import com.example.deedo.callback.Get_Plan_Detail_info;
 import com.example.deedo.callback.Get_Search_Somebody_onCallback;
+import com.example.deedo.callback.Get_period_list_Callback;
 import com.example.deedo.callback.Modify_Plan_Callback;
 import com.example.deedo.callback.MyCallback;
 import com.example.deedo.callback.Register_Call_back;
@@ -44,7 +46,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class DBHelperFirebase {
 
@@ -90,7 +94,7 @@ public class DBHelperFirebase {
         String date = sdf.format(today_date.getTime());
 
 
-        DocumentReference docRef = db.collection("Daily").document("" + date);
+        DocumentReference docRef = db.collection("Daily").document("" + date + _userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -99,18 +103,18 @@ public class DBHelperFirebase {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
-                        DocumentReference washingtonRef = db.collection("Daily").document("" + date);
+                        DocumentReference washingtonRef = db.collection("Daily").document("" + date + _userId);
 
                         washingtonRef.update(_area_tag, FieldValue.increment(10));
                     } else {
                         Log.d(TAG, "No such document");
-                        db.collection("Daily").document(date)
+                        db.collection("Daily").document(date + _userId)
                                 .set(Daily)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                                        DocumentReference washingtonRef = db.collection("Daily").document("" + date);
+                                        DocumentReference washingtonRef = db.collection("Daily").document("" + date + _userId);
                                         washingtonRef.update(_area_tag, FieldValue.increment(10));
                                     }
                                 })
@@ -421,7 +425,7 @@ public class DBHelperFirebase {
         // today_date.add(Calendar.DATE, -i);
         String date = sdf.format(today_date.getTime());
         Log.v("데이트 = ", date);
-        DocumentReference docRef = db.collection("Daily").document("" + date);
+        DocumentReference docRef = db.collection("Daily").document("" + date + userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -543,19 +547,26 @@ public class DBHelperFirebase {
         String year = DATE[0];
         String __month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
         String month;
+
         if (__month.length() == 1) {
             month = "0" + __month;
         } else {
             month = __month;
         }
 
-
-        String day = DATE[2];
+        String day;
+        String __day = DATE[2];
+        if (__day.length() == 1) {
+            day = "0" + __day;
+        } else {
+            day = __day;
+        }
 
 
         db.collection("Plan")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @SuppressLint("LongLogTag")
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -564,6 +575,8 @@ public class DBHelperFirebase {
                                 Log.v("파이어asdf", "" + document.getData());
                                 Log.v("사용자가 입력한 날짜 = ", "userId=" + _userId + "\n Plan_Year=" + year + "\nPlan_month=" + month + "\nPlan_day=" + day);
 
+                                Log.v("month", "get month = -" + document.getData().get("Plan_Month") +"- month = -" + month + "-");
+                                Log.v("day", "get day = -" + document.getData().get("Plan_Day") +"- day = -" + day + "-");
                                 if (document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Year").toString().equals(year) &&
                                         document.getData().get("Plan_Month").toString().equals(month) && document.getData().get("Plan_Day").toString().equals(day)) {
 
@@ -594,13 +607,22 @@ public class DBHelperFirebase {
         String today_date = null;
 
         String year = DATE[0];
+        String __month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
         String month;
-        if ((String.valueOf(Integer.parseInt(DATE[1]) + 1)).length() == 1) {
-            month = "0" + String.valueOf(Integer.parseInt(DATE[1]) + 1);
+
+        if (__month.length() == 1) {
+            month = "0" + __month;
         } else {
-            month = String.valueOf(Integer.parseInt(DATE[1]) + 1);
+            month = __month;
         }
-        String day = DATE[2];
+
+        String day;
+        String __day = DATE[2];
+        if (__day.length() == 1) {
+            day = "0" + __day;
+        } else {
+            day = __day;
+        }
 
         for (int i = 0; i < DATE.length; i++) {
             Log.v("DATE", DATE[i]);
@@ -608,7 +630,7 @@ public class DBHelperFirebase {
         today_date = year + month + day;
         Log.v("get info daily에서 today", today_date);
 
-        DocumentReference docRef = db.collection("Daily").document("" + today_date);
+        DocumentReference docRef = db.collection("Daily").document("" + today_date + _userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -867,7 +889,7 @@ public class DBHelperFirebase {
         ArrayList<BarChart_list_data> barChart_list_data = new ArrayList<>();
         ArrayList<BarChart_list_data> barChart_list_friend_data = new ArrayList<>();
 
-        DocumentReference docRef = db.collection("Daily").document("" + today_date);
+        DocumentReference docRef = db.collection("Daily").document("" + today_date + userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -947,9 +969,8 @@ public class DBHelperFirebase {
 
         ArrayList<BarChart_list_data> barChart_list_data = new ArrayList<>();
         ArrayList<BarChart_list_data> barChart_list_friend_data = new ArrayList<>();
-
-
-        DocumentReference docRef = db.collection("Daily").document("" + today_date);
+        Log.v("여기서 확인해야함", today_date + userId);
+        DocumentReference docRef = db.collection("Daily").document(today_date + userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -957,7 +978,9 @@ public class DBHelperFirebase {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        Log.v("짱짱짱", "WNWN");
                         if (document.getData().get("userId").equals(userId)) {
+                            Log.v("르르르", "리리리");
                             String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                     .replaceAll("\\}", "").split("=");
                             for (int i = 0; i < splitdata.length; i++) {
@@ -988,7 +1011,9 @@ public class DBHelperFirebase {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
-                DocumentReference docRef = db.collection("Daily").document("" + today_date);
+
+                ////
+                DocumentReference docRef = db.collection("Daily").document("" + today_date + friendId);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
@@ -996,7 +1021,9 @@ public class DBHelperFirebase {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                if (document.getData().get("userId").equals(friendId)) {
+                                Log.v("짱짱짱", "WNWN");
+                                if (document.getData().get("userId").equals(userId)) {
+                                    Log.v("르르르", "리리리");
                                     String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                             .replaceAll("\\}", "").split("=");
                                     for (int i = 0; i < splitdata.length; i++) {
@@ -1028,14 +1055,141 @@ public class DBHelperFirebase {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
 
+                        ////
+
+
+                    }
+
+                });
                         calc_barChart_data_callback.calc_BarChart_data_Callback(barChart_list_data, barChart_list_friend_data);
                     }
 
                 });
-            }
 
 
-        });
+    }
+
+    public void Get_Period_Daily(Get_period_list_Callback get_period_list_callback, String userId, int period) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        //for (int i = 0; i < numberOfDay; i++) {
+        // today_date.add(Calendar.DATE, -i);
+        Log.v("period =", "" + period);
+
+
+        String[] tag_name = {"운동", "식사", "근무", "공부", "휴식", "여가활동", "쇼핑", "집", "학교", "유흥", "기타활동", "기타"};
+        ArrayList<daily_data> period_data_list = new ArrayList<>();
+        for (int i = 0; i < tag_name.length; i++) {
+            period_data_list.add(new daily_data(tag_name[i], "" + 0));
+        }
+
+
+        db.collection("Daily")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v("\n가져온 document id =", document.getId() + "\n");
+                                for (int i = 0; i < period; i++) {
+                                    Calendar date = Calendar.getInstance();
+                                    if (period == 365) {
+                                        date.add(Calendar.DATE, -364);
+
+                                    } else if (period == 180) {
+                                        date.add(Calendar.DATE, -179);
+                                    } else if (period == 90) {
+                                        date.add(Calendar.DATE, -89);
+                                    } else if (period == 30) {
+                                        date.add(Calendar.DATE, -29);
+                                    } else if (period == 7) {
+                                        date.add(Calendar.DATE, -6);
+                                    }
+
+                                    date.add(Calendar.DAY_OF_MONTH, i);
+                                    String today_date = sdf.format(date.getTime());
+                                    Log.v("비교하는 id = ", today_date + userId+"\n");
+                                    if (document.getId().equals(today_date + userId)) {
+                                        Log.v("매칭성공", "시작한 이름=" + today_date+userId);
+                                        Log.v("가져온 데이터 보자 = ", document.getData().toString());
+
+                                        Log.v("keyvalue=", "" + document.getData().entrySet());
+                                        Set<Map.Entry<String, Object>> hashset = document.getData().entrySet();
+
+
+                                        Log.v("hashset size = ", "" + hashset.size());
+
+                                        Iterator<Map.Entry<String, Object>> entries = hashset.iterator();
+
+                                        while (entries.hasNext()) {
+
+                                            Map.Entry<String, Object> entry = entries.next();
+
+                                            System.out.println("key : " + entry.getKey() + " , value : " + entry.getValue());
+
+                                            if (entry.getKey().equals("운동")) {
+                                                period_data_list.set(0, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(0).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue() )))));
+                                            } else if (entry.getKey().equals("식사")) {
+                                                period_data_list.set(1, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(1).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue() )))));
+                                            } else if (entry.getKey().equals("근무")) {
+                                                period_data_list.set(2, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(2).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("공부")) {
+                                                period_data_list.set(3, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(3).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("휴식")) {
+                                                period_data_list.set(4, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(4).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("여가활동")) {
+                                                period_data_list.set(5, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(5).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("쇼핑")) {
+                                                period_data_list.set(6, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(6).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("집")) {
+                                                period_data_list.set(7, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(7).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("학교")) {
+                                                period_data_list.set(8, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(8).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("유흥")) {
+                                                period_data_list.set(9, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(9).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("기타활동")) {
+                                                period_data_list.set(10, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(10).getSecond()) +Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            } else if (entry.getKey().equals("기타")) {
+                                                period_data_list.set(11, new daily_data(entry.getKey(),
+                                                        String.valueOf(Integer.parseInt(period_data_list.get(11).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
+                                            }
+
+                                        }
+
+
+
+
+
+                                        Log.v("iter이후", "");
+                                        for (int j = 0; j < period_data_list.size(); j++) {
+                                            Log.v("tag = ", period_data_list.get(j).getArea_tag());
+                                            Log.d("second = ", period_data_list.get(j).getSecond());
+                                        }
+                                    }
+                                }
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                        get_period_list_callback.get_period_list_Callback(period_data_list);
+                    }
+                });
+
+
     }
 
 }

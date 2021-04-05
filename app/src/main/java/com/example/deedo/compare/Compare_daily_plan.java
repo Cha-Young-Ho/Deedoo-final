@@ -83,14 +83,23 @@ public class Compare_daily_plan extends AppCompatActivity {
     public void Calc_data(){
         String today_date = null;
 
-       String year = DATE[0];
+        String year = DATE[0];
+        String __month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
         String month;
-       if( (String.valueOf(Integer.parseInt(DATE[1]) + 1)).length() == 1) {
-           month = "0"+String.valueOf(Integer.parseInt(DATE[1]) + 1);
-       }else{
-           month = String.valueOf(Integer.parseInt(DATE[1]) + 1);
-       }
-       String day = DATE[2];
+
+        if (__month.length() == 1) {
+            month = "0" + __month;
+        } else {
+            month = __month;
+        }
+
+        String day;
+        String __day = DATE[2];
+        if (__day.length() == 1) {
+            day = "0" + __day;
+        } else {
+            day = __day;
+        }
 
         for (int i = 0; i < DATE.length; i++) {
             Log.v("DATE", DATE[i]);

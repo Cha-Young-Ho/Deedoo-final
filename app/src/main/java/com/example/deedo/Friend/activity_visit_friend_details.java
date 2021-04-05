@@ -71,6 +71,7 @@ public class activity_visit_friend_details extends AppCompatActivity {
         this.barChart = findViewById(R.id.visit_friend_barchart);
         this.userId = getIntent().getStringExtra("id");
         this.friendId = getIntent().getStringExtra("friendId");
+        Log.v("여기서 friend 뽑아보기 = ",  getIntent().getStringExtra("friendId"));
         this.year = getIntent().getStringExtra("selected_year");
         this.month = getIntent().getStringExtra("selected_month");
         this.day = getIntent().getStringExtra("selected_day");
@@ -94,7 +95,9 @@ public class activity_visit_friend_details extends AppCompatActivity {
 
     public void Calc_data(String userId, String friend_Id, String year, String month, String day) {
 
-
+        if( month.length() == 1) {
+            month = "0"+month;
+        }
         String today_date = year + month + day;
 
         Log.v("Calc_data 시작", "start");

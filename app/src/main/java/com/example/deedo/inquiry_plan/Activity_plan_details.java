@@ -92,6 +92,9 @@ public class Activity_plan_details extends AppCompatActivity {
         }
 
 
+        recyclerView = findViewById(R.id.plan_details_recyclerview); //리사이클러 뷰 연결
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         InitializeData(userId);  //첫 리사이클 뷰는 검색어가 입력되지 않아서, First_InitializeData 메서드 호출 - 리스트에 데이터 담기
         Log.v("resume", "여기 실행됨2");
 
@@ -222,7 +225,11 @@ public class Activity_plan_details extends AppCompatActivity {
             @Override
             public void get_plan_details_onCallback(ArrayList<Plan_details_Data> plan_details_data_list, Context con) {
                 Plan_details_Data_list = plan_details_data_list;
-                Log.v("resume", "여기 실행됨2");
+                Log.v("resume", "여기 실행됨---------------------");
+
+
+                Log.v("뽑아온 데이터:", " " + Plan_details_Data_list.get(0).getPlan_name());
+
                 adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, con,userId, DATE);
                 recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
 

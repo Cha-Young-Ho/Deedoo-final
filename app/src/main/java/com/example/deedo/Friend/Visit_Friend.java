@@ -92,7 +92,7 @@ public class Visit_Friend extends AppCompatActivity {
 
                 parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
 
-                year = parsedDATA[0];
+                /*year = parsedDATA[0];
 
                 if ( String.valueOf(Integer.parseInt(parsedDATA[1]) + 1).length() == 1) {
                     month = "0" + String.valueOf(Integer.parseInt(parsedDATA[1]) + 1).length();
@@ -100,11 +100,32 @@ public class Visit_Friend extends AppCompatActivity {
 
                 month = String.valueOf(Integer.parseInt(parsedDATA[1]) + 1);
 
-                day = parsedDATA[2];
+                day = parsedDATA[2];*/
+
+                String year = parsedDATA[0];
+                String __month = Integer.toString(Integer.parseInt(parsedDATA[1]) + 1);
+                String month;
+
+                if (__month.length() == 1) {
+                    month = "0" + __month;
+                } else {
+                    month = __month;
+                }
+
+                String day;
+                String __day = parsedDATA[2];
+                if (__day.length() == 1) {
+                    day = "0" + __day;
+                } else {
+                    day = __day;
+                }
+
+
 
                 Intent intent = new Intent(Visit_Friend.this, activity_visit_friend_details.class);
                 intent.putExtra("id", userId);
-                intent.putExtra("friend_Id", userId);
+                intent.putExtra("friendId", friendId);
+
                 intent.putExtra("selected_year", year);
                 intent.putExtra("selected_month", month);
                 intent.putExtra("selected_day", day);

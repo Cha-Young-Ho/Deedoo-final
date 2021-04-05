@@ -22,46 +22,19 @@
 
     </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray"
-            />
-
-        <TextView
-            android:id="@+id/textView_inquiry_daily_text"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="TextView"
-            android:textSize="14sp" />
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray"/>
 
-    <com.anychart.AnyChartView
-        android:id="@+id/inquiry_daily_chart_view"
+
+    <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </com.anychart.AnyChartView>
-
-    <Button
-        android:id="@+id/daily_compare_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:text="계획이랑 비교하기!" />
+        android:layout_weight="1"
+        android:id="@+id/chart_view_page"
+        />
 
 
 </LinearLayout>

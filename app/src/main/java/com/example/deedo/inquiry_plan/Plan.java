@@ -93,6 +93,7 @@ public class Plan extends AppCompatActivity {
         firebase = new DBHelperFirebase();
         userId = getIntent().getStringExtra("id");
         textView = findViewById(R.id.na);
+        textView.setText(userId + "님의 월간 일과 차트 입니다.");
 
         /*
         캘린더 뷰 추가

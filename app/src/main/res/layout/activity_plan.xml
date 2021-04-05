@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="차영호님의 월간 차트입니다!"
-        android:textSize="18sp"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
     <com.anychart.AnyChartView

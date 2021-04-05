@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
         <string-array name="spinner_array">
+            <item>오늘</item>
             <item>1년</item>
             <item>6개월</item>
             <item>3개월</item>
