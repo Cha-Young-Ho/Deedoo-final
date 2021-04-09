@@ -14,7 +14,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +32,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,7 +49,7 @@ public class BackgroundService extends Service {
     public void onCreate() {
         super.onCreate();
         firebase = new DBHelperFirebase();
-        Log.d("222222222", "여기 실행");
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
@@ -57,16 +57,13 @@ public class BackgroundService extends Service {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                Log.d("3333333333", "여기 실행");
-                Log.d("mylong", "Lat is" + locationResult.getLastLocation().getLatitude() +
-                        ",  Lng is : " + locationResult.getLastLocation().getLongitude() + "id = " + userId);
+
                 firebase.get_Area_info(new Get_Area_info_onCallback() {
                     @Override
                     public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list, Context con) { }
                     @Override
                     public void get_Area_info_onCallback(ArrayList<Area_Data> Area_Data_list) {
-                        Log.v("background에서 Area 크기 받기", "");
-                        Log.v("list size ======= ", ""+ Area_Data_list.size());
+
                         float distance = 70;
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(new Date());
@@ -74,18 +71,15 @@ public class BackgroundService extends Service {
                             LatLng nowRocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                             LatLng registeredArea = new LatLng(Double.parseDouble(Area_Data_list.get(i).getTextView_latitude()), Double.parseDouble(Area_Data_list.get(i).getTextView_longitude()));
                             distance = calculateLocationDifference(nowRocation, registeredArea);
-                            Log.v("사이 거리  = " , " " + distance);
+
 
                             if(distance < 70){
-                                Log.v("위치로 진입", Area_Data_list.get(i).getTextView_name());
-
-
                                 firebase.create_daily(userId, cal,  Area_Data_list.get(i).getTextView_name(), Area_Data_list.get(i).getArea_tag());
                                 break;
                             }
                         }
                             if(distance >=70) {
-                                Log.v("기타로 진입", "");
+
                                 CalendarDay date = CalendarDay.today();
                                 DATE = date.toString(); // ex : Calender{2021-02-28}
 
@@ -98,8 +92,6 @@ public class BackgroundService extends Service {
                             }
 
 
-
-                        Log.v("지금 아이디 ======= ", ""+ userId);
                     }
                 }, userId);
 
@@ -117,8 +109,6 @@ public class BackgroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         serviceIntent = intent;
-        Log.d("111111111", "여기 실행");
-        Log.d("스타트에서 id = ", "" + serviceIntent.getStringExtra("id"));
         userId = serviceIntent.getStringExtra("id");
         initializeNotification();
         requestLocation();

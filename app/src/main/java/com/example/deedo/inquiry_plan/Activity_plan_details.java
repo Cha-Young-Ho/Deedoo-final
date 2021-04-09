@@ -228,7 +228,7 @@ public class Activity_plan_details extends AppCompatActivity {
                 Log.v("resume", "여기 실행됨---------------------");
 
 
-                Log.v("뽑아온 데이터:", " " + Plan_details_Data_list.get(0).getPlan_name());
+
 
                 adapter = new Plan_details_recyclerview_Adapter(Plan_details_Data_list, con,userId, DATE);
                 recyclerView.setAdapter(adapter); // 리사이클러뷰 연결

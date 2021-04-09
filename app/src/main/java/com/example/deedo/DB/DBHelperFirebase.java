@@ -185,8 +185,6 @@ public class DBHelperFirebase {
         Plan.put("Executing_Minute", executing_minute);
         Plan.put("Plan_Tag", _plan_Tag);
 
-        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId + " _year = " + _year + " _create_plan_name = " + _create_plan_name + " executing_minute " + executing_minute +
-                "plan_tag = " + _plan_Tag);
         // Add a new document with a generated ID
         db.collection("Plan")
                 .add(Plan)
@@ -206,39 +204,6 @@ public class DBHelperFirebase {
         create_plan_callback.create_Plan_Callback();
     }
 
-/*
-
-데일리 구현해야함
-    public void create_plan_daily(String _userId, int _year, int _month, int _day, String _create_plan_name, int executing_hour, int executing_minute) {
-        Map<String, Object> Plan = new HashMap<>();
-        Plan.put("userId", _userId);
-        Plan.put("Plan_Year", _year);
-        Plan.put("Plan_Month", _month);
-        Plan.put("Plan_Day", _day);
-        Plan.put("Plan_Name", _create_plan_name);
-        Plan.put("Executing_Hour", executing_hour);
-        Plan.put("Executing_Minute", executing_minute);
-
-        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId+" _year = " + _year+" _create_plan_name = " + _create_plan_name+" executing_minute " + executing_minute);
-        // Add a new document with a generated ID
-        db.collection("Plan")
-                .add(Plan)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Plan 인서트 성공");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                        Log.d(TAG, "Plan 인서트 실패");
-                    }
-                });
-    }
-    
-    */
 
     public void Create_Friend(Create_Friends_Callback create_friends_callback, String _userId, String Friend_id, String Friend_Name) {
          /*

@@ -2,7 +2,6 @@ package com.example.deedo.daily;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -112,15 +111,14 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
 
-                Log.v("캘린더 클릭 이벤트 첫 부분 성공", " 성공");
                 daily_selectedDay = date;
                 DATE = daily_selectedDay.toString(); // ex : Calender{2021-02-28}
 
-                String[] parsedDATA = DATE.split("[{]"); // ex : [0] = Calender || [1] = 2021-02-28}
+                String[] parsedDATA = DATE.split("[{]");
 
-                parsedDATA = parsedDATA[1].split("[}]"); // ex : [0] = 2021-02-28 || [1] = ""
+                parsedDATA = parsedDATA[1].split("[}]");
 
-                parsedDATA = parsedDATA[0].split("-"); // ex : [0] = 2021 || [1] = 02 || [2] = 28
+                parsedDATA = parsedDATA[0].split("-");
 
                 year = Integer.parseInt(parsedDATA[0]);
 
@@ -132,7 +130,6 @@ public class Inquiry_daily_Activity extends AppCompatActivity {
                 intent.putExtra("id", userId);
                 intent.putExtra("friend_Id", userId);
                 intent.putExtra("DATE", parsedDATA);
-                Log.v("캘린더 클릭 이벤트 네번째 부분 성공", " 성공");
                 startActivity(intent); //날짜 데이터 담아서 넘겨줌
             }
         });
