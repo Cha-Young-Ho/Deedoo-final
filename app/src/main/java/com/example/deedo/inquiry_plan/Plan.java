@@ -17,11 +17,13 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
 import com.example.deedo.DB.DBHelperFirebase;
+import com.example.deedo.Friend.Search_Somebody;
+import com.example.deedo.R;
+import com.example.deedo.callback.Get_period_list_Callback;
+import com.example.deedo.daily.daily_data;
 import com.example.deedo.decorator.EventDecorator;
 import com.example.deedo.decorator.OneDayDecorator;
-import com.example.deedo.R;
 import com.example.deedo.decorator.SaturdayDecorator;
-import com.example.deedo.Friend.Search_Somebody;
 import com.example.deedo.decorator.SundayDecorator;
 import com.example.deedo.decorator.minMaxDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -158,10 +160,6 @@ public class Plan extends AppCompatActivity {
                 Log.v("캘린더 클릭 이벤트 네번째 부분 성공", " 성공");
                 startActivity(intent); //날짜 데이터 담아서 넘겨줌
 
-
-
-///////////////////////////////////////////////////////////////////////테이블 만들고 다이알로그나 액티비티이동 후 계획 조회가능하게 리사이클뷰로 만들어야함
-
             }
         });
 
@@ -169,17 +167,33 @@ public class Plan extends AppCompatActivity {
         Chart View 생성
          */
         plan_chart_view = findViewById(R.id.plan_chart_view);
-        Setup_Pie_Chart();
+        firebase.Get_Period_Daily(new Get_period_list_Callback() {
+            @Override
+            public void get_period_list_Callback(ArrayList<daily_data> period_list) {
+                Log.v("period_list 길이 = ", "" + period_list.size());
+                ArrayList<String> chart_d = new ArrayList<>();
+                ArrayList<Integer> earning = new ArrayList<>();
+                for (int i = 0; i < period_list.size(); i++) {
+                    if (Integer.parseInt(period_list.get(i).getSecond()) != 0) {
+                        chart_d.add(period_list.get(i).getArea_tag());
+                        earning.add(Integer.parseInt(period_list.get(i).getSecond()));
+                    }
+                }
+                Setup_Pie_Chart(chart_d, earning);
+
+            }
+        }, userId, 30);
+
 
     }
-    public void Setup_Pie_Chart(){
+    public void Setup_Pie_Chart(List<String> chart_d, List<Integer> earning){
         Pie pie = AnyChart.pie();
         List<DataEntry> dataEntries = new ArrayList<>();
 
-        for (int i = 0; i < chart_d.length; i++) {
-            dataEntries.add(new ValueDataEntry(chart_d[i], earning[i]));
-        }
 
+        for (int i = 0; i < chart_d.size(); i++) {
+            dataEntries.add(new ValueDataEntry(chart_d.get(i), earning.get(i)));
+        }
         pie.data(dataEntries);
         plan_chart_view.setChart(pie);
     }

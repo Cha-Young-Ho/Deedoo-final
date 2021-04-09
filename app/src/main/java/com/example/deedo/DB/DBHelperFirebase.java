@@ -58,9 +58,6 @@ public class DBHelperFirebase {
     final String TAG = "1";
 
     public void SignUp(Register_Call_back register_call_back, String _id, String _password, String name) {
-
-
-        Log.v("파이어베이스 시작", " 시작시작시작");
 // Add a new document with a generated ID
         Map<String, Object> user = new HashMap<>();
         user.put("userId", _id);
@@ -101,10 +98,7 @@ public class DBHelperFirebase {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-
                         DocumentReference washingtonRef = db.collection("Daily").document("" + date + _userId);
-
                         washingtonRef.update(_area_tag, FieldValue.increment(10));
                     } else {
                         Log.d(TAG, "No such document");
@@ -113,7 +107,6 @@ public class DBHelperFirebase {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully written!");
                                         DocumentReference washingtonRef = db.collection("Daily").document("" + date + _userId);
                                         washingtonRef.update(_area_tag, FieldValue.increment(10));
                                     }
@@ -140,8 +133,6 @@ public class DBHelperFirebase {
         Area.put("AreaLatitude", _latitude);
         Area.put("AreaLongitude", _longitude);
         Area.put("AreaTag", _area_tag);
-
-        Log.v("파이어베이스 로테이트 인서트 시작", " id = " + _id + " AreaName = " + _name + " AreaLatitude = " + _latitude + " AreaLongitude " + _longitude);
         // Add a new document with a generated ID
         db.collection("Area")
                 .add(Area)
@@ -225,9 +216,6 @@ public class DBHelperFirebase {
         Map<String, Object> User1_Friend = new HashMap<>();
         User1_Friend.put("userId", _userId);
         User1_Friend.put("Friend_Id", Friend_id);
-
-
-        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId + " Friend_Id = " + Friend_id + " Friend_Name = " + Friend_Name);
         // Add a new document with a generated ID
         db.collection("User1_Friend")
                 .add(User1_Friend)
@@ -249,8 +237,6 @@ public class DBHelperFirebase {
         User2_Friend.put("userId", Friend_id);
         User2_Friend.put("Friend_Id", _userId);
 
-
-        Log.v("파이어베이스 플랜 인서트 시작", " id = " + _userId + " Friend_Id = " + Friend_id + " Friend_Name = " + Friend_Name);
         // Add a new document with a generated ID
         db.collection("User2_Friend")
                 .add(User2_Friend)
@@ -284,26 +270,16 @@ public class DBHelperFirebase {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.getData().get("userId").equals(userId) && document.getData().get("userPassword").equals(userPassword)) {
-
-
                                     match_id = userId;
-                                    Log.v("11111111111", "파이어베이스 로그인 성공!. 로그인 아이디 =" + match_id);
                                 }
                             }
-                            Log.v("1.5555555", "파이어베이스 로그인 성공!. 로그인 아이디 =" + match_id);
                             myCallback.login_onCallback(match_id);
 
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                        Log.v("2222222222", "파이어베이스 로그인 성공!. 로그인 아이디 =" + match_id);
-
-
                     }
-
-
                 });
-        Log.v("33333333333", "파이어베이스 로그인 성공!. 로그인 아이디 =" + match_id);
 
 
     }
@@ -320,8 +296,6 @@ public class DBHelperFirebase {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.v("파이어", "" + document.getData());
                                 if (document.getData().get("userId").equals(_id)) {
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + _id);
                                     String AreaName = document.getData().get("AreaName").toString();
                                     String AreaLatitude = document.getData().get("AreaLatitude").toString();
                                     String AreaLongitude = document.getData().get("AreaLongitude").toString();
@@ -358,11 +332,7 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("@@파이어@@", "" + document.getData());
-
                                 if (document.getData().get("userId").equals(_id)) {
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + _id);
                                     String AreaName = document.getData().get("AreaName").toString();
                                     String AreaLatitude = document.getData().get("AreaLatitude").toString();
                                     String AreaLongitude = document.getData().get("AreaLongitude").toString();
@@ -398,24 +368,15 @@ public class DBHelperFirebase {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.v("짱짱짱", "WNWN");
                         if (document.getData().get("userId").equals(userId)) {
-                            Log.v("르르르", "리리리");
                             String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                     .replaceAll("\\}", "").split("=");
-                            for (int i = 0; i < splitdata.length; i++) {
-                                Log.v("-1-", splitdata[i]);
-                            }
                             String[] splitdata2 = (String.join("-", splitdata)).split(", ");
                             for (int i = 0; i < splitdata2.length; i++) {
-                                Log.v("-2-", "" + splitdata2[i]);
                                 String[] splitdata3 = splitdata2[i].split("-");
                                 if ("운동식사근무공부휴식여가활동쇼핑집학교유흥기타활동".contains(splitdata3[0])) {
-                                    Log.v("차트뷰에 추가 성공", "tagname = " + splitdata3[0] + " second = " + splitdata3[1]);
                                     String dailyname = splitdata3[0];
                                     String dailysecond = splitdata3[1];
-
-                                    Log.v("데일리 리스트에 추가 = ", dailyname + dailysecond);
                                     chart_view_daily_list.add(new daily_data(dailyname, dailysecond));
                                 }
 
@@ -448,15 +409,11 @@ public class DBHelperFirebase {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            Log.v("입력한 아이디 = ", "id = " + userId);
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
-                                Log.v("파이어------", "" + document.getData().get("userId").toString());
                                 if ((document.getData().get("userId").toString().contains(insert_text) || document.getData().get("userName").toString().contains(insert_text))) {
 
 
                                     if (!(document.getData().get("userId").toString().equals(userId))) {
-                                        Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + userId);
                                         String FriendId = document.getData().get("userId").toString();
                                         String FriendName = document.getData().get("userName").toString();
 
@@ -467,7 +424,6 @@ public class DBHelperFirebase {
 
                             }
 
-                            Log.v("여기시작", ":!@#!@#" + Search_Friend_Data_list.size());
                             get_search_somebody_onCallback.get_Search_Somebody(Search_Friend_Data_list, con);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -487,11 +443,7 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
                                 if ((document.getData().get("userId").equals(userId))) {
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_Area_info 조회 성공!!. 로그인 아이디 =" + userId);
-
                                     String FriendId = document.getData().get("Friend_Id").toString();
                                     modify_friend_data_list.add(new Modify_Friend_Data(FriendId));
                                 }
@@ -536,41 +488,26 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                Log.v("파이어asdf", "" + document.getData());
-                                Log.v("사용자가 입력한 날짜 = ", "userId=" + _userId + "\n Plan_Year=" + year + "\nPlan_month=" + month + "\nPlan_day=" + day);
-
-                                Log.v("month", "get month = -" + document.getData().get("Plan_Month") +"- month = -" + month + "-");
-                                Log.v("day", "get day = -" + document.getData().get("Plan_Day") +"- day = -" + day + "-");
                                 if (document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Year").toString().equals(year) &&
                                         document.getData().get("Plan_Month").toString().equals(month) && document.getData().get("Plan_Day").toString().equals(day)) {
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
-
                                     String plan_name = document.getData().get("Plan_Name").toString();
                                     int planExecuting_hour = Integer.parseInt(document.getData().get("Executing_Hour").toString());
                                     int planExecuting_minute = Integer.parseInt(document.getData().get("Executing_Minute").toString());
                                     String planExecuting_tag = document.getData().get("Plan_Tag").toString();
                                     plan_details_data_list.add(new Plan_details_Data(plan_name, planExecuting_hour, planExecuting_minute, planExecuting_tag));
                                 }
-
                             }
-
                             get_plan_detail_info.get_plan_details_onCallback(plan_details_data_list, con);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
-
                 });
     }
 
-
     public void Get_daily_details_info(Get_Daily_Detail_info get_daily_detail_info, String _userId, String[] DATE, Context con) {
-
         ArrayList<daily_data> daily_details_data_list = new ArrayList<>();
         String today_date = null;
-
         String year = DATE[0];
         String __month = Integer.toString(Integer.parseInt(DATE[1]) + 1);
         String month;
@@ -588,12 +525,7 @@ public class DBHelperFirebase {
         } else {
             day = __day;
         }
-
-        for (int i = 0; i < DATE.length; i++) {
-            Log.v("DATE", DATE[i]);
-        }
         today_date = year + month + day;
-        Log.v("get info daily에서 today", today_date);
 
         DocumentReference docRef = db.collection("Daily").document("" + today_date + _userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -604,30 +536,18 @@ public class DBHelperFirebase {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         if (document.getData().get("userId").equals(_userId)) {
-                            Log.v("getdailyinfo 진입", "--===============================================--");
                             String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                     .replaceAll("\\}", "").split("=");
-                            for (int i = 0; i < splitdata.length; i++) {
-                                Log.v("-1-", splitdata[i]);
-                            }
                             String[] splitdata2 = (String.join("-", splitdata)).split(", ");
                             for (int i = 0; i < splitdata2.length; i++) {
-                                Log.v("-2-", "" + splitdata2[i]);
                                 String[] splitdata3 = splitdata2[i].split("-");
                                 if ("운동-식사-근무-공부-휴식-여가활동-쇼핑-집-학교-유흥-기타활동".contains(splitdata3[0])) {
-                                    Log.v("차트뷰에 추가 성공", "tagname = " + splitdata3[0] + " second = " + splitdata3[1]);
                                     String dailytag = splitdata3[0];
                                     String dailysecond = splitdata3[1];
-
-                                    Log.v("데일리 리스트에 추가 = ", dailytag + dailysecond);
                                     daily_details_data_list.add(new daily_data(dailytag, dailysecond));
                                 }
-
                             }
-
-
                         }
-
                     } else {
                         Log.d(TAG, "No such document");
 
@@ -635,7 +555,6 @@ public class DBHelperFirebase {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
-                Log.v("지금 확인해야하는 리스트 길이= ", "" + daily_details_data_list.size());
                 get_daily_detail_info.get_Daily_details_onCallback(daily_details_data_list, con);
             }
 
@@ -651,11 +570,8 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
                                 if (document.getData().get("userId").equals(userId) && document.getData().get("AreaLatitude").equals(_latitude) && document.getData().get("AreaLongitude").equals(_longitude) && document.getData().get("AreaName").equals(_name)) {
                                     String documentpath = document.getId();
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
                                     db.collection("Area").document(documentpath)
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -670,18 +586,13 @@ public class DBHelperFirebase {
                                                     Log.w(TAG, "Error deleting document", e);
                                                 }
                                             });
-
-
                                 }
-
                             }
-
                             delete_area_callback.delete_Area_Callback(_name, _latitude, _longitude);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
-
                 });
     }
 
@@ -693,11 +604,8 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
                                 if (document.getData().get("userId").equals(userId) && document.getData().get("Friend_Id").equals(Friend_id)) {
                                     String documentpath = document.getId();
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
                                     db.collection("User1_Friend").document(documentpath)
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -712,12 +620,8 @@ public class DBHelperFirebase {
                                                     Log.w(TAG, "Error deleting document", e);
                                                 }
                                             });
-
-
                                 }
-
                             }
-
 
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
@@ -734,11 +638,8 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
                                 if (document.getData().get("userId").equals(Friend_id) && document.getData().get("Friend_Id").equals(userId)) {
                                     String documentpath = document.getId();
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
                                     db.collection("User2_Friend").document(documentpath)
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -753,8 +654,6 @@ public class DBHelperFirebase {
                                                     Log.w(TAG, "Error deleting document", e);
                                                 }
                                             });
-
-
                                 }
 
                             }
@@ -777,11 +676,8 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("파이어", "" + document.getData());
                                 if (document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Name").equals(Plan_Details_name)) {
                                     String documentpath = document.getId();
-
-                                    Log.v("파이어베이스 성공!", "파이어베이스 Get_plan_details_info 조회 성공!!");
                                     db.collection("Plan").document(documentpath)
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -819,10 +715,8 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("modify plan", "실행 중");
                                 if (document.getData().get("userId").equals(_userId) && document.getData().get("Plan_Name").equals(before_planName)) {
                                     String documentpath = document.getId();
-                                    Log.v("document path=", documentpath);
                                     db.collection("Plan").document(documentpath)
                                             .update(
 
@@ -862,24 +756,16 @@ public class DBHelperFirebase {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.v("짱짱짱", "WNWN");
                         if (document.getData().get("userId").equals(userId)) {
-                            Log.v("르르르", "리리리");
                             String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                     .replaceAll("\\}", "").split("=");
-                            for (int i = 0; i < splitdata.length; i++) {
-                                Log.v("-1-", splitdata[i]);
-                            }
                             String[] splitdata2 = (String.join("-", splitdata)).split(", ");
                             for (int i = 0; i < splitdata2.length; i++) {
                                 Log.v("-2-", "" + splitdata2[i]);
                                 String[] splitdata3 = splitdata2[i].split("-");
                                 if ("운동-식사-근무-공부-휴식-여가활동-쇼핑-집-학교-유흥-기타활동".contains(splitdata3[0])) {
-                                    Log.v("차트뷰에 추가 성공", "tagname = " + splitdata3[0] + " second = " + splitdata3[1]);
                                     String dailytag = splitdata3[0];
                                     String dailysecond = splitdata3[1];
-
-                                    Log.v("데일리 리스트에 추가 = ", dailytag + dailysecond);
                                     barChart_list_data.add(new BarChart_list_data(dailytag, dailysecond));
                                 }
 
@@ -912,10 +798,7 @@ public class DBHelperFirebase {
                                             String plan_Executing_time = String.valueOf(((planExecuting_hour * 60) + planExecuting_minute) * 60);
                                             String planExecuting_tag = document.getData().get("Plan_Tag").toString();
                                             barChart_list_friend_data.add(new BarChart_list_data(planExecuting_tag, plan_Executing_time));
-                                            Log.v("추가한 내용 = ", "tag = " + planExecuting_tag + " time = " + plan_Executing_time);
                                         }
-
-
                                     }
 
                                 } else {
@@ -934,7 +817,6 @@ public class DBHelperFirebase {
 
         ArrayList<BarChart_list_data> barChart_list_data = new ArrayList<>();
         ArrayList<BarChart_list_data> barChart_list_friend_data = new ArrayList<>();
-        Log.v("여기서 확인해야함", today_date + userId);
         DocumentReference docRef = db.collection("Daily").document(today_date + userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -943,24 +825,17 @@ public class DBHelperFirebase {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.v("짱짱짱", "WNWN");
                         if (document.getData().get("userId").equals(userId)) {
-                            Log.v("르르르", "리리리");
                             String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                     .replaceAll("\\}", "").split("=");
-                            for (int i = 0; i < splitdata.length; i++) {
-                                Log.v("-1-", splitdata[i]);
-                            }
                             String[] splitdata2 = (String.join("-", splitdata)).split(", ");
                             for (int i = 0; i < splitdata2.length; i++) {
                                 Log.v("-2-", "" + splitdata2[i]);
                                 String[] splitdata3 = splitdata2[i].split("-");
                                 if ("운동-식사-근무-공부-휴식-여가활동-쇼핑-집-학교-유흥-기타활동".contains(splitdata3[0])) {
-                                    Log.v("차트뷰에 추가 성공", "tagname = " + splitdata3[0] + " second = " + splitdata3[1]);
                                     String dailytag = splitdata3[0];
                                     String dailysecond = splitdata3[1];
 
-                                    Log.v("데일리 리스트에 추가 = ", dailytag + dailysecond);
                                     barChart_list_data.add(new BarChart_list_data(dailytag, dailysecond));
                                 }
 
@@ -986,24 +861,15 @@ public class DBHelperFirebase {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Log.v("짱짱짱", "WNWN");
                                 if (document.getData().get("userId").equals(userId)) {
-                                    Log.v("르르르", "리리리");
                                     String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                             .replaceAll("\\}", "").split("=");
-                                    for (int i = 0; i < splitdata.length; i++) {
-                                        Log.v("-1-", splitdata[i]);
-                                    }
                                     String[] splitdata2 = (String.join("-", splitdata)).split(", ");
                                     for (int i = 0; i < splitdata2.length; i++) {
-                                        Log.v("-2-", "" + splitdata2[i]);
                                         String[] splitdata3 = splitdata2[i].split("-");
                                         if ("운동-식사-근무-공부-휴식-여가활동-쇼핑-집-학교-유흥-기타활동".contains(splitdata3[0])) {
-                                            Log.v("차트뷰에 추가 성공", "tagname = " + splitdata3[0] + " second = " + splitdata3[1]);
                                             String dailytag = splitdata3[0];
                                             String dailysecond = splitdata3[1];
-
-                                            Log.v("데일리 리스트에 추가 = ", dailytag + dailysecond);
                                             barChart_list_friend_data.add(new BarChart_list_data(dailytag, dailysecond));
                                         }
 
@@ -1037,17 +903,11 @@ public class DBHelperFirebase {
     public void Get_Period_Daily(Get_period_list_Callback get_period_list_callback, String userId, int period) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        //for (int i = 0; i < numberOfDay; i++) {
-        // today_date.add(Calendar.DATE, -i);
-        Log.v("period =", "" + period);
-
-
         String[] tag_name = {"운동", "식사", "근무", "공부", "휴식", "여가활동", "쇼핑", "집", "학교", "유흥", "기타활동", "기타"};
         ArrayList<daily_data> period_data_list = new ArrayList<>();
         for (int i = 0; i < tag_name.length; i++) {
             period_data_list.add(new daily_data(tag_name[i], "" + 0));
         }
-
 
         db.collection("Daily")
                 .get()
@@ -1057,7 +917,6 @@ public class DBHelperFirebase {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v("\n가져온 document id =", document.getId() + "\n");
                                 for (int i = 0; i < period; i++) {
                                     Calendar date = Calendar.getInstance();
                                     if (period == 365) {
@@ -1075,24 +934,14 @@ public class DBHelperFirebase {
 
                                     date.add(Calendar.DAY_OF_MONTH, i);
                                     String today_date = sdf.format(date.getTime());
-                                    Log.v("비교하는 id = ", today_date + userId+"\n");
                                     if (document.getId().equals(today_date + userId)) {
-                                        Log.v("매칭성공", "시작한 이름=" + today_date+userId);
-                                        Log.v("가져온 데이터 보자 = ", document.getData().toString());
 
-                                        Log.v("keyvalue=", "" + document.getData().entrySet());
                                         Set<Map.Entry<String, Object>> hashset = document.getData().entrySet();
-
-
-                                        Log.v("hashset size = ", "" + hashset.size());
-
                                         Iterator<Map.Entry<String, Object>> entries = hashset.iterator();
 
                                         while (entries.hasNext()) {
 
                                             Map.Entry<String, Object> entry = entries.next();
-
-                                            System.out.println("key : " + entry.getKey() + " , value : " + entry.getValue());
 
                                             if (entry.getKey().equals("운동")) {
                                                 period_data_list.set(0, new daily_data(entry.getKey(),
@@ -1132,16 +981,6 @@ public class DBHelperFirebase {
                                                         String.valueOf(Integer.parseInt(period_data_list.get(11).getSecond()) + Integer.valueOf(String.valueOf(entry.getValue())))));
                                             }
 
-                                        }
-
-
-
-
-
-                                        Log.v("iter이후", "");
-                                        for (int j = 0; j < period_data_list.size(); j++) {
-                                            Log.v("tag = ", period_data_list.get(j).getArea_tag());
-                                            Log.d("second = ", period_data_list.get(j).getSecond());
                                         }
                                     }
                                 }

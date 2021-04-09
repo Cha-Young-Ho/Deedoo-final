@@ -82,12 +82,7 @@ public class Inquiry_Lotate extends AppCompatActivity {
         Area_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
 
 
-        Log.v("onCreate에서 ", "initialize시작");
         InitializeData();  //리스트에 데이터 담기
-
-
-
-
 
     }
 

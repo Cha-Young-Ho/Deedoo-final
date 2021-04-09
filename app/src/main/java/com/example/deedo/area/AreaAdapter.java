@@ -1,7 +1,6 @@
 package com.example.deedo.area;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +55,12 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
     public void onBindViewHolder(@NonNull AreaAdapter.AreaViewHolder holder, int position) {
 
         holder.AreaName.setText(Area_List.get(position).getTextView_name() + " (" + Area_List.get(position).getArea_tag() + ")");
-        holder.AreaLatitude.setText(Area_List.get(position).getTextView_latitude());
-        holder.AreaLongitude.setText(Area_List.get(position).getTextView_longitude());
+
+        float latitude_ = (Math.round(Float.parseFloat(Area_List.get(position).getTextView_latitude())*1000))/1000;
+        float longitude_ = (Math.round(Float.parseFloat(Area_List.get(position).getTextView_longitude())*1000))/1000;
+
+        holder.AreaLatitude.setText("lat : " + latitude_);
+        holder.AreaLongitude.setText("long : " + longitude_);
 
         holder.item_delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,8 +68,6 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.AreaViewHolder
                 int pos = holder.getAdapterPosition();
 
 
-                Log.v("선택된 번호 =", "" + pos);
-                Log.v("선택된 곳의 정보", "" + Area_List.get(pos).getTextView_name() + " - " + Area_List.get(pos).getTextView_latitude() + " - " + Area_List.get(pos).getTextView_longitude());
                 String AreaName = Area_List.get(pos).getTextView_name();
                 String AreaLatitude = Area_List.get(pos).getTextView_latitude();
                 String AreaLongitude = Area_List.get(pos).getTextView_longitude();

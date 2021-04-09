@@ -3,7 +3,6 @@ package com.example.deedo.daily;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -126,9 +125,9 @@ public class Activity_daily_details extends AppCompatActivity {
             daily_details_Data_list.clear();
             daily_details_Data_list = new ArrayList<>();
         } else {
-            daily_details_Data_list = new ArrayList<>(); //  넘어온 데이터를 담을 그릇 (어댑터로)
+            daily_details_Data_list = new ArrayList<>();
         }
-        InitializeData(userId); //데이터 정보를 리스트에 담아서옴
+        InitializeData(userId);
 
 
 
@@ -152,12 +151,6 @@ public class Activity_daily_details extends AppCompatActivity {
                 Activity_daily_details.this.finish();
             }
         });
-//        adapter.notifyDataSetChanged();
-    }
-
-
-    public void First_InitializeData() {
-
 
     }
 
@@ -176,13 +169,10 @@ public class Activity_daily_details extends AppCompatActivity {
 
           @Override
           public void get_Daily_details_onCallback(ArrayList<daily_data> daily_data_list, Context con) {
-              Log.v("get_Daily_onCallback", "이후");
               daily_details_Data_list = daily_data_list;
-              Log.v("dadada길이 = " , ""+daily_data_list.size());
               adapter = new daily_details_recyclerview_Adapter(daily_details_Data_list, con, userId, DATE);
-              Log.v("4번이요", "");
               recyclerView.setAdapter(adapter); // 리사이클러뷰 연결
-              Log.v("5번이요", "");
+
           }
       },userId, DATE, this);//리스트에 데이터 담기
 
