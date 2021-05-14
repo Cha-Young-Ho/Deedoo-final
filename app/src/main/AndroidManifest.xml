@@ -1,13 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 ChangWon National Univ
 Capstone Design
 Cha Young Ho
 20143031
 -->
-
-
-
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.deedo">
     <!--
