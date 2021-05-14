@@ -171,6 +171,7 @@ public class BackgroundService extends Service {
         PendingIntent sender = PendingIntent.getBroadcast(this, 0,intent,0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
     }
     @Override
     public void onTaskRemoved(Intent rootIntent) {
@@ -182,6 +183,7 @@ public class BackgroundService extends Service {
         PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
     }
 
     private float calculateLocationDifference(LatLng lastLocation, LatLng firstLocation) {

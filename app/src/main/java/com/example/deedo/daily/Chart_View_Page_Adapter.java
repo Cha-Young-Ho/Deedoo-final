@@ -1,7 +1,6 @@
 package com.example.deedo.daily;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class Chart_View_Page_Adapter extends PagerAdapter {
                 firebase.Get_Period_Daily(new Get_period_list_Callback() {
                     @Override
                     public void get_period_list_Callback(ArrayList<daily_data> period_list) {
-                        Log.v("period_list 길이 = ", "" + period_list.size());
+
                         ArrayList<String> chart_d = new ArrayList<>();
                         ArrayList<Integer> earning = new ArrayList<>();
                         for (int i = 0; i < period_list.size(); i++) {

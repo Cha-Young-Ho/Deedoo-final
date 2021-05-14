@@ -114,10 +114,10 @@ public class Home_activity extends AppCompatActivity {
         firebase.get_daily_info(new Create_Chart_view_daily() {
             @Override
             public void create_Chart_view_daily(ArrayList<daily_data> daily_data_list) {
-                Log.v("데일리 사이즈 = ", ""+daily_data_list.size());
+
                 for (int i = 0; i < daily_data_list.size(); i++) {
                    chart_d.add(daily_data_list.get(i).getArea_tag());
-                   Log.v("차트뷰 = ",""+daily_data_list.get(i).getArea_tag());
+
                 }
                 for (int i = 0; i < daily_data_list.size(); i++) {
                     earning.add(Integer.parseInt(daily_data_list.get(i).getSecond()));
@@ -251,8 +251,6 @@ public class Home_activity extends AppCompatActivity {
          intent가 생성되지 않은 상태 (이미 백그라운드가 실행중이 아닐 때 home_activity가 실행되면) intent를 새로 만들어라
              */
         if (null == BackgroundService.serviceIntent) {
-            Log.d("0.5:", "여기 실행");
-            Log.d("id = ", ""+userId);
             foregroundServiceIntent = new Intent(this, BackgroundService.class);
             foregroundServiceIntent.putExtra("id", userId);
             startService(foregroundServiceIntent);

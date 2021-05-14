@@ -3,7 +3,6 @@ package com.example.deedo.inquiry_plan;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -113,19 +112,14 @@ public class Plan extends AppCompatActivity {
                 .setCalendarDisplayMode(CalendarMode.MONTHS)    //날짜단위
                 .commit();
 
-
-
-
         //이전 날짜 데코
         plan_calendarView.addDecorators(new minMaxDecorator(CalendarDay.today(), CalendarDay.from(2030, 11, 31)));
-        
         plan_calendarView.addDecorator(new SundayDecorator()); //일요일 색깔넣기
         plan_calendarView.addDecorator(new SaturdayDecorator()); // 토요일 색깔넣기
         plan_calendarView.addDecorator(oneDayDecorator); //현재날짜 색깔넣기
-        
+
         //빨간점 넣기
         plan_calendarView.addDecorator(new EventDecorator(Color.RED, Collections.singleton(CalendarDay.today()), this)); //빨간점 넣기
-        
         /*
         캘린더 클릭 이벤트
          */
@@ -136,8 +130,7 @@ public class Plan extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 
-                
-                Log.v("캘린더 클릭 이벤트 첫 부분 성공", " 성공");
+
                 selectedDay = date;
                 DATE = selectedDay.toString(); // ex : Calender{2021-02-28}
 
@@ -157,7 +150,7 @@ public class Plan extends AppCompatActivity {
                 Intent intent = new Intent(Plan.this, Activity_plan_details.class);
                 intent.putExtra("id", userId);
                 intent.putExtra("DATE", parsedDATA);
-                Log.v("캘린더 클릭 이벤트 네번째 부분 성공", " 성공");
+
                 startActivity(intent); //날짜 데이터 담아서 넘겨줌
 
             }
@@ -170,7 +163,7 @@ public class Plan extends AppCompatActivity {
         firebase.Get_Period_Daily(new Get_period_list_Callback() {
             @Override
             public void get_period_list_Callback(ArrayList<daily_data> period_list) {
-                Log.v("period_list 길이 = ", "" + period_list.size());
+
                 ArrayList<String> chart_d = new ArrayList<>();
                 ArrayList<Integer> earning = new ArrayList<>();
                 for (int i = 0; i < period_list.size(); i++) {
