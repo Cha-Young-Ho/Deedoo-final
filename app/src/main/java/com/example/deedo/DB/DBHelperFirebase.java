@@ -454,11 +454,8 @@ public class DBHelperFirebase {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
-
                 });
-
     }
-
     public void Get_plan_details_info(Get_Plan_Detail_info get_plan_detail_info, String _userId, String[] DATE, Context con) {
         ArrayList<Plan_details_Data> plan_details_data_list = new ArrayList<>();
         String year = DATE[0];
@@ -478,7 +475,6 @@ public class DBHelperFirebase {
         } else {
             day = __day;
         }
-
 
         db.collection("Plan")
                 .get()
@@ -557,11 +553,8 @@ public class DBHelperFirebase {
                 }
                 get_daily_detail_info.get_Daily_details_onCallback(daily_details_data_list, con);
             }
-
         });
-
     }
-
     public void Delete_Area(Delete_Area_Callback delete_area_callback, String _name, String _latitude, String _longitude, String userId) {
         db.collection("Area")
                 .get()
@@ -595,7 +588,6 @@ public class DBHelperFirebase {
                     }
                 });
     }
-
     public void Delete_Friend(Delete_Friend_Callback delete_friend_callback, String userId, String Friend_id) {
         db.collection("User1_Friend")
                 .get()
@@ -622,14 +614,12 @@ public class DBHelperFirebase {
                                             });
                                 }
                             }
-
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
 
                 });
-
         //친구 B목록 삭제
         db.collection("User2_Friend")
                 .get()
@@ -851,7 +841,6 @@ public class DBHelperFirebase {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
-
                 ////
                 DocumentReference docRef = db.collection("Daily").document("" + today_date + friendId);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -861,20 +850,25 @@ public class DBHelperFirebase {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                if (document.getData().get("userId").equals(userId)) {
+                                if (document.getData().get("userId").equals(friendId)) {
                                     String[] splitdata = document.getData().toString().replaceAll("\\{", "")
                                             .replaceAll("\\}", "").split("=");
                                     String[] splitdata2 = (String.join("-", splitdata)).split(", ");
+
                                     for (int i = 0; i < splitdata2.length; i++) {
                                         String[] splitdata3 = splitdata2[i].split("-");
+
                                         if ("운동-식사-근무-공부-휴식-여가활동-쇼핑-집-학교-유흥-기타활동".contains(splitdata3[0])) {
                                             String dailytag = splitdata3[0];
+                                            Log.v("dailytag = ", dailytag);
                                             String dailysecond = splitdata3[1];
+
+
                                             barChart_list_friend_data.add(new BarChart_list_data(dailytag, dailysecond));
                                         }
 
                                     }
-
+                                    Log.v("여기서 체크 ====", ""+barChart_list_friend_data.size());
 
                                 }
 
@@ -889,10 +883,10 @@ public class DBHelperFirebase {
                         ////
 
 
+                        calc_barChart_data_callback.calc_BarChart_data_Callback(barChart_list_data, barChart_list_friend_data);
                     }
 
                 });
-                        calc_barChart_data_callback.calc_BarChart_data_Callback(barChart_list_data, barChart_list_friend_data);
                     }
 
                 });

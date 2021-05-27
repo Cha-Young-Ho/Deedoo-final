@@ -107,8 +107,8 @@ public class activity_visit_friend_details extends AppCompatActivity {
             public void calc_BarChart_data_Callback(ArrayList<BarChart_list_data> barChart_list_data, ArrayList<BarChart_list_data> barChart_lists_friend_Data) {
                 for (int i = 0; i < barChart_list_data.size(); i++) {
                     Log.v("태그이름: ", "" + barChart_list_data.get(i).getTag());
-                    //Log.v("태그이름: " , "" + barChart_lists_friend_Data.get(i).getTag());
                 }
+                Log.v("친구 리스트 길이3 = ", "" + barChart_lists_friend_Data.size());
                 set_barchart(barChart_list_data, barChart_lists_friend_Data);
 
             }
@@ -120,6 +120,7 @@ public class activity_visit_friend_details extends AppCompatActivity {
     public void set_barchart(ArrayList<BarChart_list_data> barChart_lists_Data, ArrayList<BarChart_list_data> barChart_lists_friend_Data) {
         BarDataSet barDataSet1;
         BarDataSet barDataSet2;
+        Log.v("친구 리스트 길이 2 = ", "" + barChart_lists_friend_Data.size());
         if (barChart_lists_Data.size() >= barChart_lists_friend_Data.size()) {
             barDataSet1 = new BarDataSet(data1(barChart_lists_Data, barChart_lists_Data.size()), "나의 일과");
             barDataSet2 = new BarDataSet(data2(barChart_lists_friend_Data, barChart_lists_Data.size()), "친구 일과");
@@ -181,6 +182,7 @@ public class activity_visit_friend_details extends AppCompatActivity {
         ArrayList<BarEntry> data_val = new ArrayList<>();
 
         Log.v("일과데이터 = ", "꺼내보기");
+        Log.v("친구 리스트 길이 = ", ""+barChart_lists_friend_Data.size());
         for (int i = 0; i < barChart_lists_friend_Data.size(); i++) {
             Log.v("bar_friend_Data", "꺼내보기 " + i + "번째");
             Log.v("tag = ", "" + barChart_lists_friend_Data.get(i).getTag());

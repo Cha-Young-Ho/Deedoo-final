@@ -139,12 +139,12 @@ public class Home_activity extends AppCompatActivity {
         }, userId, 1, cal);
 
 
-         
 
 
 
 
-    /*
+
+
         //백그라운드 서비스 인텐트가 이전에 생성되어있는 상태에서 어플을 실행하면 기존의 intent를 종료하고 새로 서비스를 시작
         if (BackgroundService.serviceIntent==null) {
             serviceIntent = new Intent(this, BackgroundService.class);
@@ -154,21 +154,9 @@ public class Home_activity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "already", Toast.LENGTH_LONG).show();
         }
 
-
-
-
-
         startService(new Intent(getApplicationContext(), BackgroundService.class));
 
-     */
-
-
-
-        //id값 확인
-
-
-        //여기까지
-
+        /*------------------------------------------------------------------------*/
         userId = intent.getStringExtra("id"); // 로그인한 id값 (primary key)
         map_button = findViewById(R.id.map_Button);
         plan_button = findViewById(R.id.plan_Button);
@@ -176,9 +164,6 @@ public class Home_activity extends AppCompatActivity {
         friend_setting_button = findViewById(R.id.friend_setting_Button);
         main_id = findViewById(R.id.main_id);
         main_id.setText(userId + "님 어서오세요!");
-
-        //main_id.setText(now_latitude + " --" + now_longitude);
-
 
         //구역정하기 버튼 클릭 시
         map_button.setOnClickListener(new View.OnClickListener() {
@@ -221,10 +206,6 @@ public class Home_activity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    public void Setup_Pie_Chart() {
 
     }
 
